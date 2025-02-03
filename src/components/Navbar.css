@@ -4,14 +4,23 @@ ul {
   
 
   /* Navbar */
-  .navbar {
-  
-    color: #000000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-  }
+  /* Navbar */
+.navbar {
+  height: 40px; /* Fixed missing px */
+  width: 100%;
+  border-radius: 50px; /* Reduced for a subtle effect */
+  position: sticky;
+  top: 0; /* Sticks to the top */
+  background-color: rgb(255, 255, 255);
+  color: #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  z-index: 1000; /* Keeps it above other elements */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for a sleek look */
+}
+
   
 
   
