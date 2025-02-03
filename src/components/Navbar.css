@@ -1,0 +1,31 @@
+ul {
+    list-style-type: none;
+  }
+  
+
+  /* Navbar */
+  .navbar {
+  
+    color: #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+  
+
+  
+  .navbar nav ul {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .navbar nav ul li a {
+    font-size: 1.1rem;
+    transition: color 0.3s;
+  }
+  
+  .navbar nav ul li a:hover {
+    color: #8c8c8c;
+  }
+  

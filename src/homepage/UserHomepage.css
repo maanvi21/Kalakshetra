@@ -1,0 +1,94 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+  background-color: #f4f4f4;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+/* Hero Section */
+.hero {
+  height: 500px;
+  overflow: hidden;
+}
+
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Offerings Section */
+.offerings {
+  padding: 2rem;
+  background-color: #fff;
+}
+
+.offerings h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #8c1aff;
+}
+
+.offerings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.offerings-grid > div {
+  background-color: #f4f4f4;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.offerings-grid h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #8c1aff;
+}
+
+.offerings-grid button {
+  background-color: #8c1aff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.offerings-grid button:hover {
+  background-color: #6e00cc;
+}
+
+/* Branches Section */
+.branches {
+  padding: 2rem;
+  background-color: #f4f4f4;
+}
+
+.branches h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #8c1aff;
+}
+
+.branch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
