@@ -4,14 +4,33 @@ import './UserHomepage.css';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import HomepagCarousel from './HomepagCarousel';
-
+const carouselItems = [
+  {
+    image: "assets/homeimg1.png",
+    alt: "Art 1",
+    title: "Beautiful Art",
+    description: "A masterpiece of creativity.",
+  },
+  {
+    image: "assets/homeimg2.png",
+    alt: "Art 2",
+    title: "Cultural Heritage",
+    description: "Preserving traditions through art.",
+  },
+  {
+    image: "assets/homeimg3.png",
+    alt: "Art 3",
+    title: "Modern Expression",
+    description: "Blending past and future.",
+  },
+];
 const UserHomepage = () => {
   return (
     <div className="user-homepage">
       
 <Header/>
       <main>
-        <HomepagCarousel/>
+        <HomepagCarousel items={carouselItems}/>
 
         <section className="offerings">
           <h2>What we offer</h2>
