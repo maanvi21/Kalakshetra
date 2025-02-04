@@ -56,6 +56,11 @@
   .prod_desc {
     padding: 10px;
     position: absolute;
+    display: flex;
+    justify-content: space-between; /* Pushes items to edges */
+    align-items: center; /* Aligns items vertically */
+    width: 100%;
+    padding: 10px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -75,4 +80,3 @@
     margin: 0 0 5px 0;
     font-size: 18px;
   }
-  

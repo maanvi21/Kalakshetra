@@ -3,51 +3,9 @@ import "./Browse.css";
 import ProductCard from "../components/ProductCard";
 import Search from "../components/Search";
 import Header from '../components/Header';
+import productItems from "../data/ProductData";
 
-const productItems = [
-  {
-    image: 'assets/categories1.png',
-    alt: "",
-    title: "Random Title",
-    description: "Desc"
-  },
-  {
-    image: 'assets/categories2.png',
-    alt: "",
-    title: "Random Title",
-    description: "Desc"
-  },
-  {
-    image: 'assets/categories3.png',
-    alt: "",
-    title: "Random Title",
-    description: "Desc"
-  },
-  {
-    image: 'assets/categories3.png',
-    alt: "",
-    title: "Random Title",
-    description: "Desc"
-  },
-  {
-    image: 'assets/categories3.png',
-    alt: "",
-    title: "Random Title",
-    description: "Desc"
-  },
-  {
-    image: 'assets/categories3.png',
-    alt: "",
-    title: "Random Title",
-    description: "Desc"
-  },
-  {
-    image: 'assets/categories3.png',
-    alt: "",
-    title: "Random Title",
-    description: "Desc"
-  },
-];
+
 
 export default function Browse() {
   return (

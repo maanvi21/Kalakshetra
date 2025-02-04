@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './ProductCard.css';
+import Button from './Button';
 
 export default function ProductCard({ items }) {
-  const [liked, setLiked] = useState({}); // Track liked state for each item
+  const [liked, setLiked] = useState({}); 
 
   const toggleLike = (index) => {
     setLiked((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -27,7 +28,9 @@ export default function ProductCard({ items }) {
               </button>
               <h3>{item.title}</h3>
             </div>
-           
+            <div className='btn'>
+           <Button text='View' onClick={''}/>
+           </div>
           </div>
         </div>
       ))}
