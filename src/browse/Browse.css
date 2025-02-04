@@ -1,0 +1,45 @@
+
+.browse_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+}
+/* Category Section */
+.category h2 {
+  margin-left: 20px;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 30px;
+  color: brown;
+  margin-bottom: 10px;
+}
+
+.scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.horizontal-scroll {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;  /* Space between product cards */
+  padding: 10px 0;  /* Optional padding */
+  overflow-x: scroll;
+  scrollbar-width: thin; 
+
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;  /* Horizontal scrollbar height */
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+}
