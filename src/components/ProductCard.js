@@ -7,6 +7,7 @@ export default function ProductCard({ items }) {
 
   const toggleLike = (index) => {
     setLiked((prev) => ({ ...prev, [index]: !prev[index] }));
+    alert('Added to Wishlist')
   };
 
   return (
@@ -19,7 +20,9 @@ export default function ProductCard({ items }) {
           <div className="prod_desc">
             <div className="title-container">
               
-              <button className="like-button" onClick={() => toggleLike(index)}>
+              <button className="like-button" onClick={() => toggleLike(index)
+                
+              }>
                 <img
                   src={liked[index] ? 'assets/liked.png' : 'assets/unliked.png'}
                   alt="like"
