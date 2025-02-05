@@ -1,11 +1,22 @@
-import React from 'react'
-import './HomepageCarousel.css'
-export default function HomepagCarousel() {
+import React from "react";
+import "./HomepageCarousel.css";
+
+export default function HomepageCarousel({ items }) {
   return (
-    <div>
+    <div className="carousel-container">
       <section className="hero">
-          <img src="assets/homeimg.png" alt="Frame 9" />
-        </section>
+        <div className="carousel-row">
+          {items.map((item, index) => (
+            <div className="carousel-item" key={index}>
+              <img src={item.image} alt={item.alt} />
+              <div className="hero-content">
+                <h1>{item.title}</h1>
+                <h3>{item.description}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
-  )
+  );
 }

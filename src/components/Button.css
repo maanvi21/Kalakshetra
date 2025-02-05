@@ -1,0 +1,16 @@
+.btn_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px 20px; /* Consistent padding */
+    width: auto; /* Adjust to content */
+    height: 30px; /* Fixed height */
+    background-color: #67301B;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+

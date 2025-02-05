@@ -1,0 +1,47 @@
+/* Outer Container */
+.carousel-container {
+    width: 100%;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents wrapping */
+  }
+  
+  /* Row with Scroll */
+  .carousel-row {
+    display: flex;
+    gap: 20px; /* Space between items */
+    padding: 10px;
+    scroll-behavior: smooth; /* Smooth scrolling */
+  }
+  
+  /* Individual Carousel Item */
+  .carousel-item {
+    min-width: 300px; /* Adjust as needed */
+    height: 500px;
+    position: relative;
+    flex-shrink: 0; /* Prevents shrinking */
+  }
+  
+  /* Image Styling */
+  .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(70%);
+    border-radius: 10px;
+  }
+  
+  /* Content Overlay */
+  .hero-content {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 10px;
+    width: 80%;
+  }
+  
