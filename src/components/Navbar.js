@@ -8,9 +8,9 @@ export default function Navbar() {
         <nav>
           <ul>
             <li><a href="#">Home</a></li>
-            <li><a href="#">What We Offer</a></li>
+            <li><a href="#">About Us</a></li>
             <li><a href="#">Locate Our Branches</a></li>
-            <li><a href="#">Quick Links</a></li>
+            <li><a href="#">Contact Us</a></li>
           </ul>
         </nav>
       </header>
