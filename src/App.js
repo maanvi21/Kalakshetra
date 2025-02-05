@@ -1,4 +1,3 @@
-
 import About from './about/About';
 import './App.css';
 import UserHomepage from './homepage/UserHomepage';
@@ -23,10 +22,5 @@ function App() {
 <Route path='/contact' element={[<Contact/>]}/>
       </Routes>
       </Router>
-     
-    </div>
+     </div>
     </Context>
-  );
-}
-
-export default App;
