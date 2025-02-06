@@ -1,9 +1,8 @@
 /* Base styles */
 .about-container {
- 
     min-height: 100vh;
-    background-color: #D3BFB1;
-    padding: 48px 0;
+  
+
 }
 
 .about-content {
