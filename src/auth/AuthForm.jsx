@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Mail, Lock, LogIn, UserPlus } from "lucide-react";
 import { FaGoogle as Google } from "react-icons/fa";
- import './Auth.css';
 
 
 const AuthForm = () => {

@@ -16,7 +16,7 @@ navigate('/browse')
     {item.title} </h3>
     <p> {items.description}</p>
       <div className='button'> 
-        <Button text='View' onClick={navToBrowse}/>
+        <Button text='Browse' onClick={navToBrowse}/>
         </div>
     </div>)}
     
