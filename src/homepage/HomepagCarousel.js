@@ -1,7 +1,7 @@
 import React from "react";
 import "./HomepageCarousel.css";
-
-export default function HomepageCarousel({ items }) {
+import CarouselData from '../data/CarouselData.js'
+export default function HomepageCarousel({ items}) {
   return (
     <div className="carousel-container">
       <section className="hero">
