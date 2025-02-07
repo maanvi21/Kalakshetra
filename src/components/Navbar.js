@@ -1,40 +1,44 @@
 import React from 'react'
 import './Navbar.css'
 import { useNavigate } from 'react-router-dom'
+
 export default function Navbar() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
-  const navToHome=()=>{
+  const navToHome = () => {
     navigate('/')
-
   }
 
-  const navToAbout=()=>{
+  const navToAbout = () => {
     navigate('/about')
-    
   }
-  const navToContact=()=>{
+
+  const navToContact = () => {
     navigate('/contact')
-    
   }
-  const navToLocatet=()=>{
+
+  const navToLocate = () => {
     navigate('/')
-    
   }
-  const navToBrowse=()=>{
+
+  const navToBrowse = () => {
     navigate('/browse')
-    
   }
+
+  const navToLogin = () => {
+    navigate('/login')
+  }
+
   return (
     <div>
       <header className="navbar">
-        
         <nav>
           <ul>
             <li onClick={navToHome}>Home</li>
             <li onClick={navToAbout}>About Us</li>
-            <li onClick={navToLocatet}>Locate Our Branches</li>
+            <li onClick={navToLocate}>Locate Our Branches</li>
             <li onClick={navToContact}>Contact Us</li>
+            <li onClick={navToLogin} className="login-btn">Login</li>
           </ul>
         </nav>
       </header>
