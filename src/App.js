@@ -8,11 +8,13 @@ import Wishlist from './wishlist/Wishlist.js'
 import Contact from './contact/Contact.js'
 import Register from "./auth/Register";
 import "./App.css";
-import Context from "./context/Context";
+import WishlistContext from "./context/WishlistContext.js";
+import { AuthProvider } from "./context/AuthContext.js";
 
 function App() {
   return (
-    <Context>
+    <AuthProvider>
+    <WishlistContext>
       <Router>
         <div className="App">
           <Routes>
@@ -27,7 +29,8 @@ function App() {
           </Routes>
         </div>
       </Router>
-    </Context>
+    </WishlistContext>
+    </AuthProvider>
   );
 }
 
