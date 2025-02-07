@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './ProductCard.css';
 import Button from './Button';
-import { useStateValue } from '../context/Context';
+import { useStateValue } from '../context/WishlistContext';
 
-export default function ProductCard({ items }) {
+export default function ProductCard({ items}) {
   const [liked, setLiked] = useState({}); 
   const { dispatch } = useStateValue();
 
