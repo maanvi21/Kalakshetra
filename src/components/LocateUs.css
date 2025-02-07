@@ -1,0 +1,24 @@
+.branch-grid {
+    width: 100%; /* Make it full-width for better scrolling */
+    height: 250px; /* Slightly increased height for better UI */
+    display: flex;
+    flex-direction: row;
+    gap: 10px; /* Add spacing between items */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    scroll-snap-type: x mandatory; /* Makes scrolling smoother */
+    white-space: nowrap; /* Prevents content wrapping */
+    padding-bottom: 10px;
+}
+
+.branch {
+    flex: 0 0 auto; /* Ensures items don't shrink */
+    width: 50%; /* Set width to match the iframe */
+    height: 200px; /* Set height to match the iframe */
+    scroll-snap-align: start; /* Aligns items properly */
+}
+
+.branch iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px; /* Adds slight rounding for better aesthetics */
+}
