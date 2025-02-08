@@ -4,9 +4,7 @@ import Browse from "./browse/Browse.js";
 import UserHomepage from "./homepage/UserHomepage";
 import Wishlist from './wishlist/Wishlist.js'
 import Contact from './contact/Contact.js'
-
-
-
+import AuthForm from "./auth/AuthForm.jsx";
 
 import "./App.css";
 import WishlistContext from "./context/WishlistContext.js";
@@ -33,7 +31,8 @@ function App() {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-
+            <Route path="/login" element={<AuthForm />} />
+            <Route path="/register" element={<AuthForm />} />
           </Routes>
         </div>
       </Router>
