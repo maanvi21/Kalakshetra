@@ -1,0 +1,75 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(222, 219, 219); /* Light gray background */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Added padding for better spacing */
+    width: 50%; /* Responsive width */
+    margin: 20px auto; /* Center container and add space between them */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.container img {
+    width: 100%; /* Full width of container */
+    max-height: 150px; /* Limit height for large images */
+    object-fit: cover; /* Maintain aspect ratio */
+    border-radius: 10px 10px 0 0; /* Rounded top corners for images */
+}
+
+.container h3 {
+    margin: 10px 0 5px; /* Space around the heading */
+    font-size: 18px; /* Readable font size */
+    text-align: center; /* Center align the title */
+    color: #333; /* Darker text color */
+}
+
+.container p {
+    font-size: 14px; /* Smaller description text */
+    text-align: center; /* Center-align description */
+    color: #555; /* Subtle text color */
+    margin-bottom: 15px; /* Space between description and button */
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    width: 100%; /* Ensures button spans full width if needed */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 10px;
+    flex: 0 0 auto; /* Prevent shrinking and set fixed size */
+    width: 200px; /* Set a fixed width for each card */
+  }
+  .categories-container {
+    display: flex;
+    flex-direction: row;
+    gap: 16px; /* Space between cards */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    padding: 10px; /* Add padding for the scrollable container */
+    width: 100%; /* Full width of the parent */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    scrollbar-width: thin; /* Custom scrollbar for Firefox */
+}
+
+.categories-container::-webkit-scrollbar {
+    height: 8px; /* Scrollbar height */
+}
+
+.categories-container::-webkit-scrollbar-thumb {
+    background-color: #67301B; /* Scrollbar color */
+    border-radius: 10px;
+}
+
+.categories-container::-webkit-scrollbar-track {
+    background: #e0e0e0; /* Track color */
+}
