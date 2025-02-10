@@ -9,6 +9,7 @@ import AuthForm from "./auth/AuthForm.jsx";
 import "./App.css";
 import WishlistContext from "./context/WishlistContext.js";
 import { AuthProvider } from "./context/AuthContext.js";
+import Cart from "./cart/Cart.js";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<AuthForm />} />
             <Route path="/register" element={<AuthForm />} />
+            <Route path="/cart" element={<Cart />} />
           </Routes>
         </div>
       </Router>
