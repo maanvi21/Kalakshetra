@@ -8,24 +8,27 @@ import Contact from './contact/Contact.js'
 import AuthForm from "./auth/AuthForm.jsx";
 
 import "./App.css";
-import WishlistContext from "./context/WishlistContext.js";
-import { AuthProvider } from "./context/AuthContext.js";
 
+import { AuthProvider } from "./context/AuthContext.js";
+import CartProvider from './context/CartContext.js';
 import Cart from "./cart/Cart.js";
+import WishlistProvider from "./context/WishlistContext.js";
 
 
 
 function App() {
   return (
     <AuthProvider>
-    <WishlistContext>
+      <CartProvider>
+    <WishlistProvider>
       <Router>
         <div className="App">
           <Routes>
           <Route path='/' element={[<UserHomepage/>]}/>
 
 <Route path='/userbrowse' element={[<Browse/>]}/>
-<Route path='/wishlist' element={[<Wishlist/>]}/>
+<Route path='/wishlist' element={[<Wishlist
+/>]}/>
 <Route path='/about' element={[<About/>]}/>
 <Route path='/contact' element={[<Contact/>]}/>
 
@@ -43,7 +46,9 @@ function App() {
           </Routes>
         </div>
       </Router>
-    </WishlistContext>
+      </WishlistProvider>
+      </CartProvider>
+    
     </AuthProvider>
   );
 }

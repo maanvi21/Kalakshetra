@@ -1,40 +1,34 @@
-import React from 'react';
-import './Wishlist.css';
-
-class Wishlist extends React.Component {
-    render(){
-        if (this.props.wishList) {
-            this.wishList = this.props.wishList;
-        }
-
-        return (
-            <div className="col-md-12">
-            <form onSubmit={this.props.showWishList}>
-            <label>
-                Name:
-                <input type="text" name="name" />
-            </label>
-            <input type="submit" value="Submit" />
-            </form>
-                <div className="row row-border pt-2 pb-2">
-                    <div className="col-md-2 col-lg-2 d-flex align-items-center">
-                        <h5>My Wishlist</h5>
-                    </div>
-                    {this.wishList.map(wish => { return (
-                    <div key={wish.pk} className="col-md-2 col-lg-2 mt-2 mb-2">
-                        <div className="card text-center">
-                            <div className="card-body ">
-                                <button onClick={this.props.deleteFromWishList.bind(this, wish.pk)} className="btn btn-sm btn-outline-secondary d-flex">&#10006;</button>
-                                <img className="img-thumbnail img-tumbnail-clean" src={wish.image} alt={wish.product_name} />
-                            </div>
+import React from 'react'
+import './Wishlist.css'
+import Button from '../components/Button'
+import productItems from '../data/ProductData'
+import Header from '../components/Header'
+import { useNavigate } from 'react-router-dom'
+export default function Wishlist() {
+    const navigate=useNavigate();
+  return (
+    <div>
+       <Header/>
+                <div>
+                  {productItems.length > 0 ? (
+                    <div className="item-grid">
+                      {productItems.map((item) => (
+                        <div className="wishlist-item" key={item.id}>
+                          <img src={item.image} alt={item.name} className="item-image" />
+                          <div className="item-details">
+                            <h2 className="item-name">{item.name}</h2>
+                            <p className="item-price">₹{item.price}</p>
+                          </div>
+                       <Button text='Move to Cart' onClick={() => navigate('/cart')} />
+                        
                         </div>
+                      ))}
                     </div>
-                    ) })}
+                  ) : (
+                    <p className="empty-message">Your wishlist is empty.</p>
+                  )}
                 </div>
-            </div>
-        )
-    }
-
+              
+    </div>
+  )
 }
-
-export default Wishlist;
