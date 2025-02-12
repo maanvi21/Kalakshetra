@@ -7,12 +7,6 @@ body {
     background-color: #f9f9f9;
   }
   
-  .min-h-screen {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   
   .container {
     width: 90%;
@@ -21,6 +15,10 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
+  }
+  .toggle-button{
+    position: absolute;
+    left:20;
   }
   
   .header {

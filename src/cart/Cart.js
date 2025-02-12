@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import productItems from '../data/ProductData'
+import Header from '../components/Header';
 import "./Cart.css";
 
 const Cart = () => {
   const [isCartView, setIsCartView] = useState(true);
 
-  // const cartItems = [
-  //   { id: 1, name: "Item 1", price: 100, quantity: 1, image: "https://via.placeholder.com/150" },
-  //   { id: 2, name: "Item 2", price: 200, quantity: 2, image: "https://via.placeholder.com/150" },
-  // ];
-
-  // const wishlistItems = [
-  //   { id: 3, name: "Wishlist Item 1", price: 150, image: "https://via.placeholder.com/150" },
-  // ];
+  
 
   const handleQuantityChange = (id, delta) => {
     console.log(`Change quantity for item ${productItems.id} by ${delta}`);
@@ -27,17 +21,17 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div >
+      <Header/>
       <div className="container">
-        <div className="header">
-          <h1 className="title">Shopping Cart</h1>
+          <h1 className="title">View Cart</h1>
           <button 
             className="toggle-button"
             onClick={() => setIsCartView(!isCartView)}
           >
             {isCartView ? "View Wishlist" : "View Cart"}
           </button>
-        </div>
+        
 
         {isCartView ? (
           <div>
