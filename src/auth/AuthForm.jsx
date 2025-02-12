@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { Mail, Lock, LogIn, UserPlus } from "lucide-react";
 import { FaGoogle as Google } from "react-icons/fa";
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 1aa9caa96178aed1cbd1a66cd5e94086e96b5ff5
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -34,14 +31,9 @@ const AuthForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-<<<<<<< HEAD
+
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-=======
-            <Mail
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={20}
-            />
->>>>>>> 1aa9caa96178aed1cbd1a66cd5e94086e96b5ff5
+
             <input
               type="email"
               placeholder="Email"
@@ -53,14 +45,9 @@ const AuthForm = () => {
           </div>
 
           <div className="relative">
-<<<<<<< HEAD
+
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-=======
-            <Lock
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={20}
-            />
->>>>>>> 1aa9caa96178aed1cbd1a66cd5e94086e96b5ff5
+
             <input
               type="password"
               placeholder="Password"
@@ -75,15 +62,9 @@ const AuthForm = () => {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
           >
-<<<<<<< HEAD
+
             {isLogin ? <LogIn className="mr-2" size={20} /> : <UserPlus className="mr-2" size={20} />}
-=======
-            {isLogin ? (
-              <LogIn className="mr-2" size={20} />
-            ) : (
-              <UserPlus className="mr-2" size={20} />
-            )}
->>>>>>> 1aa9caa96178aed1cbd1a66cd5e94086e96b5ff5
+
             {isLogin ? "Log In" : "Sign Up"}
           </button>
 
