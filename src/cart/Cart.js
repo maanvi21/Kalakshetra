@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import productItems from '../data/ProductData'
 import Header from '../components/Header';
 import "./Cart.css";
+import Button from '../components/Button'
 
 const Cart = () => {
   const [isCartView, setIsCartView] = useState(true);
@@ -44,27 +45,15 @@ const Cart = () => {
                       <h2 className="item-name">{item.name}</h2>
                       <p className="item-price">₹{item.price}</p>
                       <div className="quantity-controls">
-                        <button 
-                          className="quantity-button"
-                          onClick={() => handleQuantityChange(item.id, -1)}
-                        >
-                          -
-                        </button>
+                     
+                        <Button text='-' onClick={() => handleQuantityChange(item.id, -1)} />
                         <span>{item.quantity}</span>
-                        <button 
-                          className="quantity-button"
-                          onClick={() => handleQuantityChange(item.id, 1)}
-                        >
-                          +
-                        </button>
+            
+                        <Button text='+' onClick={() => handleQuantityChange(item.id, 1)} />
                       </div>
                     </div>
-                    <button 
-                      className="action-button" 
-                      onClick={() => handleRemove(item.id)}
-                    >
-                      Remove
-                    </button>
+                    <Button text='Move to Wishlist' onClick={() => handleRemove(item.id)} />
+                    <Button text='Remove' onClick={() => handleRemove(item.id)} />
                   </div>
                 ))}
               </div>
@@ -75,7 +64,7 @@ const Cart = () => {
             {productItems.length > 0 && (
               <div className="total-container">
                 <p className="total-label">Total: ₹{calculateTotal()}</p>
-                <button className="checkout-button">Checkout</button>
+                <Button text='Checkout' onClick={() => null} />
               </div>
             )}
           </div>
@@ -90,12 +79,8 @@ const Cart = () => {
                       <h2 className="item-name">{item.name}</h2>
                       <p className="item-price">₹{item.price}</p>
                     </div>
-                    <button 
-                      className="action-button"
-                      onClick={() => handleRemove(item.id)}
-                    >
-                      Remove
-                    </button>
+                 <Button text='Move to Cart' onClick={() => handleRemove(item.id)} />
+                  
                   </div>
                 ))}
               </div>
