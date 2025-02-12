@@ -1,51 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import './ProductCard.css';
 import Button from './Button';
-import { useStateValue } from '../context/WishlistContext';
+import { useStateValue as useWishlistState } from '../context/WishlistContext';
+import { useStateValue as useCartState } from '../context/CartContext';
 
-export default function ProductCard({ items}) {
-  const [liked, setLiked] = useState({}); 
-  const { dispatch } = useStateValue();
+export default function ProductCard({ items }) {
+  const [liked, setLiked] = useState({});
+  const { dispatch: wishlistDispatch } = useWishlistState();
+  const { state: cartState, dispatch: cartDispatch } = useCartState();
 
-  // like functionality with context
+  // Like functionality
   const toggleLike = (index) => {
     setLiked((prev) => {
       const newLikedState = { ...prev, [index]: !prev[index] };
       const item = {
-        id: items[index].id, 
+        id: items[index].id,
         title: items[index].title,
         image: items[index].image,
         alt: items[index].alt,
       };
 
-      // Dispatch ADD_TO_WISHLIST or REMOVE_FROM_WISHLIST based on the like state
       if (newLikedState[index]) {
-        dispatch({
-          type: 'ADD_TO_WISHLIST',
-          item,
-        });
+        wishlistDispatch({ type: 'ADD_TO_WISHLIST', item });
       } else {
-        dispatch({
-          type: 'REMOVE_FROM_WISHLIST',
-          item,
-        });
+        wishlistDispatch({ type: 'REMOVE_FROM_WISHLIST', id: item.id });
       }
 
       return newLikedState;
     });
   };
 
-  // Use useEffect to show alert only when liked state changes
+  // Add to cart function
+  const addToCart = (item) => {
+    const newItem = {
+      id: item.id,
+      name: item.name || item.title,
+      price: item.price || 0,
+      image: item.image,
+      quantity: 1,
+    };
+
+    cartDispatch({ type: 'ADD_TO_CART', item: newItem });
+    console.log('Current Cart:', [...cartState.cart, newItem]);
+  };
+
+  // wishlist useEffect
   useEffect(() => {
     for (let index in liked) {
       if (liked[index]) {
-        alert('Added to Wishlist');
+        console.log('Added to Wishlist');
       } else {
-        alert('Removed from Wishlist');
+        console.log('Removed from Wishlist');
       }
     }
-  }, [liked]); // This will run when liked state changes
-  
+  }, [liked]);
+
   return (
     <div className="product-card-container">
       {items.map((item, index) => (
@@ -65,7 +74,7 @@ export default function ProductCard({ items}) {
               <h3>{item.title}</h3>
             </div>
             <div className="btn">
-              <Button text="View" onClick={''} />
+              <Button text="Add to Cart" onClick={() => addToCart(item)} />
             </div>
           </div>
         </div>
