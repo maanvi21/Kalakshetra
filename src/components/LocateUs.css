@@ -3,11 +3,12 @@
     height: 250px; /* Slightly increased height for better UI */
     display: flex;
     flex-direction: row;
-    gap: 10px; /* Add spacing between items */
+    gap: 20px; /* Add spacing between items */
     overflow-x: auto; /* Enable horizontal scrolling */
     scroll-snap-type: x mandatory; /* Makes scrolling smoother */
     white-space: nowrap; /* Prevents content wrapping */
     padding-bottom: 10px;
+    
 }
 
 .branch {

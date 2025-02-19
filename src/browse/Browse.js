@@ -7,7 +7,7 @@ import productItems from '../data/ProductData.js';
 import { useStateValue } from '../context/CartContext';
 
 export default function Browse() {
-  const { state } = useStateValue(); // You can use this to show cart count in header if needed
+  const { state } = useStateValue(); 
 
   return (
     <div className="browse-page">

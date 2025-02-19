@@ -32,16 +32,32 @@ export default function ProductCard({ items }) {
 
   // Add to cart function
   const addToCart = (item) => {
-    const newItem = {
-      id: item.id,
-      name: item.name || item.title,
-      price: item.price || 0,
-      image: item.image,
-      quantity: 1,
-    };
+    console.log('Adding item to cart:', item);
+    // Find if item already exists in cart
+    const existingItem = cartState.cart.find((cartItem) => cartItem.id === item.id);
+    console.log('Existing item:', existingItem);
+    if (existingItem) {
+      // If item exists, update its quantity
+      cartDispatch({
+        type: 'UPDATE_QUANTITY',
+        id: item.id,
+        quantity: existingItem.quantity + 1
+      });
+    } else {
+      // If item doesn't exist, add it with quantity 1
+      const newItem = {
+        id: item.id,
+        name: item.name || item.title,
+        price: item.price || 0,
+        image: item.image,
+        quantity: 1,
+     
+        category: item.category || 'Uncategorized',
+      };
+      cartDispatch({ type: 'ADD_TO_CART', item: newItem });
+    }
 
-    cartDispatch({ type: 'ADD_TO_CART', item: newItem });
-    console.log('Current Cart:', [...cartState.cart, newItem]);
+    alert('Item added to cart');
   };
 
   // wishlist useEffect

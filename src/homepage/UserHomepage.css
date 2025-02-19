@@ -44,7 +44,7 @@ a {
 .offerings-grid > div {
   flex: 0 0 auto; /* Prevent child elements from shrinking or growing */
   width:100%; /* Adjust to control the size of each item */
-  background-color: #f4f4f4;
+  /* background-color: #f4f4f4; */
   padding: 1.5rem;
   text-align: center;
   border-radius: 8px; /* Add rounded corners */
