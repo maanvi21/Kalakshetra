@@ -4,7 +4,7 @@ import Browse from "./browse/Browse.js";
 import UserHomepage from "./homepage/UserHomepage";
 import Wishlist from './wishlist/Wishlist.js'
 import Contact from './contact/Contact.js'
-
+import AdminBrowse from "./browse/AdminBrowse.js";
 import AuthForm from "./auth/AuthForm.jsx";
 
 import "./App.css";
@@ -44,6 +44,7 @@ function App() {
             <Route path="/login" element={<AuthForm />} />
             <Route path="/register" element={<AuthForm />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/adminbrowse" element={<AdminBrowse />} />
             {/* <Route path='/locate' element={<LocateUs/>} /> */}
 
           </Routes>
