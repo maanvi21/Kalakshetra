@@ -1,0 +1,32 @@
+.uploaded-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .uploaded-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .upload-btn {
+    display: inline-block;
+    background-color: #4caf50;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .upload-btn:hover {
+    background-color: #45a049;
+  }
