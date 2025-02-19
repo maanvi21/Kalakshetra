@@ -5,6 +5,7 @@ export default function Footer() {
     <div>
         
       <footer>
+        <div className='row1'> 
         <div className="quick-links">
           <h3>QUICK LINKS</h3>
           <ul>
@@ -12,12 +13,22 @@ export default function Footer() {
             <li><a href="#">About Us</a></li>
           </ul>
         </div>
-        <div className="help">
-          <h3>HELP</h3>
+        <div className="services">
+
+          <h3>SERVICES</h3>
           <ul>
             <li><a href="#">Track Orders</a></li>
             <li><a href="#">Return/Exchange Policy</a></li>
             <li><a href="#">Shipping & Payment</a></li>
+            
+          </ul>
+        </div>
+        </div>
+
+        <div className="help">
+          <h3>HELP</h3>
+          <ul>
+        
             <li><a href="#">Privacy Policy</a></li>
             <li><a href="#">Terms & Conditions</a></li>
             <li><a href="#">Contact Us</a></li>
