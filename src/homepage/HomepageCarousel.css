@@ -1,47 +1,67 @@
 /* Outer Container */
-.carousel-container {
-    width: 100%;
-    overflow-x: auto; /* Enables horizontal scrolling */
-    white-space: nowrap; /* Prevents wrapping */
+.carousel-container-wrapper {
+  overflow: hidden; /* Hides overflow to create smooth scrolling */
+  width: 100%;
+  position: relative;
+}
+
+/* Row with Auto Scrolling */
+.carousel-row {
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  width: max-content; /* Prevents line breaks */
+  animation: scroll-right 20s linear infinite; /* Adjust speed as needed */
+}
+
+/* Individual Carousel Item */
+.carousel-item {
+  min-width: 300px; /* Adjust as needed */
+  height: 500px;
+  position: relative;
+  flex-shrink: 0; /* Prevents shrinking */
+}
+
+/* Image Styling */
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(70%);
+  border-radius: 10px;
+}
+
+/* Content Overlay */
+.hero-content {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  border-radius: 10px;
+  width: 80%;
+}
+
+/* Reverse Auto-scrolling Animation */
+@keyframes scroll-right {
+  from {
+      transform: translateX(-50%);
   }
-  
-  /* Row with Scroll */
-  .carousel-row {
-    display: flex;
-    gap: 20px; /* Space between items */
-    padding: 10px;
-    scroll-behavior: smooth; /* Smooth scrolling */
+  to {
+      transform: translateX(0);
   }
-  
-  /* Individual Carousel Item */
-  .carousel-item {
-    min-width: 300px; /* Adjust as needed */
-    height: 500px;
-    position: relative;
-    flex-shrink: 0; /* Prevents shrinking */
-  }
-  
-  /* Image Styling */
-  .carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(70%);
-    border-radius: 10px;
-  }
-  
-  /* Content Overlay */
-  .hero-content {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: white;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px;
-    border-radius: 10px;
-    width: 80%;
-  }
-  
+}
+
+/* Hide Scrollbar */
+.carousel-container-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-container-wrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
