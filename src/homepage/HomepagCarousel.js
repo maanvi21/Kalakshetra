@@ -1,12 +1,19 @@
 import React from "react";
 import "./HomepageCarousel.css";
-import CarouselData from '../data/CarouselData.js'
+
+
+
+
 export default function HomepageCarousel({ items}) {
+
+    // Duplicate the items to create a seamless scrolling effect
+    const duplicatedItems = [...items, ...items];
   return (
+    <div className="carousel-container-wrapper">
     <div className="carousel-container">
       <section className="hero">
         <div className="carousel-row">
-          {items.map((item, index) => (
+          {duplicatedItems.map((item, index) => (
             <div className="carousel-item" key={index}>
               <img src={item.image} alt={item.alt} />
               <div className="hero-content">
@@ -17,6 +24,7 @@ export default function HomepageCarousel({ items}) {
           ))}
         </div>
       </section>
+    </div>
     </div>
   );
 }

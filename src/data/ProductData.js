@@ -6,7 +6,9 @@ const productItems = [
     alt: "",
     title: "Random Title",
     description: "Desc",
-    prodInfo:''
+    prodInfo:'',
+    quantity:'',
+    category:''
   },
   {
     id:2,
@@ -15,7 +17,9 @@ const productItems = [
     alt: "",
     title: "Random Title",
     description: "Desc",
-    prodInfo:''
+    prodInfo:'',
+     quantity:'',
+    category:''
   },
   {
     id:3,
@@ -24,7 +28,9 @@ const productItems = [
     alt: "",
     title: "Random Title",
     description: "Desc",
-    prodInfo:''
+    prodInfo:'',
+     quantity:'',
+    category:''
   },
   {
     id:4,
@@ -33,7 +39,9 @@ const productItems = [
     alt: "",
     title: "Random Title",
     description: "Desc",
-    prodInfo:''
+    prodInfo:'',
+     quantity:'',
+    category:''
   },
   {
     id:5,
@@ -42,7 +50,9 @@ const productItems = [
     alt: "",
     title: "Random Title",
     description: "Desc",
-    prodInfo:''
+    prodInfo:'',
+     quantity:'',
+    category:''
   },
   {
     id:6,
@@ -51,7 +61,9 @@ const productItems = [
     alt: "",
     title: "Random Title",
     description: "Desc",
-    prodInfo:''
+    prodInfo:'',
+     quantity:'',
+    category:''
   },
   {
     id:7,
@@ -60,7 +72,9 @@ const productItems = [
     alt: "",
     title: "Random Title",
     description: "Desc",
-    prodInfo:''
+    prodInfo:'',
+     quantity:'',
+    category:''
   },
 ];
 

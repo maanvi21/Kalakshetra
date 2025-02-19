@@ -13,6 +13,8 @@ import { AuthProvider } from "./context/AuthContext.js";
 import CartProvider from './context/CartContext.js';
 import Cart from "./cart/Cart.js";
 import WishlistProvider from "./context/WishlistContext.js";
+import { Locate } from "lucide-react";
+import LocateUs from "./components/LocateUs.js";
 
 
 
@@ -42,6 +44,7 @@ function App() {
             <Route path="/login" element={<AuthForm />} />
             <Route path="/register" element={<AuthForm />} />
             <Route path="/cart" element={<Cart />} />
+            {/* <Route path='/locate' element={<LocateUs/>} /> */}
 
           </Routes>
         </div>
