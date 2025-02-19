@@ -17,7 +17,7 @@ export default function Navbar() {
     navigate('/contact')
     
   }
-  const navToLocatet=()=>{
+  const navToLocate=()=>{
     navigate('/')
     
   }
@@ -33,7 +33,7 @@ export default function Navbar() {
           <ul>
             <li onClick={navToHome}>Home</li>
             <li onClick={navToAbout}>About Us</li>
-            <li onClick={navToLocatet}>Locate Our Branches</li>
+            <li onClick={navToLocate}>Locate Our Branches</li>
             <li onClick={navToContact}>Contact Us</li>
           </ul>
         </nav>

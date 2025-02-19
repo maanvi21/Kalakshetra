@@ -1,8 +1,7 @@
-// wishlistContext
 
 import React, { createContext, useContext, useReducer, useState} from 'react';
 //prepares the data layer
-export const StateContext =createContext();
+export const WishlistContext =createContext();
 
 
 
@@ -28,16 +27,16 @@ const Reducer=(state,action)=>{
 
 
 //wraps our app and provides the data layer to the entire app
-const WishlistContext = ({ children }) => {
+const WishlistProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, { wishlist: [] });
 
   return (
-    <StateContext.Provider value={{ state, dispatch }}>
+    <WishlistContext.Provider value={{ state, dispatch }}>
       {children}
-    </StateContext.Provider>
+    </WishlistContext.Provider>
   );
 };
 //pulls information from the data layer
-export const useStateValue = () => useContext(StateContext);
+export const useStateValue = () => useContext(WishlistContext);
 
-export default WishlistContext;
+export default WishlistProvider;

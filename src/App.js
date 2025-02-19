@@ -8,24 +8,29 @@ import Contact from './contact/Contact.js'
 import AuthForm from "./auth/AuthForm.jsx";
 
 import "./App.css";
-import WishlistContext from "./context/WishlistContext.js";
-import { AuthProvider } from "./context/AuthContext.js";
 
+import { AuthProvider } from "./context/AuthContext.js";
+import CartProvider from './context/CartContext.js';
 import Cart from "./cart/Cart.js";
+import WishlistProvider from "./context/WishlistContext.js";
+import { Locate } from "lucide-react";
+import LocateUs from "./components/LocateUs.js";
 
 
 
 function App() {
   return (
     <AuthProvider>
-    <WishlistContext>
+      <CartProvider>
+    <WishlistProvider>
       <Router>
         <div className="App">
           <Routes>
           <Route path='/' element={[<UserHomepage/>]}/>
 
 <Route path='/userbrowse' element={[<Browse/>]}/>
-<Route path='/wishlist' element={[<Wishlist/>]}/>
+<Route path='/wishlist' element={[<Wishlist
+/>]}/>
 <Route path='/about' element={[<About/>]}/>
 <Route path='/contact' element={[<Contact/>]}/>
 
@@ -39,11 +44,14 @@ function App() {
             <Route path="/login" element={<AuthForm />} />
             <Route path="/register" element={<AuthForm />} />
             <Route path="/cart" element={<Cart />} />
+            {/* <Route path='/locate' element={<LocateUs/>} /> */}
 
           </Routes>
         </div>
       </Router>
-    </WishlistContext>
+      </WishlistProvider>
+      </CartProvider>
+    
     </AuthProvider>
   );
 }

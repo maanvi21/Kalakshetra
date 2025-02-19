@@ -1,94 +1,138 @@
-import React, { useState } from 'react';
-import productItems from '../data/ProductData'
+import React from 'react';
 import Header from '../components/Header';
-import "./Cart.css";
-import Button from '../components/Button'
+import Button from '../components/Button';
+import OperationsButton from '../components/OperationsButton';
+import { useNavigate } from 'react-router-dom';
+import { useStateValue } from '../context/CartContext';
+import { useStateValue as useWishlistState } from '../context/WishlistContext';
+import './Cart.css';
 
 const Cart = () => {
-  const [isCartView, setIsCartView] = useState(true);
-
-  
+  const navigate = useNavigate();
+  const { state, dispatch } = useStateValue();
+  const { dispatch: wishlistDispatch } = useWishlistState();
 
   const handleQuantityChange = (id, delta) => {
-    console.log(`Change quantity for item ${productItems.id} by ${delta}`);
+    const item = state.cart.find(item => item.id === id);
+    if (item) {
+      const newQuantity = item.quantity + delta;
+      if (newQuantity > 0) {
+        dispatch({
+          type: 'UPDATE_QUANTITY',
+          id: id,
+          quantity: newQuantity
+        });
+      }
+    }
   };
 
   const handleRemove = (id) => {
-    console.log(`Remove item ${id}`);
+    dispatch({
+      type: 'REMOVE_FROM_CART',
+      id: id
+    });
+  };
+
+  const moveToWishlist = (item) => {
+    wishlistDispatch({
+      type: 'ADD_TO_WISHLIST',
+      item: {
+        id: item.id,
+        title: item.name,
+        image: item.image,
+        price: item.price
+      }
+    });
+    handleRemove(item.id);
   };
 
   const calculateTotal = () => {
-    return productItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return state.cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const calculateItemTotal = (item) => {
+    return item.price * item.quantity;
+  };
+
+  const navToWishlist = () => {
+    navigate('/wishlist');
   };
 
   return (
-    <div >
+    <div className="cart-page">
       <Header/>
-      <div className="container">
-          <h1 className="title">View Cart</h1>
-          <button 
-            className="toggle-button"
-            onClick={() => setIsCartView(!isCartView)}
-          >
-            {isCartView ? "View Wishlist" : "View Cart"}
-          </button>
+      <div className="cart-container">
+        <div className='cart-header'>
+          <h1 className="title">Shopping Cart</h1>
+          <div className='wishlist-button'>
+            <Button text='View Wishlist' onClick={navToWishlist}/>
+          </div>
+        </div>
         
-
-        {isCartView ? (
-          <div>
-            {productItems.length > 0 ? (
-              <div className="item-grid">
-                {productItems.map((item) => (
-                  <div className="cart-item" key={item.id}>
+        <div className="cart-content">
+          {state.cart.length > 0 ? (
+            <div className="item-grid">
+              {state.cart.map((item) => (
+                <div className="cart-item" key={item.id}>
+                  <div className="item-image-container">
                     <img src={item.image} alt={item.name} className="item-image" />
-                    <div className="item-details">
-                      <h2 className="item-name">{item.name}</h2>
-                      <p className="item-price">₹{item.price}</p>
-                      <div className="quantity-controls">
-                     
-                        <Button text='-' onClick={() => handleQuantityChange(item.id, -1)} />
-                        <span>{item.quantity}</span>
-            
-                        <Button text='+' onClick={() => handleQuantityChange(item.id, 1)} />
-                      </div>
-                    </div>
-                    <Button text='Move to Wishlist' onClick={() => handleRemove(item.id)} />
-                    <Button text='Remove' onClick={() => handleRemove(item.id)} />
                   </div>
-                ))}
-              </div>
-            ) : (
-              <p className="empty-message">Your cart is empty.</p>
-            )}
-
-            {productItems.length > 0 && (
-              <div className="total-container">
-                <p className="total-label">Total: ₹{calculateTotal()}</p>
-                <Button text='Checkout' onClick={() => null} />
-              </div>
-            )}
-          </div>
-        ) : (
-          <div>
-            {productItems.length > 0 ? (
-              <div className="item-grid">
-                {productItems.map((item) => (
-                  <div className="wishlist-item" key={item.id}>
-                    <img src={item.image} alt={item.name} className="item-image" />
-                    <div className="item-details">
-                      <h2 className="item-name">{item.name}</h2>
-                      <p className="item-price">₹{item.price}</p>
+                  <div className="item-details">
+                    <div className="item-header">
+                      <h2 className="item-name">{item.name || item.title}</h2>
+                      {item.category && (
+                        <span className="item-category">{item.category}</span>
+                      )}
                     </div>
-                 <Button text='Move to Cart' onClick={() => handleRemove(item.id)} />
-                  
+                    <div className="price-section">
+                      <p className="item-price">₹{item.price} each</p>
+                      <p className="item-subtotal">
+                        Subtotal: ₹{calculateItemTotal(item)}
+                      </p>
+                    </div>
+                    <div className="quantity-controls">
+                      <OperationsButton 
+                        text='-' 
+                        onClick={() => handleQuantityChange(item.id, -1)}
+                      />
+                      <span className="quantity-display">{item.quantity}</span>
+                      <OperationsButton 
+                        text='+' 
+                        onClick={() => handleQuantityChange(item.id, 1)}
+                      />
+                    </div>
                   </div>
-                ))}
+                  <div className="item-actions">
+                    <Button 
+                      text='Move to Wishlist' 
+                      onClick={() => moveToWishlist(item)}
+                    />
+                    <OperationsButton 
+                      text='Remove' 
+                      onClick={() => handleRemove(item.id)}
+                      className="remove-button"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-cart">
+              <p className="empty-message">Your cart is empty</p>
+              <Button text='Continue Shopping' onClick={() => navigate('/')} />
+            </div>
+          )}
+          
+          {state.cart.length > 0 && (
+            <div className="total-container">
+              <div className="total-details">
+                <p className="total-label">Total Items: {state.cart.reduce((sum, item) => sum + item.quantity, 0)}</p>
+                <p className="total-amount">Total Amount: ₹{calculateTotal()}</p>
               </div>
-            ) : (
-              <p className="empty-message">Your wishlist is empty.</p>
-            )}
-          </div>
-        )}
+              <Button text='Proceed to Checkout' onClick={() => null} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
