@@ -8,8 +8,16 @@ footer {
     grid-template-columns: repeat(3, 1fr); /* Creates two equal columns */
     /* grid-template-rows: repeat(2, auto); */
   }
+
+  .row1{
+    padding:10px;
+  }
+  .services{
+    margin-top:20px;
+  }
   
   footer h3 {
+    font-weight: bold;
     font-size: 1.2rem;
     margin-bottom: 1rem;
   }
