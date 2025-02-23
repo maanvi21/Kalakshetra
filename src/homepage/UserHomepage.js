@@ -20,7 +20,7 @@ const UserHomepage = () => {
         <section className="offerings">
           {/* categories */}
           
-          <h2>What we offer</h2>
+          <h2>Offers</h2>
           
           <div className="offerings-grid">
           <CategoriesContainer items={categories}/>
