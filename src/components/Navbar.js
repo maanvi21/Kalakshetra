@@ -2,6 +2,7 @@ import React from 'react'
 import './Navbar.css'
 import { useNavigate } from 'react-router-dom'
 import LoginToggle from './LoginToggle';
+import NavDrawer from './NavDrawer';
 export default function Navbar() {
   const navigate=useNavigate();
 
@@ -37,6 +38,7 @@ export default function Navbar() {
             <li onClick={navToLocate}>Locate Our Branches</li>
             <li onClick={navToContact}>Contact Us</li>
             <li> <LoginToggle/> </li>
+            <li><NavDrawer/></li>
           </ul>
         </nav>
       </header>
