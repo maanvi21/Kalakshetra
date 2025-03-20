@@ -15,15 +15,18 @@ import Cart from "./cart/Cart.js";
 import WishlistProvider from "./context/WishlistContext.js";
 import { Locate } from "lucide-react";
 import LocateUs from "./components/LocateUs.js";
+import AuthHandler from "./auth/AuthHandler.js";
 
 
 
 function App() {
   return (
+
     <AuthProvider>
       <CartProvider>
     <WishlistProvider>
       <Router>
+        <AuthHandler/>
         <div className="App">
           <Routes>
           <Route path='/' element={[<UserHomepage/>]}/>
@@ -54,6 +57,7 @@ function App() {
       </CartProvider>
     
     </AuthProvider>
+
   );
 }
 

@@ -1,8 +1,8 @@
 const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User"); // Import User model
-require("../config/passport"); // Import Passport configuration
+const User = require("../models/User");
+require("../config/passport");
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get("/google/callback",
         try {
             // req.user.email is from passport.js
             let user = await User.findOne({ email: req.user.email });
-
+            
             if (!user) {
                 user = new User({
                     name: req.user.displayName,
@@ -25,14 +25,15 @@ router.get("/google/callback",
                 });
                 await user.save();
             }
-
+            
             // Generate JWT Token
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-            res.status(200).json({ message: "Login successful", token });
+            
+            // Redirect to frontend with token
+            res.redirect(`http://localhost:3000/?token=${token}`);
         } catch (error) {
             console.error("Google Auth Error:", error);
-            res.status(500).json({ message: "Server Error" });
+            res.redirect("http://localhost:3000/login?error=auth_failed");
         }
     }
 );

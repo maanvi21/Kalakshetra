@@ -1,25 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Mail, Lock, LogIn, UserPlus } from "lucide-react";
 import { FaGoogle as Google } from "react-icons/fa";
 
 
+
 const AuthForm = () => {
+
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+ 
 
-  const handleSubmit = (e) => {
+  // Check if user is already logged in (e.g., from localStorage token)
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+     isLogin(true);
+    }
+  }, [isLogin]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(isLogin ? "Logging in" : "Signing up", { email, password });
+    
+    try {
+      // This is where you'd make an API call to your backend
+      // For now, we'll simulate a successful login/signup
+      console.log(isLogin ? "Logging in" : "Signing up", { email, password });
+      
+      // Simulating successful auth (replace with actual API call)
+      const response = { success: true, token: "sample-token-123" };
+      
+      if (response.success) {
+        // Store token in localStorage
+        localStorage.setItem("authToken", response.token);
+        isLogin(true);
+      }
+    } catch (error) {
+      console.error("Auth Error:", error);
+    }
   };
+
   const handleGoogleAuth = async () => {
     try {
-      window.location.href = "http://localhost:5000/auth/google"; // Redirect to backend route
+      window.location.href = "http://localhost:5000/auth/google"; 
+   // Redirect to backend route
     } catch (error) {
       console.error("Google Auth Error:", error);
     }
   };
-  
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    isLogin(false);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-lg w-96">
@@ -34,9 +67,7 @@ const AuthForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-
             <input
               type="email"
               placeholder="Email"
@@ -48,9 +79,7 @@ const AuthForm = () => {
           </div>
 
           <div className="relative">
-
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-
             <input
               type="password"
               placeholder="Password"
@@ -65,9 +94,7 @@ const AuthForm = () => {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
           >
-
             {isLogin ? <LogIn className="mr-2" size={20} /> : <UserPlus className="mr-2" size={20} />}
-
             {isLogin ? "Log In" : "Sign Up"}
           </button>
 
