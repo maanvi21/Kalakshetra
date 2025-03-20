@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 // Middleware for sessions (required for Passport.js)
 app.use(session({
-    secret: "your_secret_key", // Change this to a secure secret
+    secret:process.env.MY_SECRET_KEY, // Change this to a secure secret
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false } // Set to `true` if using HTTPS
