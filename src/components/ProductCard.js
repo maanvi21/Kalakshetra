@@ -1,88 +1,93 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import './ProductCard.css';
 import Button from './Button';
 import { useStateValue as useWishlistState } from '../context/WishlistContext';
 import { useStateValue as useCartState } from '../context/CartContext';
 
 export default function ProductCard({ items }) {
-  const [liked, setLiked] = useState({});
-  const { dispatch: wishlistDispatch } = useWishlistState();
+  const [likedItems, setLikedItems] = useState({});
+  const { state: wishlistState, dispatch: wishlistDispatch } = useWishlistState();
   const { state: cartState, dispatch: cartDispatch } = useCartState();
 
-  // Like functionality
-  const toggleLike = (index) => {
-    setLiked((prev) => {
-      const newLikedState = { ...prev, [index]: !prev[index] };
-      const item = {
-        id: items[index].id,
-        title: items[index].title,
-        image: items[index].image,
-        alt: items[index].alt,
-      };
+  const handleLikeToggle = useCallback((index) => {
+    const item = items[index];
+    
+    setLikedItems(prevLiked => {
+      const currentLikedState = prevLiked[index];
+      
+      if (!currentLikedState) {
+        // Check if item is already in wishlist before dispatching
+        const isAlreadyInWishlist = wishlistState.wishlist.some(
+          wishlistItem => wishlistItem.id === item.id
+        );
 
-      if (newLikedState[index]) {
-        wishlistDispatch({ type: 'ADD_TO_WISHLIST', item });
+        if (!isAlreadyInWishlist) {
+          wishlistDispatch({ 
+            type: 'ADD_TO_WISHLIST', 
+            item: {
+              id: item.id,
+              title: item.title,
+              image: item.image,
+              alt: item.alt,
+            }
+          });
+        }
       } else {
-        wishlistDispatch({ type: 'REMOVE_FROM_WISHLIST', id: item.id });
+        wishlistDispatch({ 
+          type: 'REMOVE_FROM_WISHLIST', 
+          id: item.id 
+        });
       }
 
-      return newLikedState;
+      // Return new state
+      return {
+        ...prevLiked,
+        [index]: !currentLikedState
+      };
     });
-  };
+  }, [items, wishlistDispatch]);
 
-  // Add to cart function
-  const addToCart = (item) => {
-    console.log('Adding item to cart:', item);
-    // Find if item already exists in cart
+  const handleAddToCart = useCallback((item) => {
     const existingItem = cartState.cart.find((cartItem) => cartItem.id === item.id);
-    console.log('Existing item:', existingItem);
+    
+    const newItem = {
+      id: item.id,
+      name: item.name || item.title,
+      price: item.price || 0,
+      image: item.image,
+      quantity: 1,
+      category: item.category || 'Uncategorized',
+    };
+
     if (existingItem) {
-      // If item exists, update its quantity
       cartDispatch({
         type: 'UPDATE_QUANTITY',
         id: item.id,
         quantity: existingItem.quantity + 1
       });
     } else {
-      // If item doesn't exist, add it with quantity 1
-      const newItem = {
-        id: item.id,
-        name: item.name || item.title,
-        price: item.price || 0,
-        image: item.image,
-        quantity: 1,
-     
-        category: item.category || 'Uncategorized',
-      };
-      cartDispatch({ type: 'ADD_TO_CART', item: newItem });
+      cartDispatch({ 
+        type: 'ADD_TO_CART', 
+        item: newItem 
+      });
     }
-
-    alert('Item added to cart');
-  };
-
-  // wishlist useEffect
-  useEffect(() => {
-    for (let index in liked) {
-      if (liked[index]) {
-        console.log('Added to Wishlist');
-      } else {
-        console.log('Removed from Wishlist');
-      }
-    }
-  }, [liked]);
+  }, [cartState.cart, cartDispatch]);
 
   return (
     <div className="product-card-container">
       {items.map((item, index) => (
-        <div className="prod_container" key={index}>
+        <div className="prod_container" key={item.id || index}>
           <div className="prod_image-wrapper">
-            <img src={item.image} alt={item.alt} />
+            <img src={item.image} alt={item.alt || 'Product Image'} />
           </div>
           <div className="prod_desc">
             <div className="title-container">
-              <button className="like-button" onClick={() => toggleLike(index)}>
+              <button 
+                className="like-button" 
+                onClick={() => handleLikeToggle(index)}
+              >
                 <img
-                  src={liked[index] ? 'assets/liked.png' : 'assets/unliked.png'}
+                  src={likedItems[index] ? 'assets/liked.png' : 'assets/unliked.png'}
                   alt="like"
                   className="like-icon"
                 />
@@ -90,7 +95,10 @@ export default function ProductCard({ items }) {
               <h3>{item.title}</h3>
             </div>
             <div className="btn">
-              <Button text="Add to Cart" onClick={() => addToCart(item)} />
+              <Button 
+                text="Add to Cart" 
+                onClick={() => handleAddToCart(item)} 
+              />
             </div>
           </div>
         </div>

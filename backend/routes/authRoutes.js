@@ -1,45 +1,40 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
+const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/User"); // Import User model
+require("../config/passport"); // Import Passport configuration
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey"; 
 
-// Register Route
-router.post("/register", async (req, res) => {
-    const { name, email, password } = req.body;
+// Google OAuth Login Route
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-    try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ error: "User already exists" });
+// Google OAuth Callback Route
+router.get("/google/callback",
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    async (req, res) => {
+        try {
+            // req.user.email is from passport.js
+            let user = await User.findOne({ email: req.user.email });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword });
-        await newUser.save();
+            if (!user) {
+                user = new User({
+                    name: req.user.displayName,
+                    email: req.user.email,
+                    password: "google-auth" // Placeholder password
+                });
+                await user.save();
+            }
 
-        res.json({ message: "User registered successfully!" });
-    } catch (error) {
-        res.status(500).json({ error: "Server error" });
+            // Generate JWT Token
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+            res.status(200).json({ message: "Login successful", token });
+        } catch (error) {
+            console.error("Google Auth Error:", error);
+            res.status(500).json({ message: "Server Error" });
+        }
     }
-});
-
-// Login Route
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ error: "Invalid credentials" });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
-
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token });
-    } catch (error) {
-        res.status(500).json({ error: "Server error" });
-    }
-});
+);
 
 module.exports = router;

@@ -12,11 +12,14 @@ const AuthForm = () => {
     e.preventDefault();
     console.log(isLogin ? "Logging in" : "Signing up", { email, password });
   };
-
-  const handleGoogleAuth = () => {
-    console.log("Authenticating with Google");
+  const handleGoogleAuth = async () => {
+    try {
+      window.location.href = "http://localhost:5000/auth/google"; // Redirect to backend route
+    } catch (error) {
+      console.error("Google Auth Error:", error);
+    }
   };
-
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-lg w-96">
