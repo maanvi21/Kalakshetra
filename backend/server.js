@@ -26,6 +26,7 @@ app.use(passport.session());
 
 // Define routes *after* session and passport middleware
 app.use("/auth", authRoutes);
+// random
 
 
 const PORT = process.env.PORT || 5000;
