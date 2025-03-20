@@ -2,22 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Mail, Lock, LogIn, UserPlus } from "lucide-react";
 import { FaGoogle as Google } from "react-icons/fa";
 
-
-
 const AuthForm = () => {
-
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
  
-
   // Check if user is already logged in (e.g., from localStorage token)
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
-     isLogin(true);
+      setIsLogin(true); // Changed from isLogin(true) to setIsLogin(true)
     }
-  }, [isLogin]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +29,7 @@ const AuthForm = () => {
       if (response.success) {
         // Store token in localStorage
         localStorage.setItem("authToken", response.token);
-        isLogin(true);
+        setIsLogin(true); // Changed from isLogin(true) to setIsLogin(true)
       }
     } catch (error) {
       console.error("Auth Error:", error);
@@ -48,9 +44,10 @@ const AuthForm = () => {
       console.error("Google Auth Error:", error);
     }
   };
+  
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    isLogin(false);
+    setIsLogin(false); // Changed from isLogin(false) to setIsLogin(false)
   };
 
   return (

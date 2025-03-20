@@ -13,8 +13,7 @@ import { AuthProvider } from "./context/AuthContext.js";
 import CartProvider from './context/CartContext.js';
 import Cart from "./cart/Cart.js";
 import WishlistProvider from "./context/WishlistContext.js";
-import { Locate } from "lucide-react";
-import LocateUs from "./components/LocateUs.js";
+
 import AuthHandler from "./auth/AuthHandler.js";
 
 
