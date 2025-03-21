@@ -3,6 +3,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const singupRoutes=require("./routes/signupRoute");
+const loginRoutes=require("./routes/loginRoute");
 const session = require("express-session");
 const passport = require("passport");
 
@@ -26,7 +28,9 @@ app.use(passport.session());
 
 // Define routes *after* session and passport middleware
 app.use("/auth", authRoutes);
-// random
+app.use("/signup",singupRoutes);
+app.use("/login",loginRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;

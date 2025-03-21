@@ -1,54 +1,83 @@
 import React, { useState, useEffect } from "react";
-import { Mail, Lock, LogIn, UserPlus } from "lucide-react";
+import { Mail, Lock, LogIn, UserPlus, User, LogOut } from "lucide-react";
 import { FaGoogle as Google } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
  
-  // Check if user is already logged in (e.g., from localStorage token)
+  // Check if user is already logged in
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
-      setIsLogin(true); // Changed from isLogin(true) to setIsLogin(true)
+      setIsLoggedIn(true);
+      setIsLogin(true);
     }
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     try {
-      // This is where you'd make an API call to your backend
-      // For now, we'll simulate a successful login/signup
-      console.log(isLogin ? "Logging in" : "Signing up", { email, password });
-      
-      // Simulating successful auth (replace with actual API call)
-      const response = { success: true, token: "sample-token-123" };
-      
-      if (response.success) {
-        // Store token in localStorage
-        localStorage.setItem("authToken", response.token);
-        setIsLogin(true); // Changed from isLogin(true) to setIsLogin(true)
+      const response = await fetch(`http://localhost:5000/${isLogin ? "login" : "signup"}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.error || "Authentication failed");
       }
+  
+      if (data.token) {
+        localStorage.setItem("authToken", data.token); // Store JWT token
+        setIsLoggedIn(true);
+      }
+  
+      alert(isLogin ? "Login successful!" : "Signup successful!");
+      
+      // Navigate to home page after both successful login and signup
+      navigate("/");
+  
     } catch (error) {
       console.error("Auth Error:", error);
+      alert(error.message);
     }
   };
-
+  
   const handleGoogleAuth = async () => {
     try {
       window.location.href = "http://localhost:5000/auth/google"; 
-   // Redirect to backend route
+      // Redirect to backend route
     } catch (error) {
       console.error("Google Auth Error:", error);
     }
   };
   
+  // Modified logout function - directly logs out and redirects
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    setIsLogin(false); // Changed from isLogin(false) to setIsLogin(false)
+    setIsLoggedIn(false);
+    setIsLogin(true);
+    // Clear form fields
+    setEmail("");
+    setPassword("");
+    
+    navigate("/login");
+    alert("Logged out successfully");
   };
+
+  // Add a logout button in the form if user is logged in
+  if (isLoggedIn) {
+    handleLogout(); // Automatically log out and redirect
+    return null; // Don't render anything while redirecting
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
