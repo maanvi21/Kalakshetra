@@ -1,8 +1,15 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/../.env" });
 
+// Debugging: Check if environment variables are loaded
+console.log("🔍 GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID || "NOT FOUND");
+console.log("🔍 GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET || "NOT FOUND");
+
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    throw new Error("Missing Google OAuth credentials. Check your .env file.");
+}
 
 passport.use(
     new GoogleStrategy(

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Mail, Lock, LogIn, UserPlus, User, LogOut } from "lucide-react";
+import { Mail, Lock, LogIn, UserPlus, LogOut } from "lucide-react";
 import { FaGoogle as Google } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -9,8 +9,7 @@ const AuthForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
- 
-  // Check if user is already logged in
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
@@ -21,63 +20,50 @@ const AuthForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch(`http://localhost:5000/${isLogin ? "login" : "signup"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(data.error || "Authentication failed");
       }
-  
+
       if (data.token) {
-        localStorage.setItem("authToken", data.token); // Store JWT token
+        localStorage.setItem("authToken", data.token);
         setIsLoggedIn(true);
       }
-  
+
       alert(isLogin ? "Login successful!" : "Signup successful!");
-      
-      // Navigate to home page after both successful login and signup
       navigate("/");
-  
     } catch (error) {
       console.error("Auth Error:", error);
       alert(error.message);
     }
   };
-  
+
   const handleGoogleAuth = async () => {
     try {
-      window.location.href = "http://localhost:5000/auth/google"; 
-      // Redirect to backend route
+      window.location.href = "http://localhost:5000/auth/google";
     } catch (error) {
       console.error("Google Auth Error:", error);
     }
   };
-  
-  // Modified logout function - directly logs out and redirects
+
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     setIsLoggedIn(false);
     setIsLogin(true);
-    // Clear form fields
     setEmail("");
     setPassword("");
-    
     navigate("/login");
     alert("Logged out successfully");
   };
-
-  // Add a logout button in the form if user is logged in
-  if (isLoggedIn) {
-    handleLogout(); // Automatically log out and redirect
-    return null; // Don't render anything while redirecting
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -134,7 +120,7 @@ const AuthForm = () => {
           </div>
 
           <button
-            type="button"
+            type="buttomake n"
             onClick={handleGoogleAuth}
             className="w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition duration-300 flex items-center justify-center"
           >
@@ -142,6 +128,15 @@ const AuthForm = () => {
             Continue with Google
           </button>
         </form>
+
+        {isLoggedIn && (
+          <button
+            onClick={handleLogout}
+            className="mt-4 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300 flex items-center justify-center"
+          >
+            <LogOut className="mr-2" size={20} /> Logout
+          </button>
+        )}
 
         <div className="text-center mt-6">
           <p className="text-gray-600">
