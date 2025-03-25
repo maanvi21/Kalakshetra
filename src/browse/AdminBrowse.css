@@ -1,32 +1,46 @@
-.uploaded-images {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .uploaded-img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 5px;
-    border: 2px solid #ddd;
-  }
-  
-  .file-input {
-    display: none;
-  }
-  
-  .upload-btn {
-    display: inline-block;
-    background-color: #4caf50;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .upload-btn:hover {
-    background-color: #45a049;
-  }
+
+.browse_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+}
+/* Category Section */
+.category h2 {
+  margin-left: 20px;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 30px;
+  color: brown;
+  margin-bottom: 10px;
+}
+
+.scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 20px;
+}
+
+.horizontal-scroll {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;  /* Space between product cards */
+  padding: 10px 0;  /* Optional padding */
+  overflow-x: scroll;
+  scrollbar-width: thin; 
+
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 8px;  /* Horizontal scrollbar height */
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+}

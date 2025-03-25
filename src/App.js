@@ -47,7 +47,7 @@ function App() {
             <Route path="/login" element={<AuthForm />} />
             <Route path="/register" element={<AuthForm />} />
             <Route path="/cart" element={<Cart />} />
-            {/* <Route path="/adminbrowse" element={<AdminBrowse />} /> */}
+            <Route path="/adminbrowse" element={<AdminBrowse />} />
             {/* <Route path='/locate' element={<LocateUs/>} /> */}
 
           </Routes>
