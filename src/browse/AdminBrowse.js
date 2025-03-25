@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import "./Browse.css";
 import ProductCard from "../components/ProductCard.js";
 import Search from "../components/Search.js";
-import Header from "../components/Header.js";
+import Header from "../components/user-components/Header.js";
 import productItems from "../data/ProductData.js";
 import { useStateValue } from "../context/CartContext.js";
+import AdminHeader from "../components/admin-components/AdminHeader.js";
 
 export default function AdminBrowse() {
   const { state } = useStateValue();
@@ -29,7 +30,7 @@ export default function AdminBrowse() {
 
   return (
     <div className="browse-page">
-      <Header />
+      <AdminHeader />
       <div className="browse_header">
         <Search />
       </div>

@@ -1,0 +1,28 @@
+/* Style for the Header container */
+.header {
+    display: flex;
+    position: sticky;
+    top: 0; /* Sticks to the top */
+    left: 0;
+    height: 60px;
+    width: 100%; /* Ensures full width */
+    align-items: center; /* Align logo and navbar vertically */
+    justify-content: space-between; /* Logo on left, Navbar on right */
+    padding: 10px 20px;
+    background-color: #996c5a;;
+   
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensures it stays above other content */
+}
+
+/* Logo Styling */
+.logo img {
+    height: 60px; /* Adjust size as needed */
+    width: auto;
+    cursor: pointer; /* Makes it clickable */
+    transition: transform 0.2s ease-in-out;
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
