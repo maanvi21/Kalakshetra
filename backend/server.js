@@ -6,7 +6,7 @@ const signupRoutes = require("./routes/signupRoute");
 const loginRoutes = require("./routes/loginRoute");
 const session = require("express-session");
 const passport = require("passport");
-const { connectDB,getDatabase } = require("./config/db");
+const { connectDB } = require("./config/db");
 
 // Load environment variables & ensure .env is correctly loaded
 dotenv.config({ path: __dirname + "/.env" });
@@ -20,16 +20,16 @@ console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "✅ Loaded" : "
 
 // Connect to MongoDB
 connectDB();
- // Select different databases
- const menDB = getDatabase("Men");
- const womenDB = getDatabase("Women");
- const accessoriesDB = getDatabase("Accessories");
- const bagsDB= getDatabase("Bags");
+//  // Select different databases
+//  const menDB = getDatabase("Men");
+//  const womenDB = getDatabase("Women");
+//  const accessoriesDB = getDatabase("Accessories");
+//  const bagsDB= getDatabase("Bags");
  
- console.log("💡 Using Men Database:", menDB.name);
-    console.log("💡 Using Women Database:", womenDB.name);
-    console.log("💡 Using Accessories Database:", accessoriesDB.name);
-    console.log("💡 Using Bags Database:", bagsDB.name);
+//  console.log("💡 Using Men Database:", menDB.name);
+//     console.log("💡 Using Women Database:", womenDB.name);
+//     console.log("💡 Using Accessories Database:", accessoriesDB.name);
+//     console.log("💡 Using Bags Database:", bagsDB.name);
 
 
 const app = express();
