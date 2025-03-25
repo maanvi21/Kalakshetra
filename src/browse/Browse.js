@@ -2,7 +2,7 @@ import React from "react";
 import "./Browse.css";
 import ProductCard from "../components/ProductCard";
 import Search from "../components/Search";
-import Header from '../components/Header';
+import Header from '../components/user-components/Header.js';
 import productItems from '../data/ProductData.js';
 import { useStateValue } from '../context/CartContext';
 

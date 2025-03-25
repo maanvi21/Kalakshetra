@@ -2,7 +2,7 @@ import React from 'react'
 import './Wishlist.css'
 import Button from '../components/Button'
 import productItems from '../data/ProductData'
-import Header from '../components/Header'
+import Header from '../components/user-components/Header'
 import { useNavigate } from 'react-router-dom'
 export default function Wishlist() {
     const navigate=useNavigate();

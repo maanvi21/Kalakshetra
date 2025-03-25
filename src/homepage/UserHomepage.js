@@ -3,7 +3,7 @@ import './UserHomepage.css';
 import carouselItems from '../data/CarouselData.js'
 import categories from '../data/CategoriesData.js'
 import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Header from '../components/user-components/Header.js';
 import HomepagCarousel from './HomepagCarousel.js';
 import CategoriesContainer from '../components/CategoriesContainer';
 import LocateUs from '../components/LocateUs.js';

@@ -15,6 +15,7 @@ import Cart from "./cart/Cart.js";
 import WishlistProvider from "./context/WishlistContext.js";
 
 import AuthHandler from "./auth/AuthHandler.js";
+import AdminManagement from "./browse/AdminManagement.js";
 
 
 
@@ -35,7 +36,7 @@ function App() {
 />]}/>
 <Route path='/about' element={[<About/>]}/>
 <Route path='/contact' element={[<Contact/>]}/>
-
+<Route path='/adminmanagement' element={[<AdminManagement/>]}/>
            
             <Route path="/browse" element={<Browse />} />
             <Route path="/" element={<UserHomepage />} />
