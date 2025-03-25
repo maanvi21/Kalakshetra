@@ -7,11 +7,16 @@ const connectDB = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
+        
         console.log("✅ MongoDB Connected");
     } catch (error) {
         console.error("❌ MongoDB Connection Failed:", error);
         process.exit(1);
     }
 };
+// Function to get a specific database
+const getDatabase = (dbName) => {
+    return mongoose.connection.useDb(dbName); // Ensure this function is exported properly
+};
+module.exports = { connectDB, getDatabase };
 
-module.exports = connectDB;
