@@ -1,62 +1,106 @@
 const express = require('express');
-const { Shirts, Trousers, Jackets, Shoes } = require('../models/Men');
+const { Shirts, Trousers } = require('../models/men');
 const router = express.Router();
 
-// Map categories to their respective models
-const modelMap = {
-    'shirts': Shirts,
-    'trousers': Trousers,
-    'jackets': Jackets,
-    'shoes': Shoes
-};
+const models = {
+ shirts: Shirts,
+    trousers: Trousers
+  };
+  
 
-// Middleware to get the correct model
-const getModel = (req, res, next) => {
-    const category = req.params.category.toLowerCase();
-    if (!modelMap[category]) {
-        return res.status(400).json({ message: 'Invalid category' });
-    }
-    req.Model = modelMap[category];
-    next();
-};
+// Generic route to handle different subcategories
+router.post('/add/:subcategory', async (req, res) => {
+    const { subcategory } = req.params.toLowerCase();
+    const Model = models[subcategory];
+    if (!Model) {
+        return res.status(400).json({ error: 'Invalid subcategory' });
+      }
 
-// GET all items in a category
-router.get('/:category', getModel, async (req, res) => {
-    try {
-        const items = await req.Model.find().sort({ createdAt: -1 });
+      try {
+        const newItem = new Model(req.body);
+        await newItem.save();
+        res.status(201).json({ message: `${subcategory} item added successfully!`, item: newItem });
+      }catch(error){
+        return res.status(500).json({ error: 'Server error', message: error.message });
+      }
+}
+
+
+);  
+
+// to fetch all items
+router.get('/fetch/:subcategory', async (req, res) => {
+    const { subcategory } = req.params.toLowerCase();
+    const Model = models[subcategory];
+    if (!Model) {
+        return res.status(400).json({ error: 'Invalid subcategory' });
+      }
+
+      try {
+        const items = await Model.find().sort({ createdAt: -1 });
         res.status(200).json({ items });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-});
+      }catch(error){
+        return res.status(500).json({ error: 'Server error', message: error.message });
+      }
+}
+);
 
-// POST a new item to a category
-router.post('/:category', getModel, async (req, res) => {
-    try {
-        const { title, description, image } = req.body;
-        if (!title || !description || !image) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
+//  to delete an item
+router.delete('/delete/:subcategory/:id', async (req, res) => {
+    const { subcategory, id } = req.params;
+    const Model = models[subcategory];
+    if (!Model) {
+        return res.status(400).json({ error: 'Invalid subcategory' });
+      }
 
-        const newItem = new req.Model({ title, description, image });
-        const savedItem = await newItem.save();
-        res.status(201).json({ item: savedItem });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-});
-
-// DELETE an item from a category
-router.delete('/:category/:id', getModel, async (req, res) => {
-    try {
-        const deletedItem = await req.Model.findByIdAndDelete(req.params.id);
+      try {
+        const deletedItem = await Model.findByIdAndDelete(id);
         if (!deletedItem) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
-        res.status(200).json({ message: 'Item deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-});
+            return res.status(404).json({ error: 'Item not found' });
+          }
+          res.status(200).json({ message: `${subcategory} item deleted successfully!` });
+      }catch(error){
+        return res.status(500).json({ error: 'Server error', message: error.message });
+      }
+}
+);
+//  to update an item
+router.put('/update/:subcategory/:id', async (req, res) => {
+    const { subcategory, id } = req.params;
+    const Model = models[subcategory];
+    if (!Model) {
+        return res.status(400).json({ error: 'Invalid subcategory' });
+      }
+
+      try {
+        const updatedItem = await Model.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedItem) {
+            return res.status(404).json({ error: 'Item not found' });
+          }
+          res.status(200).json({ message: `${subcategory} item updated successfully!`, item: updatedItem });
+      }catch(error){
+        return res.status(500).json({ error: 'Server error', message: error.message });
+      }
+}
+);
+//  to fetch a single item
+router.get('/fetch/:subcategory/:id', async (req, res) => {
+    const { subcategory, id } = req.params;
+    const Model = models[subcategory];
+    if (!Model) {
+        return res.status(400).json({ error: 'Invalid subcategory' });
+      }
+
+      try {
+        const item = await Model.findById(id);
+        if (!item) {
+            return res.status(404).json({ error: 'Item not found' });
+          }
+          res.status(200).json({ item });
+      }catch(error){
+        return res.status(500).json({ error: 'Server error', message: error.message });
+      }
+}
+);
 
 module.exports = router;
