@@ -6,6 +6,9 @@ export default function AdminManagement() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [activeSubcategory, setActiveSubcategory] = useState(null);
   const [file, setFile] = useState(null);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
   const [items, setItems] = useState([]);
   const [viewItems, setViewItems] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
@@ -28,9 +31,14 @@ export default function AdminManagement() {
   };
 
   const handleUpload = () => {
-    if (!file) return alert('Please select a file to upload');
-    alert(`Uploading file: ${file.name} to ${activeSubcategory}`);
+    if (!file || !name || !description || !price) {
+      return alert('Please fill out all fields and select a file.');
+    }
+    alert(`Uploading item: ${name}, Description: ${description}, Price: ${price}, File: ${file.name} to ${activeSubcategory}`);
     setFile(null);
+    setName('');
+    setDescription('');
+    setPrice('');
   };
 
   const handleViewItems = () => {
@@ -48,50 +56,36 @@ export default function AdminManagement() {
         <Button text='Accessories' onClick={() => handleCategoryClick('accessories')} />
       </div>
 
-      {activeCategory === 'women' && (
+      {activeCategory && (
         <div className="subcategory-options">
-          <Button text='Kurtis' onClick={() => handleSubcategoryClick('kurtis')} />
-          <Button text='Sarees' onClick={() => handleSubcategoryClick('sarees')} />
-          <Button text='Tops' onClick={() => handleSubcategoryClick('tops')} />
-          <Button text='Trousers' onClick={() => handleSubcategoryClick('trousers')} />
+          {['Kurtis', 'Sarees', 'Tops', 'Trousers'].map((sub) => (
+            activeCategory === 'women' && <Button key={sub} text={sub} onClick={() => handleSubcategoryClick(sub.toLowerCase())} />
+          ))}
+          {['Shirts', 'Trousers'].map((sub) => (
+            activeCategory === 'men' && <Button key={sub} text={sub} onClick={() => handleSubcategoryClick(sub.toLowerCase())} />
+          ))}
+          {['Bag 1', 'Bag 2'].map((sub) => (
+            activeCategory === 'bags' && <Button key={sub} text={sub} onClick={() => handleSubcategoryClick(sub.toLowerCase())} />
+          ))}
+          {['Acc 1', 'Acc 2'].map((sub) => (
+            activeCategory === 'accessories' && <Button key={sub} text={sub} onClick={() => handleSubcategoryClick(sub.toLowerCase())} />
+          ))}
         </div>
       )}
-
-        {/* Men Subcategories */}
-        {activeCategory === 'men' && (
-        <div className="subcategory-options">
-          <Button text='Shirts' onClick={() => handleSubcategoryClick('shirts')} />
-          <Button text='Trousers' onClick={() => handleSubcategoryClick('trousers')} />
-        </div>
-      )}
-
-      {/* Bags Subcategories */}
-      {activeCategory === 'bags' && (
-        <div className="subcategory-options">
-          <Button text='Bag 1' onClick={() => handleSubcategoryClick('bag1')} />
-          <Button text='Bag 2' onClick={() => handleSubcategoryClick('bag2')} />
-        </div>
-      )}
-
-      {/* Accessories Subcategories */}
-      {activeCategory === 'accessories' && (
-        <div className="subcategory-options">
-          <Button text='Acc 1' onClick={() => handleSubcategoryClick('acc1')} />
-          <Button text='Acc 2' onClick={() => handleSubcategoryClick('acc2')} />
-        </div>
-      )}
-
-
 
       {activeSubcategory && (
         <div className="admin-actions">
           <h3>{activeSubcategory} Management</h3>
-          <Button text='Upload Item' onClick={() => { setShowUpload(true); setViewItems(false); }} />
-          <Button text='View All Items' onClick={handleViewItems} />
+          <Button text='Upload ' onClick={() => { setShowUpload(true); setViewItems(false); }} />
+          <Button text='View ' onClick={handleViewItems} />
+          <Button text='Delete'  />
+          <Button text='Update'  />
 
-          {/* Upload UI */}
           {showUpload && (
             <div className="upload-section">
+              <input type="text" placeholder="Product Name" value={name} onChange={(e) => setName(e.target.value)} />
+              <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+              <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} />
               <input type="file" onChange={handleFileChange} />
               <Button text='Upload' onClick={handleUpload} />
             </div>
@@ -99,7 +93,6 @@ export default function AdminManagement() {
         </div>
       )}
 
-      {/* Fetch UI - Table to display items */}
       {viewItems && (
         <div className="items-list">
           <h3>Items in {activeSubcategory}</h3>
@@ -108,17 +101,12 @@ export default function AdminManagement() {
               <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Description</th>
                 <th>Price</th>
               </tr>
             </thead>
             <tbody>
-              {items.map(item => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.name}</td>
-                  <td>{item.price}</td>
-                </tr>
-              ))}
+              
             </tbody>
           </table>
         </div>

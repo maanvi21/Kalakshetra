@@ -1,0 +1,201 @@
+/* AdminManagement.css */
+.admin-management {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #4a3728;
+    background-color: #f9f5f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-management h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    color: #8b5a2b;
+    font-weight: 600;
+    border-bottom: 2px solid #c9a77c;
+    padding-bottom: 0.8rem;
+  }
+  
+  .category-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .subcategory-options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: rgba(201, 167, 124, 0.1);
+    border-radius: 6px;
+  }
+  
+  .admin-actions {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .admin-actions h3 {
+    color: #8b5a2b;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-transform: capitalize;
+    text-align: center;
+  }
+  
+  .admin-actions button {
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .upload-section {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .upload-section input {
+    padding: 0.8rem 1rem;
+    border: 1px solid #c9a77c;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    color: #4a3728;
+  }
+  
+  .upload-section input:focus {
+    outline: none;
+    border-color: #8b5a2b;
+    box-shadow: 0 0 0 2px rgba(139, 90, 43, 0.2);
+  }
+  
+  .upload-section input[type="file"] {
+    padding: 0.6rem;
+    background-color: #f9f5f0;
+  }
+  
+  .upload-section input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  .upload-section input[type="number"]::-webkit-outer-spin-button,
+  .upload-section input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .items-list {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .items-list h3 {
+    color: #8b5a2b;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: capitalize;
+  }
+  
+  .items-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  
+  .items-list th {
+    background-color: #c9a77c;
+    color: white;
+    text-align: left;
+    padding: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .items-list td {
+    border-bottom: 1px solid #e0d3c2;
+    padding: 0.8rem;
+    color: #5d4c3c;
+  }
+  
+  .items-list tr:hover {
+    background-color: rgba(201, 167, 124, 0.1);
+  }
+  
+  /* Button Component Styling */
+  button {
+    background-color: #8b5a2b;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.1s;
+  }
+  
+  button:hover {
+    background-color: #a67c4e;
+  }
+  
+  button:active {
+    transform: translateY(1px);
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 768px) {
+    .admin-management {
+      padding: 1.5rem;
+    }
+    
+    .admin-management h2 {
+      font-size: 1.8rem;
+    }
+    
+    .category-buttons, .subcategory-options {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    button {
+      width: 100%;
+      margin-right: 0;
+    }
+    
+    .items-list table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+  
+  /* Active state for buttons */
+  button.active {
+    background-color: #c9a77c;
+    box-shadow: 0 0 0 2px rgba(139, 90, 43, 0.3);
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .upload-section, .items-list {
+    animation: fadeIn 0.3s ease-out;
+  }
