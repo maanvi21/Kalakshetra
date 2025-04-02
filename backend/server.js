@@ -7,7 +7,10 @@ const loginRoutes = require("./routes/loginRoute");
 const session = require("express-session");
 const passport = require("passport");
 const { connectDB } = require("./config/db");
-
+const menRoutes = require("./routes/menRoutes");
+const womenRoutes = require("./routes/womenRoutes");
+const accessoriesRoutes = require("./routes/accessoriesRoutes");
+const bagsRoutes = require("./routes/bagsRoutes");
 // Load environment variables & ensure .env is correctly loaded
 dotenv.config({ path: __dirname + "/.env" });
 
@@ -20,16 +23,6 @@ console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "✅ Loaded" : "
 
 // Connect to MongoDB
 connectDB();
-//  // Select different databases
-//  const menDB = getDatabase("Men");
-//  const womenDB = getDatabase("Women");
-//  const accessoriesDB = getDatabase("Accessories");
-//  const bagsDB= getDatabase("Bags");
- 
-//  console.log("💡 Using Men Database:", menDB.name);
-//     console.log("💡 Using Women Database:", womenDB.name);
-//     console.log("💡 Using Accessories Database:", accessoriesDB.name);
-//     console.log("💡 Using Bags Database:", bagsDB.name);
 
 
 const app = express();
@@ -56,7 +49,10 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 app.use("/signup", signupRoutes);
 app.use("/login", loginRoutes);
-
+app.use("/men", menRoutes);
+app.use("/women", womenRoutes);
+app.use("/accessories", accessoriesRoutes);
+app.use("/bags", bagsRoutes);
 // Handle undefined routes
 app.use((req, res) => {
     res.status(404).json({ error: "Route not found" });
