@@ -10,7 +10,7 @@ const models = {
 
 // Generic route to handle different subcategories
 router.post('/add/:subcategory', async (req, res) => {
-    const { subcategory } = req.params.toLowerCase();
+    const { subcategory } = req.params;
     const Model = models[subcategory];
     if (!Model) {
         return res.status(400).json({ error: 'Invalid subcategory' });
@@ -30,7 +30,7 @@ router.post('/add/:subcategory', async (req, res) => {
 
 // to fetch all items
 router.get('/fetch/:subcategory', async (req, res) => {
-    const { subcategory } = req.params.toLowerCase();
+    const { subcategory } = req.params;
     const Model = models[subcategory];
     if (!Model) {
         return res.status(400).json({ error: 'Invalid subcategory' });
