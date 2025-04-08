@@ -5,7 +5,6 @@ import { useStateValue as useWishlistState } from '../context/WishlistContext';
 import { useStateValue as useCartState } from '../context/CartContext';
 
 export default function ProductCard({ items }) {
-  const [likedItems, setLikedItems] = useState({});
   const { state: wishlistState, dispatch: wishlistDispatch } = useWishlistState();
   const { state: cartState, dispatch: cartDispatch } = useCartState();
   
@@ -25,48 +24,39 @@ export default function ProductCard({ items }) {
     }
   }, [cartState, wishlistState]);
   
-  const handleLikeToggle = useCallback((index) => {
-    const item = items[index];
-    
+  // Check if item is in wishlist
+  const isItemInWishlist = useCallback((itemId) => {
+    return wishlistState?.wishlist?.some(wishlistItem => wishlistItem.id === itemId) || false;
+  }, [wishlistState]);
+  
+  const handleLikeToggle = useCallback((item) => {
     // Safety check
     if (!wishlistState || !wishlistState.wishlist) {
       console.error('Wishlist state is undefined!');
       return;
     }
     
-    setLikedItems(prevLiked => {
-      const currentLikedState = prevLiked[index];
-      
-      if (!currentLikedState) {
-        // Safely check if item exists in wishlist
-        const isAlreadyInWishlist = wishlistState.wishlist && 
-          wishlistState.wishlist.some(wishlistItem => wishlistItem.id === item.id);
-        
-        if (!isAlreadyInWishlist) {
-          wishlistDispatch({
-            type: 'ADD_TO_WISHLIST',
-            item: {
-              id: item.id,
-              title: item.title || item.name || 'Product',
-              image: item.image || '',
-              price: item.price || 0,
-              alt: item.alt || item.title || 'Product image',
-            }
-          });
+    const isInWishlist = isItemInWishlist(item.id);
+    
+    if (!isInWishlist) {
+      wishlistDispatch({
+        type: 'ADD_TO_WISHLIST',
+        item: {
+          id: item.id,
+          title: item.title || item.name || 'Product',
+          name: item.title || item.name || 'Product',
+          image: item.image || '',
+          price: item.price || 0,
+          alt: item.alt || item.title || 'Product image',
         }
-      } else {
-        wishlistDispatch({
-          type: 'REMOVE_FROM_WISHLIST',
-          id: item.id
-        });
-      }
-      
-      return {
-        ...prevLiked,
-        [index]: !currentLikedState
-      };
-    });
-  }, [items, wishlistDispatch, wishlistState]);
+      });
+    } else {
+      wishlistDispatch({
+        type: 'REMOVE_FROM_WISHLIST',
+        id: item.id
+      });
+    }
+  }, [wishlistState, wishlistDispatch, isItemInWishlist]);
   
   const handleAddToCart = useCallback((item) => {
     // Safety check to prevent TypeError
@@ -133,10 +123,10 @@ export default function ProductCard({ items }) {
             <div className="title-container">
               <button
                 className="like-button"
-                onClick={() => handleLikeToggle(index)}
+                onClick={() => handleLikeToggle(item)}
               >
                 <img
-                  src={likedItems[index] ? 'assets/liked.png' : 'assets/unliked.png'}
+                  src={isItemInWishlist(item.id) ? 'assets/liked.png' : 'assets/unliked.png'}
                   alt="like"
                   className="like-icon"
                 />

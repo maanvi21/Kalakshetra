@@ -50,13 +50,13 @@ const WishlistProvider = ({ children }) => {
   };
   
   const [state, dispatch] = useReducer(Reducer, getInitialState());
-
+  
   // Save wishlist to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
     console.log('Current wishlist state saved to localStorage:', state.wishlist);
   }, [state.wishlist]);
-
+  
   return (
     <WishlistContext.Provider value={{ state, dispatch }}>
       {children}
