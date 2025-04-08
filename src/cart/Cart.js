@@ -104,10 +104,7 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="item-actions">
-                    <Button 
-                      text='Move to Wishlist' 
-                      onClick={() => moveToWishlist(item)}
-                    />
+                    
                     <OperationsButton 
                       text='Remove' 
                       onClick={() => handleRemove(item.id)}
