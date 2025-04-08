@@ -34,13 +34,14 @@ const Cart = () => {
   };
 
   const moveToWishlist = (item) => {
+    // Check if item already exists in wishlist
     wishlistDispatch({
       type: 'ADD_TO_WISHLIST',
       item: {
         id: item.id,
-        title: item.name,
+        title: item.name || item.title, // Handle both name and title
         image: item.image,
-        price: item.price
+        price: item.price || 0
       }
     });
     handleRemove(item.id);
@@ -75,7 +76,7 @@ const Cart = () => {
               {state.cart.map((item) => (
                 <div className="cart-item" key={item.id}>
                   <div className="item-image-container">
-                    <img src={item.image} alt={item.name} className="item-image" />
+                    <img src={item.image} alt={item.name || item.title || 'Product'} className="item-image" />
                   </div>
                   <div className="item-details">
                     <div className="item-header">
@@ -103,10 +104,7 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="item-actions">
-                    <Button 
-                      text='Move to Wishlist' 
-                      onClick={() => moveToWishlist(item)}
-                    />
+                    
                     <OperationsButton 
                       text='Remove' 
                       onClick={() => handleRemove(item.id)}
