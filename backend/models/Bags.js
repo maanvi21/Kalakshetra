@@ -38,6 +38,6 @@ async function insertSampleData() {
 }
 
 // Insert dummy data
-insertSampleData();
+// insertSampleData();
 // Export models
 module.exports = { Handbags, Backpacks, Wallets, Totes, Clutches };

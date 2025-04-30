@@ -1,63 +1,63 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const authRoutes = require("./routes/authRoutes");
-const signupRoutes = require("./routes/signupRoute");
-const loginRoutes = require("./routes/loginRoute");
 const session = require("express-session");
 const passport = require("passport");
-const { connectDB } = require("./config/db");
-const menRoutes = require("./routes/menRoutes");
-const womenRoutes = require("./routes/womenRoutes");
-const accessoriesRoutes = require("./routes/accessoriesRoutes");
-const bagsRoutes = require("./routes/bagsRoutes");
-// Load environment variables & ensure .env is correctly loaded
+// Routes (make sure Passport config is loaded before these)
+require("./config/passport"); // ← ✅ Load Passport strategy
+
+// Load environment variables
 dotenv.config({ path: __dirname + "/.env" });
 
-// Debugging: Check if critical env variables are loaded
+// Load MongoDB connection
+const { connectDB } = require("./config/db");
+
+// Debugging: Check env variables
 console.log("🔍 Checking environment variables...");
 console.log("PORT:", process.env.PORT || "NOT LOADED");
 console.log("MY_SECRET_KEY:", process.env.MY_SECRET_KEY ? "✅ Loaded" : "❌ NOT LOADED");
 console.log("MONGO_URI:", process.env.MONGO_URI ? "✅ Loaded" : "❌ NOT LOADED");
 console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "✅ Loaded" : "❌ NOT LOADED");
 
-// Connect to MongoDB
-connectDB();
-
 
 const app = express();
+
+// Connect to MongoDB before anything else
+connectDB(); // ← 🔥 THIS WAS MISSING
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Middleware for sessions (required for Passport.js)
+// Session middleware
 app.use(
     session({
-        secret: process.env.MY_SECRET_KEY || "default_secret", // Ensure a fallback secret
+        secret: process.env.MY_SECRET_KEY || "default_secret",
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: false } // Set to `true` if using HTTPS
+        cookie: { secure: false }
     })
 );
 
-// Initialize Passport
+// Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Define routes *after* session and passport middleware
-app.use("/auth", authRoutes);
-app.use("/signup", signupRoutes);
-app.use("/login", loginRoutes);
-app.use("/men", menRoutes);
-app.use("/women", womenRoutes);
-app.use("/accessories", accessoriesRoutes);
-app.use("/bags", bagsRoutes);
-// Handle undefined routes
+
+
+app.use("/auth", require("./routes/authRoutes"));
+app.use("/signup", require("./routes/signupRoute"));
+app.use("/login", require("./routes/loginRoute"));
+app.use("/men", require("./routes/menRoutes"));
+app.use("/women", require("./routes/womenRoutes"));
+app.use("/accessories", require("./routes/accessoriesRoutes"));
+app.use("/bags", require("./routes/bagsRoutes"));
+
+// 404 route handler
 app.use((req, res) => {
     res.status(404).json({ error: "Route not found" });
 });
 
-// Start the server
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
