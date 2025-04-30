@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from './Button';
-
 import './LoginToggle.css';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import auth context
 
 export default function LoginToggle() {
     const navigate = useNavigate();
-    const [isLogin, setIsLogin] = useState(true);
+    const { user, logout } = useAuth(); // Get user state and logout function
 
-    const toggleLogin = () => {
-        setIsLogin(!isLogin);
-        navigate('/login')
+    const handleClick = () => {
+        if (user) {
+            logout(); // Call logout from context
+            navigate('/login'); // Redirect to login page
+            alert('Logged out successfully');
+        } else {
+            navigate('/login'); // Redirect to login page for login
+        }
     };
 
     return (
         <div>
-            {isLogin ? (
-                <Button text="Logout" onClick={toggleLogin} />
-            ) : (
-                <Button text="Login" onClick={toggleLogin} />
-            )}
+            <Button text={user ? "Logout" : "Login"} onClick={handleClick} />
         </div>
     );
 }

@@ -10,7 +10,7 @@ import './Cart.css';
 const Cart = () => {
   const navigate = useNavigate();
   const { state, dispatch } = useStateValue();
-  const { dispatch: wishlistDispatch } = useWishlistState();
+  const { state: wishlistState, dispatch: wishlistDispatch } = useWishlistState();
 
   const handleQuantityChange = (id, delta) => {
     const item = state.cart.find(item => item.id === id);
@@ -34,16 +34,18 @@ const Cart = () => {
   };
 
   const moveToWishlist = (item) => {
-    // Check if item already exists in wishlist
-    wishlistDispatch({
-      type: 'ADD_TO_WISHLIST',
-      item: {
-        id: item.id,
-        title: item.name || item.title, // Handle both name and title
-        image: item.image,
-        price: item.price || 0
-      }
-    });
+    const existsInWishlist = wishlistState.wishlist.find(w => w.id === item.id);
+    if (!existsInWishlist) {
+      wishlistDispatch({
+        type: 'ADD_TO_WISHLIST',
+        item: {
+          id: item.id,
+          title: item.name || item.title,
+          image: item.image,
+          price: item.price || 0
+        }
+      });
+    }
     handleRemove(item.id);
   };
 
@@ -69,7 +71,7 @@ const Cart = () => {
             <Button text='View Wishlist' onClick={navToWishlist}/>
           </div>
         </div>
-        
+
         <div className="cart-content">
           {state.cart.length > 0 ? (
             <div className="item-grid">
@@ -104,11 +106,15 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="item-actions">
-                    
                     <OperationsButton 
                       text='Remove' 
                       onClick={() => handleRemove(item.id)}
                       className="remove-button"
+                    />
+                    <OperationsButton 
+                      text='Move to Wishlist' 
+                      onClick={() => moveToWishlist(item)}
+                      className="wishlist-button"
                     />
                   </div>
                 </div>
@@ -120,7 +126,7 @@ const Cart = () => {
               <Button text='Continue Shopping' onClick={() => navigate('/')} />
             </div>
           )}
-          
+
           {state.cart.length > 0 && (
             <div className="total-container">
               <div className="total-details">

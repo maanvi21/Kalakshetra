@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext to access user info
 
-// Create context with default values to prevent undefined errors
 const DEFAULT_STATE = { cart: [] };
 export const CartContext = createContext({
   state: DEFAULT_STATE,
@@ -83,6 +83,12 @@ const Reducer = (state, action) => {
         ...state,
         cart: []
       };
+      case 'REPLACE_CART':
+  return {
+    ...state,
+    cart: action.cart
+  };
+
       
     default:
       return state;
@@ -90,63 +96,55 @@ const Reducer = (state, action) => {
 };
 
 const CartProvider = ({ children }) => {
-  // Initialize with data from localStorage if available
-  const getInitialState = () => {
-    try {
-      const savedCart = localStorage.getItem('cart');
-      console.log('Retrieved from localStorage:', savedCart);
-      
-      if (savedCart && savedCart !== "undefined" && savedCart !== "null") {
-        try {
-          const parsedCart = JSON.parse(savedCart);
-          console.log('Parsed cart from localStorage:', parsedCart);
-          return { cart: Array.isArray(parsedCart) ? parsedCart : [] };
-        } catch (err) {
-          console.error('Failed to parse cart from localStorage:', err);
-          return DEFAULT_STATE;
-        }
-      }
-    } catch (error) {
-      console.error('Error loading cart from localStorage:', error);
-    }
-    
-    console.log('Using default empty cart');
-    return DEFAULT_STATE;
-  };
-  
-  const [state, dispatch] = useReducer(Reducer, getInitialState());
+  const { user } = useContext(AuthContext);
+  const [state, dispatch] = useReducer(Reducer, DEFAULT_STATE);
 
-  // Ensure state always has cart array
-  const safeState = state && state.cart ? state : DEFAULT_STATE;
-
-  // Save cart to localStorage whenever it changes
+  // Load cart from localStorage only when user is available
   useEffect(() => {
-    try {
-      if (safeState && safeState.cart) {
-        console.log('Saving cart to localStorage:', safeState.cart);
-        localStorage.setItem('cart', JSON.stringify(safeState.cart));
+    if (user) {
+      try {
+        const savedCart = localStorage.getItem(`cart_${user.id}`);
+        if (savedCart) {
+          const parsedCart = JSON.parse(savedCart);
+          dispatch({
+            type: 'REPLACE_CART',
+            cart: Array.isArray(parsedCart) ? parsedCart : []
+          });
+        }
+      } catch (err) {
+        console.error('Failed to load cart from localStorage:', err);
       }
-    } catch (error) {
-      console.error('Error saving cart to localStorage:', error);
     }
-  }, [safeState.cart]);
+  }, [user]);
+
+  // Save cart on change
+  useEffect(() => {
+    if (user) {
+      try {
+        localStorage.setItem(`cart_${user.id}`, JSON.stringify(state.cart));
+      } catch (error) {
+        console.error('Error saving cart to localStorage:', error);
+      }
+    }
+  }, [state.cart, user]);
 
   return (
-    <CartContext.Provider value={{ state: safeState, dispatch }}>
+    <CartContext.Provider value={{ state, dispatch }}>
       {children}
     </CartContext.Provider>
   );
 };
 
+ 
+
+ 
+
 export const useStateValue = () => {
   const context = useContext(CartContext);
-  
-  // Safety check
   if (!context) {
     console.error('useStateValue must be used within a CartProvider');
     return { state: DEFAULT_STATE, dispatch: () => null };
   }
-  
   return context;
 };
 

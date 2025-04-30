@@ -2,21 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Mail, Lock, LogIn, UserPlus, LogOut } from "lucide-react";
 import { FaGoogle as Google } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
 
 const AuthForm = () => {
   const navigate = useNavigate();
+  const { user, login, logout } = useAuth(); // Get user and auth functions from AuthContext
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setIsLoggedIn(true);
-      setIsLogin(true);
+    if (user) {
+      navigate("/"); // Redirect to home if user is logged in
     }
-  }, []);
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,12 +34,10 @@ const AuthForm = () => {
       }
 
       if (data.token) {
-        localStorage.setItem("authToken", data.token);
-        setIsLoggedIn(true);
+        login({ token: data.token, email }); // Login with user data
+        alert(isLogin ? "Login successful!" : "Signup successful!");
+        navigate("/"); // Redirect after successful login/signup
       }
-
-      alert(isLogin ? "Login successful!" : "Signup successful!");
-      navigate("/");
     } catch (error) {
       console.error("Auth Error:", error);
       alert(error.message);
@@ -56,12 +53,8 @@ const AuthForm = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    setIsLoggedIn(false);
-    setIsLogin(true);
-    setEmail("");
-    setPassword("");
-    navigate("/login");
+    logout(); // Logout via context
+    navigate("/login"); // Redirect to login page
     alert("Logged out successfully");
   };
 
@@ -120,7 +113,7 @@ const AuthForm = () => {
           </div>
 
           <button
-            type="buttomake n"
+            type="button"
             onClick={handleGoogleAuth}
             className="w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition duration-300 flex items-center justify-center"
           >
@@ -129,7 +122,7 @@ const AuthForm = () => {
           </button>
         </form>
 
-        {isLoggedIn && (
+        {user && (
           <button
             onClick={handleLogout}
             className="mt-4 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300 flex items-center justify-center"
