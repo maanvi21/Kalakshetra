@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const session = require("express-session");
 const passport = require("passport");
+const path = require("path"); // ← Add this line to import the 'path' module
 // Routes (make sure Passport config is loaded before these)
 require("./config/passport"); // ← ✅ Load Passport strategy
 
@@ -28,7 +29,7 @@ connectDB(); // ← 🔥 THIS WAS MISSING
 // Middleware
 app.use(cors());
 app.use(express.json());
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Session middleware
 app.use(
     session({

@@ -4,11 +4,13 @@ const { getDatabase } = require('../config/db'); // Import the getDatabase funct
 // Get the Women database
 const womenDB = getDatabase("Women");
 
-// Define Schema
+// Define Schema for items in Women's categories
 const WomenSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    image: { type: String} // Store base64 string or URL instead of Buffer
+    image: { type: Buffer }, // Change from String to Buffer to store binary data
+    price: { type: Number, required: true },
+    category: { type: String, required: true }
 }, { timestamps: true });
 
 // Create models for specific collections inside the "Women" database

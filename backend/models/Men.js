@@ -8,7 +8,14 @@ const menDB = getDatabase("Men");
 const MenSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    image: { type: String, required: true } // Store base64 string or URL instead of Buffer
+    price: { type: Number, required: true },
+    image: { 
+        type: String, 
+        required: true,
+        // Increased max size to accommodate Base64 images
+        maxlength: 5000000 
+    },
+    category: { type: String, required: true }
 }, { timestamps: true });
 
 // Create models for specific collections inside the "Men" database
