@@ -1,95 +1,60 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext'; // Import AuthContext to access user info
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext
 
 const DEFAULT_STATE = { cart: [] };
+
 export const CartContext = createContext({
   state: DEFAULT_STATE,
-  dispatch: () => null, // Placeholder function
+  dispatch: () => null,
 });
 
 const Reducer = (state, action) => {
-  // Default state protection
-  if (!state || !state.cart) {
-    console.error('Reducer received undefined state!');
-    state = DEFAULT_STATE;
-  }
-
   let newState;
-  
-  console.log('Reducer called with action:', action);
-  console.log('Current state before action:', state);
-  
+
   switch (action.type) {
-    case 'ADD_TO_CART':
-      // Check if item already exists (with safety)
-      const existingItem = state.cart.find(item => item.id === action.item.id);
-      
+    case 'ADD_TO_CART': {
+      const existingItem = state.cart.find(item => item._id === action.item._id);
       if (existingItem) {
-        console.log('Item already exists in cart, updating quantity', existingItem);
         newState = {
           ...state,
           cart: state.cart.map(item =>
-            item.id === action.item.id
+            item._id === action.item._id
               ? { ...item, quantity: item.quantity + 1 }
               : item
           )
         };
       } else {
-        console.log('Adding new item to cart', action.item);
-        // Ensure the item has all necessary properties with good defaults
         const newItem = {
           ...action.item,
-          id: action.item.id, // Ensure ID exists
           quantity: action.item.quantity || 1,
-          name: action.item.name || action.item.title || 'Unnamed Product',
-          title: action.item.title || action.item.name || 'Unnamed Product',
-          price: action.item.price || 0,
-          image: action.item.image || '',
         };
-        
-        newState = {
-          ...state,
-          cart: [...state.cart, newItem]
-        };
+        newState = { ...state, cart: [...state.cart, newItem] };
       }
-      console.log('Cart after adding item:', newState.cart);
       return newState;
-    
-    case 'REMOVE_FROM_CART':
-      console.log('Removing item from cart', action.id);
-      newState = {
-        ...state,
-        cart: state.cart.filter((item) => item.id !== action.id)
-      };
-      console.log('Cart after removing item:', newState.cart);
+    }
+    case 'REMOVE_FROM_CART': {
+      // Updated to use action._id instead of action.id
+      newState = { ...state, cart: state.cart.filter(item => item._id !== action._id) };
       return newState;
-    
-    case 'UPDATE_QUANTITY':
-      console.log('Updating quantity for item', action.id);
+    }
+    case 'UPDATE_QUANTITY': {
+      // Updated to use action._id instead of action.id
       newState = {
         ...state,
         cart: state.cart.map(item =>
-          item.id === action.id
+          item._id === action._id
             ? { ...item, quantity: action.quantity }
             : item
         )
       };
-      console.log('Cart after updating quantity:', newState.cart);
       return newState;
-    
-    case 'CLEAR_CART':
-      console.log('Clearing cart');
-      return {
-        ...state,
-        cart: []
-      };
-      case 'REPLACE_CART':
-  return {
-    ...state,
-    cart: action.cart
-  };
-
-      
+    }
+    case 'CLEAR_CART': {
+      return { ...state, cart: [] };
+    }
+    case 'REPLACE_CART': {
+      return { ...state, cart: action.cart };
+    }
     default:
       return state;
   }
@@ -99,32 +64,18 @@ const CartProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
   const [state, dispatch] = useReducer(Reducer, DEFAULT_STATE);
 
-  // Load cart from localStorage only when user is available
   useEffect(() => {
     if (user) {
-      try {
-        const savedCart = localStorage.getItem(`cart_${user.id}`);
-        if (savedCart) {
-          const parsedCart = JSON.parse(savedCart);
-          dispatch({
-            type: 'REPLACE_CART',
-            cart: Array.isArray(parsedCart) ? parsedCart : []
-          });
-        }
-      } catch (err) {
-        console.error('Failed to load cart from localStorage:', err);
+      const savedCart = localStorage.getItem(`cart_${user._id}`);
+      if (savedCart) {
+        dispatch({ type: 'REPLACE_CART', cart: JSON.parse(savedCart) });
       }
     }
   }, [user]);
 
-  // Save cart on change
   useEffect(() => {
     if (user) {
-      try {
-        localStorage.setItem(`cart_${user.id}`, JSON.stringify(state.cart));
-      } catch (error) {
-        console.error('Error saving cart to localStorage:', error);
-      }
+      localStorage.setItem(`cart_${user._id}`, JSON.stringify(state.cart));
     }
   }, [state.cart, user]);
 
@@ -134,10 +85,6 @@ const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-
- 
-
- 
 
 export const useStateValue = () => {
   const context = useContext(CartContext);

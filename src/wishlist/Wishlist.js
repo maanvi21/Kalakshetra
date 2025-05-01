@@ -17,7 +17,7 @@ export default function Wishlist() {
     cartDispatch({
       type: 'ADD_TO_CART',
       item: {
-        id: item.id,
+        _id: item._id, // Fixed: changed 'id' to '_id'
         name: item.name || item.title || 'Product',
         title: item.title || item.name || 'Product',
         price: Number(item.price) || 0,
@@ -30,7 +30,7 @@ export default function Wishlist() {
     // Remove from wishlist
     wishlistDispatch({
       type: 'REMOVE_FROM_WISHLIST',
-      id: item.id
+      _id: item._id // Fixed: changed 'id' to '_id'
     });
   };
   
@@ -38,7 +38,7 @@ export default function Wishlist() {
   const removeFromWishlist = (itemId) => {
     wishlistDispatch({
       type: 'REMOVE_FROM_WISHLIST',
-      id: itemId
+      _id: itemId // Fixed: changed 'id' to '_id'
     });
   };
 
@@ -52,11 +52,12 @@ export default function Wishlist() {
         {wishlistState?.wishlist?.length > 0 ? (
           <div className="item-grid">
             {wishlistState.wishlist.map((item) => (
-              <div className="wishlist-item" key={item.id}>
+              <div className="wishlist-item" key={item._id}>
                 <div className="wishlist-item-header">
-                  <button 
+                  <button
                     className="remove-button"
-                    onClick={() => removeFromWishlist(item.id)}
+                    onClick={() => removeFromWishlist(item._id)}
+                    aria-label="Remove from wishlist"
                   >
                     ✕
                   </button>
@@ -73,7 +74,7 @@ export default function Wishlist() {
         ) : (
           <div className="empty-wishlist">
             <p className="empty-message">Your wishlist is empty.</p>
-            <Button text='Continue Shopping' onClick={() => navigate('/products')} />
+            <Button text='Continue Shopping' onClick={() => navigate('/')} />
           </div>
         )}
       </div>

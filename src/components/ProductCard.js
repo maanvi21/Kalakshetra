@@ -1,147 +1,140 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState,useNavigate, useCallback, useEffect } from 'react';
 import './ProductCard.css';
 import Button from './Button';
 import { useStateValue as useWishlistState } from '../context/WishlistContext';
 import { useStateValue as useCartState } from '../context/CartContext';
 
-export default function ProductCard({ items }) {
+export default function ProductCard({ item }) {
+ 
   const { state: wishlistState, dispatch: wishlistDispatch } = useWishlistState();
   const { state: cartState, dispatch: cartDispatch } = useCartState();
-  
-  // Debug on mount to check for undefined values
+
   useEffect(() => {
     console.log('ProductCard mounted - Cart state:', cartState);
     console.log('Wishlist state:', wishlistState);
-    
-    // Check if cart state is properly defined
-    if (!cartState || !cartState.cart) {
-      console.error('Cart state is undefined or missing cart array!');
-    }
-    
-    // Check if wishlist state is properly defined
-    if (!wishlistState || !wishlistState.wishlist) {
-      console.error('Wishlist state is undefined or missing wishlist array!');
-    }
   }, [cartState, wishlistState]);
-  
+
   // Check if item is in wishlist
   const isItemInWishlist = useCallback((itemId) => {
-    return wishlistState?.wishlist?.some(wishlistItem => wishlistItem.id === itemId) || false;
+    return wishlistState?.wishlist?.some(wishlistItem => wishlistItem._id === itemId) || false;
   }, [wishlistState]);
-  
+
   const handleLikeToggle = useCallback((item) => {
-    // Safety check
-    if (!wishlistState || !wishlistState.wishlist) {
-      console.error('Wishlist state is undefined!');
-      return;
-    }
-    
-    const isInWishlist = isItemInWishlist(item.id);
-    
-    if (!isInWishlist) {
+    const isInWishlist = isItemInWishlist(item._id);
+    if (isInWishlist) {
+      console.log('Removing item from wishlist:', item);
+      wishlistDispatch({ type: 'REMOVE_FROM_WISHLIST', _id: item._id });
+    } else {
+      console.log('Adding item to wishlist:', item);
       wishlistDispatch({
         type: 'ADD_TO_WISHLIST',
         item: {
-          id: item.id,
-          title: item.title || item.name || 'Product',
-          name: item.title || item.name || 'Product',
+          _id: item._id,
+          title: item.title || 'Product',
+          name: item.title || 'Product',
           image: item.image || '',
           price: item.price || 0,
           alt: item.alt || item.title || 'Product image',
         }
       });
-    } else {
-      wishlistDispatch({
-        type: 'REMOVE_FROM_WISHLIST',
-        id: item.id
-      });
     }
-  }, [wishlistState, wishlistDispatch, isItemInWishlist]);
-  
+  }, [wishlistDispatch, wishlistState]);
+
   const handleAddToCart = useCallback((item) => {
-    // Safety check to prevent TypeError
-    if (!cartState || !cartState.cart) {
-      console.error('Cart state is undefined!');
-      return;
-    }
-    
-    console.log('Adding item to cart:', item);
-    
-    // Make sure the item has a valid ID
-    if (!item.id) {
-      console.error('Item missing ID!', item);
-      return;
-    }
-    
-    // Safely find existing item
-    const existingItem = cartState.cart.find(cartItem => cartItem.id === item.id);
-    
+    const existingItem = cartState.cart.find(cartItem => cartItem._id === item._id);
     const newItem = {
-      id: item.id,
-      name: item.title || item.name || 'Product',
+      _id: item._id,
+      name: item.name || item.title || 'Product',
       title: item.title || item.name || 'Product',
       price: Number(item.price) || 0,
-      image: item.image || '',
+      image: item.image || '/placeholder.png',
       quantity: 1,
-      category: item.category || 'Uncategorized',
+      category: item.category || item.type || 'Other',
     };
     
-    console.log('Prepared cart item:', newItem);
-    
+
     if (existingItem) {
-      console.log('Item exists in cart, updating quantity', existingItem);
       cartDispatch({
         type: 'UPDATE_QUANTITY',
-        id: item.id,
+        _id: item._id,
         quantity: existingItem.quantity + 1
       });
     } else {
-      console.log('Adding new item to cart', newItem);
       cartDispatch({
         type: 'ADD_TO_CART',
         item: newItem
       });
     }
-  }, [cartState, cartDispatch]);
-  
-  // Check if items array exists
-  if (!items || !Array.isArray(items) || items.length === 0) {
-    return <div className="product-card-container">No products available</div>;
-  }
-  
+  }, [cartState.cart, cartDispatch]);
+
+  const handleIncreaseQuantity = (item) => {
+    const existingItem = cartState.cart.find(cartItem => cartItem._id === item._id);
+    if (existingItem) {
+      cartDispatch({
+        type: 'UPDATE_QUANTITY',
+        _id: item._id,
+        quantity: existingItem.quantity + 1
+      });
+    }
+  };
+
+  const handleDecreaseQuantity = (item) => {
+    const existingItem = cartState.cart.find(cartItem => cartItem._id === item._id);
+    if (existingItem && existingItem.quantity > 1) {
+      cartDispatch({
+        type: 'UPDATE_QUANTITY',
+        _id: item._id,
+        quantity: existingItem.quantity - 1
+      });
+    }
+  };
+
   return (
     <div className="product-card-container">
-      {items.map((item, index) => (
-        <div className="prod_container" key={item.id || `item-${index}`}>
-          <div className="prod_image-wrapper">
-            <img 
-              src={item.image || '/placeholder.png'} 
-              alt={item.alt || item.title || 'Product Image'} 
-            />
-          </div>
-          <div className="prod_desc">
-            <div className="title-container">
-              <button
-                className="like-button"
-                onClick={() => handleLikeToggle(item)}
-              >
-                <img
-                  src={isItemInWishlist(item.id) ? 'assets/liked.png' : 'assets/unliked.png'}
-                  alt="like"
-                  className="like-icon"
-                />
-              </button>
-              <h3>{item.title || item.name || 'Product'}</h3>
-            </div>
-            <div className="btn">
-              <Button
-                text="Add to Cart"
-                onClick={() => handleAddToCart(item)}
+      <div className="prod_container" key={item._id}>
+        <div className="prod_image-wrapper">
+          <img src={item.image || '/placeholder.png'} alt={item.alt || item.title || 'Product Image'} />
+        </div>
+        <div className="prod_desc">
+          <div className="title-container">
+            <h3>{item.name || item.title || 'Product'}</h3>
+            <button
+              className="like-button"
+              onClick={() => handleLikeToggle(item)}
+              aria-label={isItemInWishlist(item._id) ? "Remove from wishlist" : "Add to wishlist"}
+            >
+              <img
+                src={isItemInWishlist(item._id) ? 'assets/liked.png' : 'assets/unliked.png'}
+                alt="like"
+                className="like-icon"
               />
+            </button>
+          </div>
+          
+          {/* Price display - centered on its own line */}
+          <div className="price-container">
+            <p className="product-price">₹{item.price || 0}</p>
+          </div>
+          
+          <div className="btn">
+            <Button
+              text="Add to Cart"
+              onClick={() => handleAddToCart(item)}
+            />
+            <div className="quantity-controls">
+              <button
+                onClick={() => handleDecreaseQuantity(item)}
+                className="quantity-btn"
+              >-</button>
+              <span>{cartState.cart.find(cartItem => cartItem._id === item._id)?.quantity || 0}</span>
+              <button
+                onClick={() => handleIncreaseQuantity(item)}
+                className="quantity-btn"
+              >+</button>
             </div>
           </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 }

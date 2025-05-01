@@ -12,47 +12,52 @@ const Cart = () => {
   const { state, dispatch } = useStateValue();
   const { state: wishlistState, dispatch: wishlistDispatch } = useWishlistState();
 
+  // Handle Quantity Change
   const handleQuantityChange = (id, delta) => {
-    const item = state.cart.find(item => item.id === id);
+    const item = state.cart.find(item => item._id === id);
     if (item) {
       const newQuantity = item.quantity + delta;
       if (newQuantity > 0) {
         dispatch({
           type: 'UPDATE_QUANTITY',
-          id: id,
+          _id: id,  // Changed from id to _id to match reducer
           quantity: newQuantity
         });
       }
     }
   };
 
+  // Handle Remove Item from Cart
   const handleRemove = (id) => {
     dispatch({
       type: 'REMOVE_FROM_CART',
-      id: id
+      _id: id  // Changed from id to _id to match reducer
     });
   };
 
+  // Move item to Wishlist
   const moveToWishlist = (item) => {
-    const existsInWishlist = wishlistState.wishlist.find(w => w.id === item.id);
+    const existsInWishlist = wishlistState.wishlist.find(w => w._id === item._id);
     if (!existsInWishlist) {
       wishlistDispatch({
         type: 'ADD_TO_WISHLIST',
         item: {
-          id: item.id,
+          _id: item._id,  // Use _id instead of id to maintain consistency
           title: item.name || item.title,
           image: item.image,
           price: item.price || 0
         }
       });
     }
-    handleRemove(item.id);
+    handleRemove(item._id); // Remove item from cart after moving to wishlist
   };
 
+  // Calculate Total
   const calculateTotal = () => {
     return state.cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  // Calculate Item Total
   const calculateItemTotal = (item) => {
     return item.price * item.quantity;
   };
@@ -63,12 +68,12 @@ const Cart = () => {
 
   return (
     <div className="cart-page">
-      <Header/>
+      <Header />
       <div className="cart-container">
-        <div className='cart-header'>
+        <div className="cart-header">
           <h1 className="title">Shopping Cart</h1>
-          <div className='wishlist-button'>
-            <Button text='View Wishlist' onClick={navToWishlist}/>
+          <div className="wishlist-button">
+            <Button text='View Wishlist' onClick={navToWishlist} />
           </div>
         </div>
 
@@ -76,7 +81,7 @@ const Cart = () => {
           {state.cart.length > 0 ? (
             <div className="item-grid">
               {state.cart.map((item) => (
-                <div className="cart-item" key={item.id}>
+                <div className="cart-item" key={item._id}>
                   <div className="item-image-container">
                     <img src={item.image} alt={item.name || item.title || 'Product'} className="item-image" />
                   </div>
@@ -96,24 +101,24 @@ const Cart = () => {
                     <div className="quantity-controls">
                       <OperationsButton 
                         text='-' 
-                        onClick={() => handleQuantityChange(item.id, -1)}
+                        onClick={() => handleQuantityChange(item._id, -1)} 
                       />
                       <span className="quantity-display">{item.quantity}</span>
                       <OperationsButton 
                         text='+' 
-                        onClick={() => handleQuantityChange(item.id, 1)}
+                        onClick={() => handleQuantityChange(item._id, 1)} 
                       />
                     </div>
                   </div>
                   <div className="item-actions">
                     <OperationsButton 
                       text='Remove' 
-                      onClick={() => handleRemove(item.id)}
+                      onClick={() => handleRemove(item._id)} 
                       className="remove-button"
                     />
                     <OperationsButton 
                       text='Move to Wishlist' 
-                      onClick={() => moveToWishlist(item)}
+                      onClick={() => moveToWishlist(item)} 
                       className="wishlist-button"
                     />
                   </div>

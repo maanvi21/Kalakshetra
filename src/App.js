@@ -6,14 +6,15 @@ import Wishlist from './wishlist/Wishlist.js'
 import Contact from './contact/Contact.js'
 import AdminBrowse from "./browse/AdminBrowse.js";
 import AuthForm from "./auth/AuthForm.jsx";
-
+import MenProducts from "./browse/MenProducts.js";
+import WomenProducts from "./browse/WomenProducts.js";
+import BagsProducts from "./browse/BagsProducts.js";
 import "./App.css";
-
 import { AuthProvider } from "./context/AuthContext.js";
 import CartProvider from './context/CartContext.js';
 import Cart from "./cart/Cart.js";
 import WishlistProvider from "./context/WishlistContext.js";
-
+import AccessoriesProducts from "./browse/AccessoriesProducts.js";
 import AuthHandler from "./auth/AuthHandler.js";
 import AdminManagement from "./browse/AdminManagement.js";
 
@@ -30,7 +31,10 @@ function App() {
         <div className="App">
           <Routes>
           <Route path='/' element={[<UserHomepage/>]}/>
-
+          <Route path='/menProducts' element={[<MenProducts/>]}/>
+          <Route path='/womenProducts' element={[<WomenProducts/>]}/>
+          <Route path='/bagsProducts' element={[<BagsProducts/>]}/>
+          <Route path='/accessoriesProducts' element={[<AccessoriesProducts/>]}/>
 <Route path='/userbrowse' element={[<Browse/>]}/>
 <Route path='/wishlist' element={[<Wishlist
 />]}/>
