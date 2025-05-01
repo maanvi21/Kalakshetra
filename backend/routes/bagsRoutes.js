@@ -4,7 +4,6 @@ const multer = require('multer');
 const { Handbags, Backpacks, Clutches, Totes, Wallets } = require('../models/Bags');
 
 const router = express.Router();
-const storage = multer.memoryStorage();
 
 
 const models = {
@@ -16,6 +15,8 @@ const models = {
 };
 
 
+// Configure multer for memory storage (not disk)
+const storage = multer.memoryStorage();
 
 // File filter to only accept images
 const fileFilter = (req, file, cb) => {
