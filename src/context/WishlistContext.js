@@ -1,16 +1,15 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
-export const WishlistContext = createContext();
-
 const initialState = { wishlist: [] };
+export const WishlistContext = createContext();
 
 const Reducer = (state, action) => {
   let newState;
 
   switch (action.type) {
-    case 'ADD_TO_WISHLIST':
-      const exists = state.wishlist.find(item => item.id === action.item.id);
+    case 'ADD_TO_WISHLIST': {
+      const exists = state.wishlist.find(item => item._id === action.item._id);
       if (exists) return state;
 
       const newItem = {
@@ -18,25 +17,16 @@ const Reducer = (state, action) => {
         title: action.item.title || action.item.name,
         name: action.item.name || action.item.title,
       };
-
       newState = { ...state, wishlist: [...state.wishlist, newItem] };
-      console.log('Wishlist after adding:', newState.wishlist);
       return newState;
-
-    case 'REMOVE_FROM_WISHLIST':
-      newState = {
-        ...state,
-        wishlist: state.wishlist.filter(item => item.id !== action.id)
-      };
-      console.log('Wishlist after removing:', newState.wishlist);
+    }
+    case 'REMOVE_FROM_WISHLIST': {
+      newState = { ...state, wishlist: state.wishlist.filter(item => item._id !== action._id) };
       return newState;
-
-    case 'REPLACE_WISHLIST':
-      return {
-        ...state,
-        wishlist: Array.isArray(action.wishlist) ? action.wishlist : []
-      };
-
+    }
+    case 'REPLACE_WISHLIST': {
+      return { ...state, wishlist: Array.isArray(action.wishlist) ? action.wishlist : [] };
+    }
     default:
       return state;
   }
@@ -46,28 +36,18 @@ const WishlistProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
   const [state, dispatch] = useReducer(Reducer, initialState);
 
-  // Load wishlist from localStorage after user is defined
   useEffect(() => {
     if (user) {
-      try {
-        const saved = localStorage.getItem(`wishlist_${user.id}`);
-        if (saved) {
-          dispatch({ type: 'REPLACE_WISHLIST', wishlist: JSON.parse(saved) });
-        }
-      } catch (err) {
-        console.error('Failed to load wishlist:', err);
+      const savedWishlist = localStorage.getItem(`wishlist_${user._id}`);
+      if (savedWishlist) {
+        dispatch({ type: 'REPLACE_WISHLIST', wishlist: JSON.parse(savedWishlist) });
       }
     }
   }, [user]);
 
-  // Save wishlist when it changes
   useEffect(() => {
     if (user) {
-      try {
-        localStorage.setItem(`wishlist_${user.id}`, JSON.stringify(state.wishlist));
-      } catch (error) {
-        console.error('Error saving wishlist:', error);
-      }
+      localStorage.setItem(`wishlist_${user._id}`, JSON.stringify(state.wishlist));
     }
   }, [state.wishlist, user]);
 
