@@ -264,14 +264,20 @@ export default function AdminManagement() {
         )}
         {activeCategory === 'bags' && (
           <div className="bag-options">
-            <Button text='Bag1' onClick={() => handleSubcategoryClick('Bag1')} />
-            <Button text='Bag2' onClick={() => handleSubcategoryClick('Bag2')} />
+            <Button text='Handbags' onClick={() => handleSubcategoryClick('Handbags')} />
+            <Button text='Totes' onClick={() => handleSubcategoryClick('Totes')} />
+            <Button text='Wallets' onClick={() => handleSubcategoryClick('Wallets')} />
+            <Button text='Backpacks' onClick={() => handleSubcategoryClick('Backpacks')} />
           </div>
         )}
+       
         {activeCategory === 'accessories' && (
           <div className="accessory-options">
-            <Button text='Acc1' onClick={() => handleSubcategoryClick('Acc1')} />
-            <Button text='Acc2' onClick={() => handleSubcategoryClick('Acc2')} />
+            <Button text='Earrings' onClick={() => handleSubcategoryClick('Earrings')} />
+            <Button text='Necklaces' onClick={() => handleSubcategoryClick('Necklaces')} />
+            <Button text='Rings' onClick={() => handleSubcategoryClick('Rings')} />
+            <Button text='Bracelets' onClick={() => handleSubcategoryClick('Bracelets')} />
+            <Button text='Watches' onClick={() => handleSubcategoryClick('Watches')} />
           </div>
         )}
 
@@ -386,7 +392,7 @@ export default function AdminManagement() {
                       <td>{item._id.substring(0, 8)}...</td>
                       <td>{item.name}</td>
                       <td>{item.description.length > 50 ? `${item.description.substring(0, 50)}...` : item.description}</td>
-                      <td>${item.price}</td>
+                      <td>₹{item.price}</td>
                       <td>
                         <ProductImage 
                           src={item.image} 

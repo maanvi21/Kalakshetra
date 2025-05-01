@@ -16,7 +16,7 @@ const { connectDB } = require("./config/db");
 // Debugging: Check env variables
 console.log("🔍 Checking environment variables...");
 console.log("PORT:", process.env.PORT || "NOT LOADED");
-console.log("MY_SECRET_KEY:", process.env.MY_SECRET_KEY ? "✅ Loaded" : "❌ NOT LOADED");
+console.log("MY_SECRET_KEY:", process.env.GOOGLE_CLIENT_SECRET ? "✅ Loaded" : "❌ NOT LOADED");
 console.log("MONGO_URI:", process.env.MONGO_URI ? "✅ Loaded" : "❌ NOT LOADED");
 console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "✅ Loaded" : "❌ NOT LOADED");
 

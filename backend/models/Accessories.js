@@ -8,6 +8,7 @@ const accessoriesDB = getDatabase("Accessories");
 const AccessoriesSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
+    price:{ type: Number, required: true },
     image: { type: String, required: true } // Store as URL or base64 instead of Buffer
 }, { timestamps: true });
 
