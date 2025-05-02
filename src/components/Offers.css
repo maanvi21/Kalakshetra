@@ -1,0 +1,90 @@
+.offers-section {
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 2rem 1.5rem;
+  background-color: #f8f8f8;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* Wrapper to hide overflow and position scrolling content */
+.offers-scroll-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* Grid is turned into a long scrollable flex row */
+.offers-grid {
+  display: flex;
+  gap: 1.5rem;
+  animation: scroll-left 30s linear infinite;
+  width: max-content;
+}
+
+/* Smooth infinite scroll keyframes */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Hide scrollbar entirely */
+.offers-grid::-webkit-scrollbar {
+  display: none;
+}
+.offers-grid {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.offers-card {
+  flex: 0 0 auto; /* Prevent shrinking, force horizontal layout */
+  width: 300px;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.offers-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 1rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.card-description {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.card-footer {
+  padding: 1rem;
+}

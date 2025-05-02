@@ -8,6 +8,7 @@ import HomepagCarousel from './HomepagCarousel.js';
 import CategoriesContainer from '../components/CategoriesContainer';
 import LocateUs from '../components/LocateUs.js';
 import branchesData from '../data/BranchesData.js';
+import Offers from '../components/Offers.js';
 
 const UserHomepage = () => {
   return (
@@ -23,7 +24,7 @@ const UserHomepage = () => {
           <h2>Offers</h2>
           
           <div className="offerings-grid">
-          <CategoriesContainer items={categories}/>
+          <Offers/>
           </div>
         </section>
 
