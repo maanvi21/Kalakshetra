@@ -17,6 +17,7 @@ import WishlistProvider from "./context/WishlistContext.js";
 import AccessoriesProducts from "./browse/AccessoriesProducts.js";
 import AuthHandler from "./auth/AuthHandler.js";
 import AdminManagement from "./browse/AdminManagement.js";
+import Checkout from "./checkout/Checkout.js";
 
 
 
@@ -35,7 +36,7 @@ function App() {
           <Route path='/womenProducts' element={[<WomenProducts/>]}/>
           <Route path='/bagsProducts' element={[<BagsProducts/>]}/>
           <Route path='/accessoriesProducts' element={[<AccessoriesProducts/>]}/>
-
+          <Route path='/checkout' element={[<Checkout/>]}/>
 <Route path='/wishlist' element={[<Wishlist
 />]}/>
 <Route path='/about' element={[<About/>]}/>
