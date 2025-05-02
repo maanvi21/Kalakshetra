@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Kalakshetra3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .checkout-form {
+            flex: 3;
+            padding-right: 30px;
+        }
+
+        .order-summary {
+            flex: 2;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #212121;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title a {
+            font-size: 14px;
+            color: #666;
+            text-decoration: none;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #777;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-control {
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .payment-option {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-option.selected {
+            border-color: #000;
+            background-color: #f0f0f0;
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .payment-icons {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            gap: 8px;
+        }
+
+        .payment-icons img {
+            height: 20px;
+        }
+
+        .payment-gateway-info {
+            text-align: center;
+            padding: 20px 0;
+            color: #666;
+        }
+
+        .gateway-image {
+            max-width: 100%;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        .cart-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 15px;
+            position: relative;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-quantity {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #333;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+        }
+
+        .cart-item-variant {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .discount-form {
+            display: flex;
+            margin: 15px 0;
+            gap: 10px;
+        }
+
+        .discount-form input {
+            flex-grow: 1;
+        }
+
+        .apply-btn {
+            background-color: white;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 0 20px;
+            font-weight: normal;
+        }
+
+        .order-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .order-total {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .tax-info {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .tax-info span {
+            background-color: #e6f0ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .error-message {
+            color: #d9534f;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .form-control.error {
+            border-color: #d9534f;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .checkout-form {
+                padding-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkout-form">
+            <div class="form-section">
+                <div class="section-title">
+                    Contact
+                    <a href="#" id="login-link">Log in</a>
+                </div>
+                <input type="email" class="form-control" id="email" placeholder="Email or mobile phone number" required>
+                <div class="error-message" id="email-error">Please enter a valid email or phone number</div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="newsletter">
+                    <label for="newsletter">Email me with news and offers</label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Delivery</div>
+                <div class="form-group">
+                    <select class="form-control" id="country">
+                        <option value="india" selected>India</option>
+                        <option value="usa">United States</option>
+                        <option value="uk">United Kingdom</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="firstName" placeholder="First name" required>
+                        <div class="error-message" id="firstName-error">Please enter your first name</div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
+                        <div class="error-message" id="lastName-error">Please enter your last name</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="address" placeholder="Address" required>
+                    <div class="error-message" id="address-error">Please enter your address</div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="apartment" placeholder="Apartment, suite, etc. (optional)">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="city" placeholder="City" required>
+                        <div class="error-message" id="city-error">Please enter your city</div>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="state" required>
+                            <option value="" disabled selected>State</option>
+                            <option value="maharashtra">Maharashtra</option>
+                            <option value="delhi">Delhi</option>
+                            <option value="karnataka">Karnataka</option>
+                            <!-- Add more states as needed -->
+                        </select>
+                        <div class="error-message" id="state-error">Please select your state</div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="pincode" placeholder="PIN code" required>
+                        <div class="error-message" id="pincode-error">Please enter a valid 6-digit PIN code</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="tel" class="form-control" id="phone" placeholder="Phone" required>
+                    <div class="error-message" id="phone-error">Please enter a valid phone number</div>
+                </div>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="saveInfo">
+                    <label for="saveInfo">Save this information for next time</label>
+                </div>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="textOffers">
+                    <label for="textOffers">Text me with news and offers</label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Shipping method</div>
+                <div id="shipping-methods">
+                    <p>Enter your shipping address to view available shipping methods.</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Payment</div>
+                <p style="margin-bottom: 15px;">All transactions are secure and encrypted.</p>
+
+                <div class="payment-option selected" onclick="selectPaymentOption(this, 'online')">
+                    <input type="radio" name="paymentMethod" id="online-payment" checked>
+                    <label for="online-payment">PhonePe Payment Gateway (UPI, Cards & NetBanking)</label>
+                    <div class="payment-icons">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/2560px-Paytm_Logo_%28standalone%29.svg.png" alt="UPI">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/2560px-MasterCard_Logo.svg.png" alt="Mastercard">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/RuPay.svg/2560px-RuPay.svg.png" alt="RuPay">
+                    </div>
+                </div>
+
+                <div class="payment-gateway-info">
+                    <img class="gateway-image" src="https://cdn-icons-png.flaticon.com/512/6214/6214494.png" alt="Payment Gateway">
+                    <p>After clicking "Pay now", you will be redirected to <br>PhonePe Payment Gateway (UPI, Cards & NetBanking)<br> to complete your purchase securely.</p>
+                </div>
+
+                <div class="payment-option" onclick="selectPaymentOption(this, 'cod')">
+                    <input type="radio" name="paymentMethod" id="cod">
+                    <label for="cod">Cash on Delivery (COD)</label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Billing address</div>
+                
+                <div class="payment-option selected" onclick="selectBillingOption(this, 'same')">
+                    <input type="radio" name="billingAddress" id="same-address" checked>
+                    <label for="same-address">Same as shipping address</label>
+                </div>
+                
+                <div class="payment-option" onclick="selectBillingOption(this, 'different')">
+                    <input type="radio" name="billingAddress" id="different-address">
+                    <label for="different-address">Use a different billing address</label>
+                </div>
+
+                <div id="different-billing-form" style="display: none; margin-top: 15px;">
+                    <!-- Billing address form fields will be added here via JavaScript -->
+                </div>
+            </div>
+
+            <button type="button" id="pay-button" onclick="validateAndSubmit()">Pay now</button>
+        </div>
+
+        <div class="order-summary">
+            <div class="cart-item">
+                <div class="cart-item-image">
+                    <img src="https://via.placeholder.com/60x60" alt="Product Image">
+                    <div class="cart-item-quantity">1</div>
+                </div>
+                <div class="cart-item-details">
+                    <div class="cart-item-title">The Justice Red Oversized T-Shirt</div>
+                    <div class="cart-item-variant">XS</div>
+                </div>
+                <div class="cart-item-price">₹999.00</div>
+            </div>
+
+            <div class="discount-form">
+                <input type="text" class="form-control" id="discountCode" placeholder="Discount code">
+                <button class="apply-btn" type="button" onclick="applyDiscount()">Apply</button>
+            </div>
+
+            <div class="order-summary-row">
+                <div>Subtotal</div>
+                <div>₹999.00</div>
+            </div>
+
+            <div class="order-summary-row">
+                <div>Shipping</div>
+                <div id="shipping-cost">Enter shipping address</div>
+            </div>
+
+            <div class="order-summary-row order-total">
+                <div>Total</div>
+                <div>
+                    <span>INR</span> ₹999.00
+                </div>
+            </div>
+
+            <div class="tax-info">
+                Including <span>₹107.04</span> in taxes
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form validation
+        function validateAndSubmit() {
+            let isValid = true;
+            
+            // Email validation
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('email-error');
+            const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|[0-9]{10})$/;
+            
+            if (!emailPattern.test(email.value)) {
+                email.classList.add('error');
+                emailError.style.display = 'block';
+                isValid = false;
+            } else {
+                email.classList.remove('error');
+                emailError.style.display = 'none';
+            }
+            
+            // First name validation
+            const firstName = document.getElementById('firstName');
+            const firstNameError = document.getElementById('firstName-error');
+            
+            if (firstName.value.trim() === '') {
+                firstName.classList.add('error');
+                firstNameError.style.display = 'block';
+                isValid = false;
+            } else {
+                firstName.classList.remove('error');
+                firstNameError.style.display = 'none';
+            }
+            
+            // Last name validation
+            const lastName = document.getElementById('lastName');
+            const lastNameError = document.getElementById('lastName-error');
+            
+            if (lastName.value.trim() === '') {
+                lastName.classList.add('error');
+                lastNameError.style.display = 'block';
+                isValid = false;
+            } else {
+                lastName.classList.remove('error');
+                lastNameError.style.display = 'none';
+            }
+            
+            // Address validation
+            const address = document.getElementById('address');
+            const addressError = document.getElementById('address-error');
+            
+            if (address.value.trim() === '') {
+                address.classList.add('error');
+                addressError.style.display = 'block';
+                isValid = false;
+            } else {
+                address.classList.remove('error');
+                addressError.style.display = 'none';
+            }
+            
+            // City validation
+            const city = document.getElementById('city');
+            const cityError = document.getElementById('city-error');
+            
+            if (city.value.trim() === '') {
+                city.classList.add('error');
+                cityError.style.display = 'block';
+                isValid = false;
+            } else {
+                city.classList.remove('error');
+                cityError.style.display = 'none';
+            }
+            
+            // State validation
+            const state = document.getElementById('state');
+            const stateError = document.getElementById('state-error');
+            
+            if (state.value === '') {
+                state.classList.add('error');
+                stateError.style.display = 'block';
+                isValid = false;
+            } else {
+                state.classList.remove('error');
+                stateError.style.display = 'none';
+            }
+            
+            // PIN code validation
+            const pincode = document.getElementById('pincode');
+            const pincodeError = document.getElementById('pincode-error');
+            const pincodePattern = /^[0-9]{6}$/;
+            
+            if (!pincodePattern.test(pincode.value)) {
+                pincode.classList.add('error');
+                pincodeError.style.display = 'block';
+                isValid = false;
+            } else {
+                pincode.classList.remove('error');
+                pincodeError.style.display = 'none';
+            }
+            
+            // Phone validation
+            const phone = document.getElementById('phone');
+            const phoneError = document.getElementById('phone-error');
+            const phonePattern = /^[0-9]{10}$/;
+            
+            if (!phonePattern.test(phone.value)) {
+                phone.classList.add('error');
+                phoneError.style.display = 'block';
+                isValid = false;
+            } else {
+                phone.classList.remove('error');
+                phoneError.style.display = 'none';
+            }
+            
+            if (isValid) {
+                // If form is valid, show a simulated submission
+                alert('Order placed successfully! Redirecting to payment gateway...');
+                // In a real implementation, you would submit the form or redirect to payment gateway
+            }
+            
+            return isValid;
+        }
+        
+        // Payment option selection
+        function selectPaymentOption(element, type) {
+            // Remove selected class from all payment options
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            paymentOptions.forEach(option => {
+                option.classList.remove('selected');
+                option.querySelector('input[type="radio"]').checked = false;
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            element.querySelector('input[type="radio"]').checked = true;
+            
+            // Show/hide payment gateway info
+            const gatewayInfo = document.querySelector('.payment-gateway-info');
+            if (type === 'online') {
+                gatewayInfo.style.display = 'block';
+            } else {
+                gatewayInfo.style.display = 'none';
+            }
+            
+            // Update button text based on payment method
+            const payButton = document.getElementById('pay-button');
+            payButton.textContent = type === 'online' ? 'Pay now' : 'Place order';
+        }
+        
+        // Billing address option selection
+        function selectBillingOption(element, type) {
+            // Remove selected class from all billing options
+            const billingOptions = document.querySelectorAll('div.payment-option input[name="billingAddress"]');
+            billingOptions.forEach(option => {
+                option.parentElement.classList.remove('selected');
+                option.checked = false;
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            element.querySelector('input[type="radio"]').checked = true;
+            
+            // Show/hide different billing form
+            const differentBillingForm = document.getElementById('different-billing-form');
+            if (type === 'different') {
+                differentBillingForm.style.display = 'block';
+                if (differentBillingForm.innerHTML === '') {
+                    createBillingForm();
+                }
+            } else {
+                differentBillingForm.style.display = 'none';
+            }
+        }
+        
+        // Create billing address form
+        function createBillingForm() {
+            const differentBillingForm = document.getElementById('different-billing-form');
+            differentBillingForm.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="billingFirstName" placeholder="First name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="billingLastName" placeholder="Last name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="billingAddress" placeholder="Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="billingApartment" placeholder="Apartment, suite, etc. (optional)">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="billingCity" placeholder="City" required>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="billingState" required>
+                            <option value="" disabled selected>State</option>
+                            <option value="maharashtra">Maharashtra</option>
+                            <option value="delhi">Delhi</option>
+                            <option value="karnataka">Karnataka</option>
+                            <!-- Add more states as needed -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="billingPincode" placeholder="PIN code" required>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Update shipping methods when address is entered
+        const addressField = document.getElementById('address');
+        const pincodeField = document.getElementById('pincode');
+        const stateField = document.getElementById('state');
+        
+        function updateShippingMethods() {
+            if (addressField.value && pincodeField.value && stateField.value) {
+                const shippingMethodsDiv = document.getElementById('shipping-methods');
+                shippingMethodsDiv.innerHTML = `
+                    <div class="payment-option selected" onclick="selectShippingMethod(this, 'standard', 40)">
+                        <input type="radio" name="shippingMethod" id="standard-shipping" checked>
+                        <label for="standard-shipping">Standard Shipping (3-5 business days)</label>
+                        <div class="payment-icons">₹40.00</div>
+                    </div>
+                    <div class="payment-option" onclick="selectShippingMethod(this, 'express', 100)">
+                        <input type="radio" name="shippingMethod" id="express-shipping">
+                        <label for="express-shipping">Express Shipping (1-2 business days)</label>
+                        <div class="payment-icons">₹100.00</div>
+                    </div>
+                `;
+                
+                // Update shipping cost and total
+                document.getElementById('shipping-cost').textContent = '₹40.00';
+                updateTotal(40);
+            }
+        }
+        
+        // Add event listeners for address fields
+        addressField.addEventListener('blur', updateShippingMethods);
+        pincodeField.addEventListener('blur', updateShippingMethods);
+        stateField.addEventListener('change', updateShippingMethods);
+        
+        // Select shipping method
+        function selectShippingMethod(element, type, cost) {
+            // Remove selected class from all shipping methods
+            const shippingMethods = document.querySelectorAll('div.payment-option input[name="shippingMethod"]');
+            shippingMethods.forEach(method => {
+                method.parentElement.classList.remove('selected');
+                method.checked = false;
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            element.querySelector('input[type="radio"]').checked = true;
+            
+            // Update shipping cost and total
+            document.getElementById('shipping-cost').textContent = `₹${cost.toFixed(2)}`;
+            updateTotal(cost);
+        }
+        
+        // Update total amount
+        function updateTotal(shippingCost) {
+            const subtotal = 999.00;
+            const total = subtotal + shippingCost;
+            const taxRate = 0.12; // 12% tax rate
+            const taxAmount = total * taxRate;
+            
+            document.querySelector('.order-total div:last-child').innerHTML = `<span>INR</span> ₹${total.toFixed(2)}`;
+            document.querySelector('.tax-info span').textContent = `₹${taxAmount.toFixed(2)}`;
+        }
+        
+        // Apply discount
+        function applyDiscount() {
+            const discountCode = document.getElementById('discountCode').value.trim();
+            
+            if (discountCode === '') {
+                alert('Please enter a discount code');
+                return;
+            }
+            
+            // In a real implementation, you would validate the discount code with your backend
+            // This is just a simulation
+            if (discountCode.toLowerCase() === 'welcome10') {
+                // Apply 10% discount
+                const subtotal = 999.00;
+                const discount = subtotal * 0.1;
+                const newSubtotal = subtotal - discount;
+                
+                // Update subtotal
+                document.querySelector('.order-summary-row:nth-child(3) div:last-child').textContent = `₹${newSubtotal.toFixed(2)}`;
+                
+                // Add discount row
+                const discountRow = document.createElement('div');
+                discountRow.className = 'order-summary-row';
+                discountRow.innerHTML = `
+                    <div>Discount (WELCOME10)</div>
+                    <div>-₹${discount.toFixed(2)}</div>
+                `;
+                
+                // Insert discount row after subtotal
+                const subtotalRow = document.querySelector('.order-summary-row:nth-child(3)');
+                subtotalRow.after(discountRow);
+                
+                // Update shipping cost (if selected)
+                const shippingCostText = document.getElementById('shipping-cost').textContent;
+                if (shippingCostText !== 'Enter shipping address') {
+                    const shippingCost = parseFloat(shippingCostText.replace('₹', ''));
+                    updateTotal(shippingCost);
+                } else {
+                    updateTotal(0);
+                }
+                
+                // Disable discount code input
+                document.getElementById('discountCode').disabled = true;
+                document.querySelector('.apply-btn').disabled = true;
+                document.querySelector('.apply-btn').textContent = 'Applied';
+                
+                alert('Discount applied successfully!');
+            } else {
+                alert('Invalid discount code');
+            }
+        }
+        
+        // Login functionality
+        document.getElementById('login-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Login feature would be implemented here');
+        });
+    </script>
+</body>
+</html>
