@@ -56,7 +56,9 @@ const Cart = () => {
   const calculateTotal = () => {
     return state.cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
-
+const navToCheckout = () => {
+    navigate('/checkout');
+  };
   // Calculate Item Total
   const calculateItemTotal = (item) => {
     return item.price * item.quantity;
@@ -138,7 +140,7 @@ const Cart = () => {
                 <p className="total-label">Total Items: {state.cart.reduce((sum, item) => sum + item.quantity, 0)}</p>
                 <p className="total-amount">Total Amount: ₹{calculateTotal()}</p>
               </div>
-              <Button text='Proceed to Checkout' onClick={() => null} />
+              <Button text='Proceed to Checkout' onClick={() => navToCheckout()} />
             </div>
           )}
         </div>

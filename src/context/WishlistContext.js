@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import { AuthContext } from './AuthContext';
 
 const initialState = { wishlist: [] };
 export const WishlistContext = createContext();
 
-const Reducer = (state, action) => {
+const wishlistReducer = (state, action) => {
   let newState;
 
   switch (action.type) {
@@ -33,23 +33,49 @@ const Reducer = (state, action) => {
 };
 
 const WishlistProvider = ({ children }) => {
-  const { user } = useContext(AuthContext);
-  const [state, dispatch] = useReducer(Reducer, initialState);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user; // Extract user directly
+  
+  const [state, dispatch] = useReducer(wishlistReducer, initialState);
+  const [currentUserEmail, setCurrentUserEmail] = useState(null);
 
+  // Load wishlist when user changes
   useEffect(() => {
-    if (user) {
-      const savedWishlist = localStorage.getItem(`wishlist_${user._id}`);
+    const userEmail = user?.email;
+    
+    // Only reload if the email has actually changed
+    if (userEmail !== currentUserEmail) {
+      console.log("Loading wishlist for user:", userEmail || "guest");
+      setCurrentUserEmail(userEmail);
+      
+      const wishlistKey = userEmail ? `wishlist_${userEmail}` : "wishlist_guest";
+      const savedWishlist = localStorage.getItem(wishlistKey);
+      
       if (savedWishlist) {
-        dispatch({ type: 'REPLACE_WISHLIST', wishlist: JSON.parse(savedWishlist) });
+        try {
+          const parsedWishlist = JSON.parse(savedWishlist);
+          console.log("Found saved wishlist with", parsedWishlist.length, "items");
+          dispatch({ type: 'REPLACE_WISHLIST', wishlist: parsedWishlist });
+        } catch (error) {
+          console.error('Error parsing wishlist data:', error);
+          dispatch({ type: 'REPLACE_WISHLIST', wishlist: [] });
+        }
+      } else {
+        console.log("No saved wishlist found for", wishlistKey);
+        dispatch({ type: 'REPLACE_WISHLIST', wishlist: [] });
       }
     }
-  }, [user]);
+  }, [user, currentUserEmail]);
 
+  // Save wishlist when it changes
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(`wishlist_${user._id}`, JSON.stringify(state.wishlist));
+    if (state.wishlist && (state.wishlist.length > 0 || currentUserEmail !== null)) {
+      const wishlistKey = currentUserEmail ? `wishlist_${currentUserEmail}` : "wishlist_guest";
+      
+      console.log("Saving wishlist with", state.wishlist.length, "items for", wishlistKey);
+      localStorage.setItem(wishlistKey, JSON.stringify(state.wishlist));
     }
-  }, [state.wishlist, user]);
+  }, [state.wishlist, currentUserEmail]);
 
   return (
     <WishlistContext.Provider value={{ state, dispatch }}>

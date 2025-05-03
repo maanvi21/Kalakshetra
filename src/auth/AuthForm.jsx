@@ -1,62 +1,82 @@
 import React, { useState, useEffect } from "react";
 import { Mail, Lock, LogIn, UserPlus, LogOut } from "lucide-react";
-import { FaGoogle as Google } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
+import { useAuth } from "../context/AuthContext";
 
 const AuthForm = () => {
   const navigate = useNavigate();
-  const { user, login, logout } = useAuth(); // Get user and auth functions from AuthContext
+  const { user, login, logout, loading } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (user) {
-      navigate("/"); // Redirect to home if user is logged in
+    // If user is logged in and not in loading state, redirect to home
+    if (user && !loading) {
+      navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setIsSubmitting(true);
 
     try {
       const response = await fetch(`http://localhost:5000/${isLogin ? "login" : "signup"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include" // Include cookies if your API uses them
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Authentication failed");
+        throw new Error(data.error || (isLogin ? "Login failed" : "Signup failed"));
       }
 
       if (data.token) {
-        login({ token: data.token, email }); // Login with user data
-        alert(isLogin ? "Login successful!" : "Signup successful!");
-        navigate("/"); // Redirect after successful login/signup
+        // Login with user data
+        login({ 
+          token: data.token, 
+          email: email 
+        });
+        
+        // Clear form
+        setEmail("");
+        setPassword("");
+        
+        // Show success message and redirect
+        navigate("/");
       }
     } catch (error) {
       console.error("Auth Error:", error);
-      alert(error.message);
+      setError(error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleGoogleAuth = async () => {
-    try {
-      window.location.href = "http://localhost:5000/auth/google";
-    } catch (error) {
-      console.error("Google Auth Error:", error);
-    }
+  const handleGoogleAuth = () => {
+    // Redirect to Google OAuth endpoint
+    window.location.href = "http://localhost:5000/auth/google";
   };
 
   const handleLogout = () => {
-    logout(); // Logout via context
-    navigate("/login"); // Redirect to login page
-    alert("Logged out successfully");
+    logout();
+    navigate("/login");
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-xl text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -69,6 +89,12 @@ const AuthForm = () => {
             {isLogin ? "Log in to continue" : "Sign up to get started"}
           </p>
         </div>
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
@@ -97,10 +123,11 @@ const AuthForm = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+            disabled={isSubmitting}
+            className={`w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             {isLogin ? <LogIn className="mr-2" size={20} /> : <UserPlus className="mr-2" size={20} />}
-            {isLogin ? "Log In" : "Sign Up"}
+            {isSubmitting ? 'Processing...' : (isLogin ? "Log In" : "Sign Up")}
           </button>
 
           <div className="relative my-4">
@@ -117,7 +144,7 @@ const AuthForm = () => {
             onClick={handleGoogleAuth}
             className="w-full bg-white border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition duration-300 flex items-center justify-center"
           >
-            <Google className="mr-2" size={20} />
+            <span className="mr-2 text-red-500">G</span>
             Continue with Google
           </button>
         </form>
@@ -125,7 +152,7 @@ const AuthForm = () => {
         {user && (
           <button
             onClick={handleLogout}
-            className="mt-4 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300 flex items-center justify-center"
+            className="mt-4 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300 flex items-center justify-center"
           >
             <LogOut className="mr-2" size={20} /> Logout
           </button>
@@ -135,6 +162,7 @@ const AuthForm = () => {
           <p className="text-gray-600">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button
+              type="button"
               onClick={() => setIsLogin(!isLogin)}
               className="text-blue-600 hover:underline"
             >
