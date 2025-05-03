@@ -1,7 +1,6 @@
 const express = require("express");
 const User = require("../models/User");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
@@ -10,47 +9,38 @@ dotenv.config();
 router.post('/', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("📩 Signup Request Received");
-    console.log("📧 Email:", email);
-    
     if (!email || !password) {
-      console.log("⚠️ Missing Fields!");
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    let user = await User.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    let user = await User.findOne({ email: normalizedEmail });
     if (user) {
-      console.log("❌ User Already Exists!");
       return res.status(400).json({ error: "User already exists" });
     }
 
-    // Hash the password before storing it
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    // Don't hash the password here - let the pre-save hook handle it
     user = new User({
-      email,
-      password: hashedPassword
+      email: normalizedEmail,
+      password: password // Plain password - will be hashed by pre-save hook
     });
 
     await user.save();
-    console.log("✅ User Created Successfully!");
-    
-    // Generate JWT token for automatic login after signup
+
     const token = jwt.sign(
-      { userId: user._id, email: user.email }, 
-      process.env.JWT_SECRET, 
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET || "default-secret",
       { expiresIn: "24h" }
     );
 
-    return res.status(201).json({ 
-      message: "User created successfully", 
-      token,
-      email: user.email
+    return res.status(201).json({
+      message: "User created successfully",
+      email: user.email,
+      token
     });
-
   } catch (error) {
-    console.error("❌ Signup Error:", error);
-    res.status(500).json({ error: "Registration failed" });
+    console.error("Signup Error:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
