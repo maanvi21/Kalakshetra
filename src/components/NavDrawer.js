@@ -40,10 +40,10 @@ export default function NavDrawer() {
 
         <nav className="nav-menu">
           <ul>
-            <li onClick={() => handleNavigation('/')}>Women</li>
-            <li onClick={() => handleNavigation('/')}>Men</li>
-            <li onClick={() => handleNavigation('/')}>Jewellery</li>
-            <li onClick={() => handleNavigation('/')}>Hand Bags</li>
+            <li onClick={() => handleNavigation('/womenProducts')}>Women</li>
+            <li onClick={() => handleNavigation('/menProducts')}>Men</li>
+            <li onClick={() => handleNavigation('/accessoriesProducts')}>Accessories</li>
+            <li onClick={() => handleNavigation('/bagsProducts')}> Bags</li>
             
           </ul>
         </nav>
