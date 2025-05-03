@@ -1,12 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-// Create a context for authentication 
+// Create a context for authentication
 export const AuthContext = createContext();
 
 // AuthProvider component to provide context value
 export const AuthProvider = ({ children }) => {
   // The user state (null if not logged in)
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ export const AuthProvider = ({ children }) => {
     
     if (token && userEmail) {
       // Set user data from localStorage
-      setUser({ 
+      setUser({
         email: userEmail,
-        token 
+        token
       });
     }
     setLoading(false);
@@ -28,23 +28,27 @@ export const AuthProvider = ({ children }) => {
     // Store user data and token in localStorage
     localStorage.setItem("authToken", userData.token);
     localStorage.setItem("userEmail", userData.email);
-    setUser({
+    
+    const userObj = {
       email: userData.email,
       token: userData.token
-    });
+    };
+    
+    setUser(userObj);
+    
+    // Add this to help debug
+    console.log("User logged in:", userObj);
   };
 
   const logout = () => {
-    // Clear user data from state
-    setUser(null); 
+    console.log("Logging out user:", user?.email);
     
-    // Remove auth data from localStorage
+    // Clear user data from state
+    setUser(null);
+    
+    // Remove only auth data from localStorage, not cart or wishlist
     localStorage.removeItem("authToken");
     localStorage.removeItem("userEmail");
-    
-    // Optional: clear other user-specific data
-    localStorage.removeItem('cart');
-    localStorage.removeItem('wishlist');
   };
 
   return (

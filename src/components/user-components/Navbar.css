@@ -1,14 +1,16 @@
+/* Reset and structure */
 ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-/* Navbar */
+/* Navbar container */
 .navbar {
   position: sticky;
-  top: 0; /* Sticks to the top */
-  color: #000000;
+  top: 0;
+ 
+ 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,22 +18,38 @@ ul {
   z-index: 1000;
 }
 
-.navbar nav ul {
+/* Navigation links */
+.nav-left ul {
   display: flex;
   align-items: center;
-  
-  gap: 1.5rem;
-  /* cursor: pointer; */
-  color: #000000;
+  gap: 2rem;
 }
 
-.navbar nav ul li {
+.nav-left ul li {
   font-size: 1.1rem;
-  font-weight: bold; 
-  transition: color 0.1s ease-in-out;
+  font-weight: 600;
+  color: #000;
   cursor: pointer;
+  transition: color 0.2s ease-in-out, transform 0.2s;
 }
 
-.navbar nav ul li:hover {
-  color: #8B4513; /* Corrected hover effect */
+.nav-left ul li:hover {
+  color: #ff7a00; /* nice orange */
+  transform: translateY(-2px);
+}
+
+/* Right section of navbar */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.user-email {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color:#262626;
+
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
 }

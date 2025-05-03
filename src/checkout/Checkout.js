@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ContactForm from './ContactForm';
 import DeliveryForm from './DeliveryForm';
 import ShippingMethod from './ShippingMethod';
 import PaymentMethod from './PaymentMethod';
 import BillingAddress from './BillingAddress';
 import OrderSummary from './OrderSummary';
-import Button from '../components/Button'; // ✅ Import Button component
+import Button from '../components/Button';
+import Header from '../components/user-components/Header';
+import { useStateValue } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import './Checkout.css';
 
 const Checkout = () => {
+  const navigate = useNavigate();
+  const { state, dispatch } = useStateValue();
+  const { user } = useAuth();
+  
+  // Check if cart is empty
+  const isCartEmpty = !state.cart || state.cart.length === 0;
+
+  // Order processing states
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [orderComplete, setOrderComplete] = useState(false);
+
   const [formData, setFormData] = useState({
-    email: '',
+    email: user?.email || '',
     newsletter: false,
     firstName: '',
     lastName: '',
@@ -40,15 +55,44 @@ const Checkout = () => {
 
   const [shippingMethod, setShippingMethod] = useState(null);
   const [shippingCost, setShippingCost] = useState(0);
-  const [subtotal, setSubtotal] = useState(999.00);
   const [discount, setDiscount] = useState(0);
   const [discountCode, setDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
+  
+  // Calculate cart subtotal
+  const calculateSubtotal = () => {
+    return state.cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+  
+  // Calculate total items in cart
+  const calculateTotalItems = () => {
+    return state.cart.reduce((sum, item) => sum + item.quantity, 0);
+  };
+
+  const [subtotal, setSubtotal] = useState(isCartEmpty ? 0 : calculateSubtotal());
   const [total, setTotal] = useState(subtotal);
 
+  // Update subtotal when cart changes
+  useEffect(() => {
+    if (!isCartEmpty) {
+      setSubtotal(calculateSubtotal());
+    }
+  }, [state.cart]);
+
+  // Update total when dependent values change
   useEffect(() => {
     setTotal(subtotal - discount + shippingCost);
   }, [subtotal, discount, shippingCost]);
+
+  // Update email when user changes
+  useEffect(() => {
+    if (user?.email) {
+      setFormData(prevData => ({
+        ...prevData,
+        email: user.email
+      }));
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -172,64 +216,134 @@ const Checkout = () => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      alert('Order placed successfully! ' + (paymentMethod === 'online' ? 'Redirecting to payment gateway...' : 'Your order has been confirmed!'));
+      setIsProcessing(true);
+      
+      // Simulate order processing with a timeout
+      setTimeout(() => {
+        // Clear cart ONLY after successful checkout
+        dispatch({ type: 'CLEAR_CART' });
+        
+        // Set order as complete
+        setIsProcessing(false);
+        setOrderComplete(true);
+        
+        // Log order details for debugging
+        console.log('Order completed for user:', user?.email || 'guest');
+        console.log('Cart cleared successfully');
+        console.log('Order details:', {
+          customer: `${formData.firstName} ${formData.lastName}`,
+          shipping: formData.address,
+          items: state.cart,
+          total: total
+        });
+        
+        // Show success message
+        alert(`Order placed successfully! ${paymentMethod === 'online' ? 'Redirecting to payment gateway...' : 'Your order has been confirmed!'}`);
+        
+        // Redirect after a delay
+        setTimeout(() => {
+          navigate('/order-confirmation', { 
+            state: { 
+              orderDetails: {
+                customer: `${formData.firstName} ${formData.lastName}`,
+                email: formData.email,
+                items: state.cart,
+                total: total,
+                paymentMethod: paymentMethod,
+                shippingAddress: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.pincode}`
+              } 
+            } 
+          });
+        }, 1000);
+      }, 1500);
     }
   };
 
   return (
-    <div className="container">
-      <div className="checkout-form">
-        {/* <ContactForm 
-          email={formData.email}
-          newsletter={formData.newsletter}
-          onChange={handleInputChange}
-          errors={errors}
-        /> */}
+    <div className="checkout-page">
+      <Header />
+      
+      {orderComplete ? (
+        <div className="order-success-container">
+          <div className="order-success">
+            <h2>Order Placed Successfully!</h2>
+            <p>Redirecting to confirmation page...</p>
+          </div>
+        </div>
+      ) : isCartEmpty ? (
+        <div className="empty-checkout-container">
+          <div className="empty-checkout">
+            <p>Your cart is empty. Please add items before checkout.</p>
+            <Button text="Continue Shopping" onClick={() => navigate('/')} />
+          </div>
+        </div>
+      ) : (
+        <div className="container">
+          <h1 className="checkout-title">Checkout</h1>
+          
+          <div className="checkout-form">
+            {/* Uncomment if you want to include ContactForm
+            <ContactForm 
+              email={formData.email}
+              newsletter={formData.newsletter}
+              onChange={handleInputChange}
+              errors={errors}
+            /> */}
 
-        <DeliveryForm 
-          formData={formData}
-          onChange={handleInputChange}
-          errors={errors}
-        />
+            <DeliveryForm 
+              formData={formData}
+              onChange={handleInputChange}
+              errors={errors}
+            />
 
-        <ShippingMethod 
-          address={formData.address}
-          pincode={formData.pincode}
-          state={formData.state}
-          onShippingMethodChange={handleShippingMethodChange}
-          selectedMethod={shippingMethod}
-        />
+            <ShippingMethod 
+              address={formData.address}
+              pincode={formData.pincode}
+              state={formData.state}
+              onShippingMethodChange={handleShippingMethodChange}
+              selectedMethod={shippingMethod}
+            />
 
-        <PaymentMethod 
-          selectedMethod={paymentMethod}
-          onPaymentMethodChange={handlePaymentMethodChange}
-        />
+            <PaymentMethod 
+              selectedMethod={paymentMethod}
+              onPaymentMethodChange={handlePaymentMethodChange}
+            />
 
-        <BillingAddress 
-          type={billingAddressType}
-          billingAddress={billingAddress}
-          onTypeChange={handleBillingAddressTypeChange}
-          onAddressChange={handleBillingAddressChange}
-          errors={errors}
-        />
+            <BillingAddress 
+              type={billingAddressType}
+              billingAddress={billingAddress}
+              onTypeChange={handleBillingAddressTypeChange}
+              onAddressChange={handleBillingAddressChange}
+              errors={errors}
+            />
 
-        {/* ✅ Replaced native button with custom Button */}
-        <Button 
-          text={paymentMethod === 'online' ? 'Pay now' : 'Place order'} 
-          onClick={handleSubmit} 
-        />
-      </div>
+            <div className="checkout-buttons">
+              <Button 
+                text="Back to Cart" 
+                onClick={() => navigate('/cart')} 
+              />
+              <Button 
+                text={isProcessing ? "Processing..." : (paymentMethod === 'online' ? 'Pay now' : 'Place order')} 
+                onClick={handleSubmit}
+                disabled={isProcessing}
+              />
+            </div>
+          </div>
 
-      <OrderSummary 
-        subtotal={subtotal}
-        discount={discount}
-        discountCode={discountCode}
-        discountApplied={discountApplied}
-        shippingCost={shippingCost}
-        total={total}
-        onDiscountCodeChange={(e) => setDiscountCode(e.target.value)}
-        onApplyDiscount={applyDiscount}
-      />
+          <OrderSummary 
+            subtotal={subtotal}
+            discount={discount}
+            discountCode={discountCode}
+            discountApplied={discountApplied}
+            shippingCost={shippingCost}
+            total={total}
+            totalItems={calculateTotalItems()}
+            onDiscountCodeChange={(e) => setDiscountCode(e.target.value)}
+            onApplyDiscount={applyDiscount}
+            cartItems={state.cart}
+          />
+        </div>
+      )}
     </div>
   );
 };

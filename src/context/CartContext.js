@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext'; // Import AuthContext
+import React, { createContext, useContext, useState, useReducer, useEffect } from 'react';
+import { AuthContext } from './AuthContext';
 
 const DEFAULT_STATE = { cart: [] };
 
@@ -8,7 +8,7 @@ export const CartContext = createContext({
   dispatch: () => null,
 });
 
-const Reducer = (state, action) => {
+const cartReducer = (state, action) => {
   let newState;
 
   switch (action.type) {
@@ -33,12 +33,10 @@ const Reducer = (state, action) => {
       return newState;
     }
     case 'REMOVE_FROM_CART': {
-      // Updated to use action._id instead of action.id
       newState = { ...state, cart: state.cart.filter(item => item._id !== action._id) };
       return newState;
     }
     case 'UPDATE_QUANTITY': {
-      // Updated to use action._id instead of action.id
       newState = {
         ...state,
         cart: state.cart.map(item =>
@@ -61,23 +59,49 @@ const Reducer = (state, action) => {
 };
 
 const CartProvider = ({ children }) => {
-  const { user } = useContext(AuthContext);
-  const [state, dispatch] = useReducer(Reducer, DEFAULT_STATE);
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user; // Extract user directly
+  
+  const [state, dispatch] = useReducer(cartReducer, DEFAULT_STATE);
+  const [currentUserEmail, setCurrentUserEmail] = useState(null);
 
+  // Load cart when user changes
   useEffect(() => {
-    if (user) {
-      const savedCart = localStorage.getItem(`cart_${user._id}`);
+    const userEmail = user?.email;
+    
+    // Only reload if the email has actually changed
+    if (userEmail !== currentUserEmail) {
+      console.log("Loading cart for user:", userEmail || "guest");
+      setCurrentUserEmail(userEmail);
+      
+      const cartKey = userEmail ? `cart_${userEmail}` : "cart_guest";
+      const savedCart = localStorage.getItem(cartKey);
+      
       if (savedCart) {
-        dispatch({ type: 'REPLACE_CART', cart: JSON.parse(savedCart) });
+        try {
+          const parsedCart = JSON.parse(savedCart);
+          console.log("Found saved cart with", parsedCart.length, "items");
+          dispatch({ type: 'REPLACE_CART', cart: parsedCart });
+        } catch (error) {
+          console.error('Error parsing cart data:', error);
+          dispatch({ type: 'REPLACE_CART', cart: [] });
+        }
+      } else {
+        console.log("No saved cart found for", cartKey);
+        dispatch({ type: 'REPLACE_CART', cart: [] });
       }
     }
-  }, [user]);
+  }, [user, currentUserEmail]);
 
+  // Save cart when it changes
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(`cart_${user._id}`, JSON.stringify(state.cart));
+    if (state.cart && (state.cart.length > 0 || currentUserEmail !== null)) {
+      const cartKey = currentUserEmail ? `cart_${currentUserEmail}` : "cart_guest";
+      
+      console.log("Saving cart with", state.cart.length, "items for", cartKey);
+      localStorage.setItem(cartKey, JSON.stringify(state.cart));
     }
-  }, [state.cart, user]);
+  }, [state.cart, currentUserEmail]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
