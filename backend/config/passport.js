@@ -1,53 +1,51 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const User = require("../models/User");
-require("dotenv").config({ path: __dirname + "/../.env" });
-
-// Debugging: Check if environment variables are loaded
-console.log("🔍 GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID || "NOT FOUND");
-console.log("🔍 GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET || "NOT FOUND");
-
-if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-    throw new Error("Missing Google OAuth credentials. Check your .env file.");
-}
-
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:5000/auth/google/callback"
-        },
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                let user = await User.findOne({ email: profile.emails[0].value });
-
-                if (!user) {
-                    user = new User({
-                        name: profile.displayName,
-                        email: profile.emails[0].value,
-                        password: "google-auth" // Placeholder
-                    });
-                    await user.save();
-                }
-
-                return done(null, user);
-            } catch (error) {
-                return done(error, null);
-            }
-        }
-    )
-);
+require("dotenv").config();
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await User.findById(id);
-        done(null, user);
-    } catch (error) {
-        done(error, null);
-    }
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
 });
+
+// Configure Google Strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",
+      proxy: true
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        console.log("📱 Google Auth Profile Received");
+        
+        const userEmail = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+        
+        if (!userEmail) {
+          console.log("❌ No email received from Google");
+          return done(null, false);
+        }
+        
+        // Return user data for the callback route
+        const userData = {
+          googleId: profile.id,
+          displayName: profile.displayName,
+          email: userEmail,
+          picture: profile.photos && profile.photos[0] ? profile.photos[0].value : null
+        };
+        
+        console.log("✅ Google Auth User:", userEmail);
+        return done(null, userData);
+      } catch (error) {
+        console.error("❌ Google Strategy Error:", error);
+        return done(error, null);
+      }
+    }
+  )
+);
+
+module.exports = passport;

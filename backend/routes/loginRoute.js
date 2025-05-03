@@ -12,7 +12,6 @@ router.post("/", async (req, res) => {
     const { email, password } = req.body;
     console.log("📩 Login Request Received");
     console.log("📧 Email:", email);
-    console.log("🔑 Entered Password:", password);
 
     if (!email || !password) {
       console.log("⚠️ Missing Fields!");
@@ -20,14 +19,12 @@ router.post("/", async (req, res) => {
     }
 
     let user = await User.findOne({ email });
-    console.log("🟢 User Found in DB:", user);
+    console.log("🔍 User Found in DB:", user ? "Yes" : "No");
 
     if (!user) {
       console.log("❌ User Not Found!");
-      return res.status(400).json({ error: "User not found" });
+      return res.status(400).json({ error: "Invalid credentials" });
     }
-
-    console.log("🔐 Stored Hashed Password:", user.password);
 
     // Compare hashed password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -35,18 +32,26 @@ router.post("/", async (req, res) => {
 
     if (!isMatch) {
       console.log("❌ Password Mismatch!");
-      return res.status(400).json({ error: "Incorrect password" });
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { userId: user._id, email: user.email }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: "24h" }
+    );
 
     console.log("✅ Login Successful!");
-    return res.status(200).json({ message: "Login successful", token });
+    return res.status(200).json({ 
+      message: "Login successful", 
+      token,
+      email: user.email 
+    });
 
   } catch (error) {
     console.error("❌ Login Error:", error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Authentication failed" });
   }
 });
 
