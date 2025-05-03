@@ -1,57 +1,46 @@
 const express = require("express");
 const User = require("../models/User");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("📩 Login Request Received");
-    console.log("📧 Email:", email);
-
     if (!email || !password) {
-      console.log("⚠️ Missing Fields!");
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    let user = await User.findOne({ email });
-    console.log("🔍 User Found in DB:", user ? "Yes" : "No");
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
-      console.log("❌ User Not Found!");
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
-    // Compare hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log("🔍 Password Match Result:", isMatch);
-
+    // Use the schema method that's already defined
+    const isMatch = await user.comparePassword(password);
+    
     if (!isMatch) {
-      console.log("❌ Password Mismatch!");
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email }, 
-      process.env.JWT_SECRET, 
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET || "default-secret",
       { expiresIn: "24h" }
     );
 
-    console.log("✅ Login Successful!");
-    return res.status(200).json({ 
-      message: "Login successful", 
-      token,
-      email: user.email 
+    return res.status(200).json({
+      message: "Login successful",
+      email: user.email,
+      token
     });
-
   } catch (error) {
-    console.error("❌ Login Error:", error);
-    res.status(500).json({ error: "Authentication failed" });
+    console.error("Login Error:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
