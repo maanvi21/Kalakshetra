@@ -1,0 +1,55 @@
+/* Reset and structure */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar container */
+.navbar {
+  position: sticky;
+  top: 0;
+ 
+ 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  z-index: 1000;
+}
+
+/* Navigation links */
+.nav-left ul {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-left ul li {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out, transform 0.2s;
+}
+
+.nav-left ul li:hover {
+  color: #ff7a00; /* nice orange */
+  transform: translateY(-2px);
+}
+
+/* Right section of navbar */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.user-email {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color:#262626;
+
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+}

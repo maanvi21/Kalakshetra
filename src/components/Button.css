@@ -1,0 +1,22 @@
+.btn_container {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    width: fit-content;
+    height: auto;
+    background-color: #67301B; /* Ensure this is dark enough for white text */
+    color: white; /* Ensure this contrasts with the background */
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: capitalize;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.btn_container:hover {
+    background-color: #8B4513; /* Ensure this is also dark enough for white text */
+}

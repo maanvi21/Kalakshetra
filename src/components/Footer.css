@@ -1,0 +1,52 @@
+
+/* Footer */
+footer {
+  background-color: #996c5a;;
+    color: #000000;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Creates two equal columns */
+    /* grid-template-rows: repeat(2, auto); */
+  }
+
+  .row1{
+    padding:10px;
+  }
+  .services{
+    margin-top:20px;
+  }
+  
+  footer h3 {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  footer ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  footer ul li a {
+    transition: color 0.3s;
+  }
+  
+  footer ul li a:hover {
+    color: #8B4513; /* Corrected hover effect */
+  }
+  
+  .social-media {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates two equal columns */
+    grid-template-rows: repeat(2, auto);  /* Creates two rows */
+    gap: 100px; /* Space between grid items */
+    justify-content: center; /* Centering items horizontally */
+    align-items: center; /* Centering items vertically */
+    width: fit-content; /* Adjust width to content */
+    margin: auto; /* Center the grid */
+  }
+  .social-media img{
+    /* height: 50px; */
+    width: 70%;
+  }
+  
+

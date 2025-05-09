@@ -1,0 +1,79 @@
+.categories-scroll-wrapper {
+    padding: 20px;
+    overflow: hidden; /* Hide overflow to create infinite scroll effect */
+    position: relative;
+    width: 100%;
+}
+
+/* Container for scrolling items */
+.categories-container {
+    display: flex;
+    gap: 16px; /* Space between cards */
+    width: max-content; /* Prevents breaking into new lines */
+    animation: scroll 20s linear infinite; /* Adjust speed */
+}
+
+/* Individual category item */
+.category-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Spacing inside */
+    width: 250px; /* Fixed width for consistent scrolling */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background: white; /* Ensures contrast */
+}
+
+/* Images inside each item */
+.category-item img {
+    width: 100%; /* Full width */
+    height: 150px; /* Fixed height for consistency */
+    object-fit: cover; /* Maintain aspect ratio */
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
+}
+
+/* Styling for item title */
+.category-item h3 {
+    margin: 10px 0 5px;
+    font-size: 18px;
+    text-align: center;
+    color: #333;
+}
+
+/* Styling for item description */
+.category-item p {
+    font-size: 14px;
+  
+    text-align: center;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Button wrapper */
+.button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Auto-scrolling animation */
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%); /* Moves half the total width */
+    }
+}
+
+/* Hide scrollbar */
+.categories-scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.categories-scroll-wrapper {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
