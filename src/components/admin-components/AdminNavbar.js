@@ -8,7 +8,7 @@ export default function AdminNavbar() {
   const navigate=useNavigate();
 
   const navToHome=()=>{
-    navigate('/')
+    navigate('/adminhome')
 
   }
 const navToManageItems=()=>{
@@ -40,7 +40,7 @@ const navToManageItems=()=>{
             <li onClick={navToAbout}>About Us</li>
             <li onClick={navToLocate}>Locate Our Branches</li>
             <li onClick={navToContact}>Contact Us</li>
-            <li> <LoginToggle/> </li>
+            {/* <li> <LoginToggle/> </li> */}
             <li><OperationsButton text='Manage Items' onClick={navToManageItems}/></li>
             <li><NavDrawer/></li>
           </ul>
