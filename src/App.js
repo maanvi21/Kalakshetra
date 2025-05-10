@@ -16,6 +16,8 @@ import WishlistProvider from "./context/WishlistContext.js";
 import AuthHandler from "./auth/AuthHandler.js";
 import AdminManagement from "./browse/AdminManagement.js";
 import Checkout from "./checkout/Checkout.js";
+import AdminHomepage from "./homepage/AdminHomepage.js";
+import AdminLogin from "./admin-login/AdminLogin.js";
 
 function App() {
   return (
@@ -27,12 +29,14 @@ function App() {
               <Routes>
                 {/* Home/Main Routes */}
                 <Route path="/" element={<UserHomepage />} />
+                   <Route path="/adminhome" element={<AdminHomepage />} />
                 
                 {/* Authentication Routes */}
                 <Route path="/auth" element={<AuthHandler />} />
                 <Route path="/auth/callback" element={<AuthHandler />} /> {/* Added auth callback route */}
                 <Route path="/login" element={<AuthForm />} />
                 <Route path="/register" element={<AuthForm />} />
+                <Route path="/adminlogin" element={<AdminLogin />} />
                 
                 {/* Product Routes */}
                 <Route path="/menProducts" element={<MenProducts />} />
