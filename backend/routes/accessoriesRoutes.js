@@ -3,14 +3,14 @@ const multer = require('multer');
 const { Earrings, Necklaces, Rings, Bracelets, Watches } = require('../models/Accessories');
 const router = express.Router();
 const models = {
-    earriings:Earrings,
+    earrings:Earrings,
     necklaces: Necklaces,
     rings: Rings,
     bracelets: Bracelets,
     watches: Watches
   };
   
-// Configure multer for memory storage (not disk)
+/// Configure multer for memory storage (not disk)
 const storage = multer.memoryStorage();
 
 // File filter to only accept images
@@ -33,27 +33,46 @@ const upload = multer({
 /**
  * Add new item to a subcategory
  */
-router.post('/add/:subcategory', upload.single('image'), async (req, res) => {
+router.post('/add/:subcategory', upload.fields([
+  { name: 'image1', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 },
+  
+]), async (req, res) => {
   const { subcategory } = req.params;
   const Model = models[subcategory.toLowerCase()];
   
   if (!Model) return res.status(400).json({ error: 'Invalid subcategory' });
-  if (!req.file) return res.status(400).json({ error: 'Image is required' });
+  if (!req.files || !req.files.image1) return res.status(400).json({ error: 'Primary image (image1) is required' });
 
   try {
     const { name, description, price, category } = req.body;
     
-    // Convert image to base64
-    const base64Image = req.file.buffer.toString('base64');
-    const imageString = `data:${req.file.mimetype};base64,${base64Image}`;
+    // Convert primary image to base64 (required)
+    const base64Image1 = req.files.image1[0].buffer.toString('base64');
+    const imageString1 = `data:${req.files.image1[0].mimetype};base64,${base64Image1}`;
 
+    // Initialize the new item with required fields
     const newItem = new Model({
       title: name, // Map 'name' from frontend to 'title' in backend
       description,
       price,
-      image: imageString, // Store as base64 string
+      image1: imageString1, // Store primary image as base64 string
       category,
     });
+
+    // Process optional images if they exist
+    if (req.files.image2) {
+      const base64Image2 = req.files.image2[0].buffer.toString('base64');
+      newItem.image2 = `data:${req.files.image2[0].mimetype};base64,${base64Image2}`;
+    }
+
+    if (req.files.image3) {
+      const base64Image3 = req.files.image3[0].buffer.toString('base64');
+      newItem.image3 = `data:${req.files.image3[0].mimetype};base64,${base64Image3}`;
+    }
+
+    
 
     await newItem.save();
     res.status(201).json({ 
@@ -84,7 +103,10 @@ router.get('/fetch/:subcategory', async (req, res) => {
       description: item.description,
       price: item.price,
       category: item.category,
-      image: item.image, // Base64 image
+      image1: item.image1, // Primary image
+      image2: item.image2 || null, // Optional images
+      image3: item.image3 || null,
+     
       createdAt: item.createdAt,
       updatedAt: item.updatedAt
     }));
@@ -115,7 +137,10 @@ router.get('/fetch/:subcategory/:id', async (req, res) => {
       description: item.description,
       price: item.price,
       category: item.category,
-      image: item.image, // Base64 image
+      image1: item.image1, // Primary image
+      image2: item.image2 || null, // Optional images
+      image3: item.image3 || null,
+     
       createdAt: item.createdAt,
       updatedAt: item.updatedAt
     };
@@ -151,7 +176,12 @@ router.delete('/delete/:subcategory/:id', async (req, res) => {
 /**
  * Update item by ID
  */
-router.put('/update/:subcategory/:id', upload.single('image'), async (req, res) => {
+router.put('/update/:subcategory/:id', upload.fields([
+  { name: 'image1', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 },
+  
+]), async (req, res) => {
   const { subcategory, id } = req.params;
   const Model = models[subcategory.toLowerCase()];
   
@@ -167,7 +197,7 @@ router.put('/update/:subcategory/:id', upload.single('image'), async (req, res) 
     let updateData;
     
     if (contentType.includes('multipart/form-data')) {
-      // FormData submission with possible new image
+      // FormData submission with possible new images
       updateData = {
         title: req.body.name || item.title,
         description: req.body.description || item.description,
@@ -175,11 +205,26 @@ router.put('/update/:subcategory/:id', upload.single('image'), async (req, res) 
         category: req.body.category || item.category,
       };
       
-      // If a new image was uploaded
-      if (req.file) {
-        // Convert new image to base64
-        const base64Image = req.file.buffer.toString('base64');
-        updateData.image = `data:${req.file.mimetype};base64,${base64Image}`;
+      // Process each image if updated
+      if (req.files) {
+        // Update primary image if provided
+        if (req.files.image1) {
+          const base64Image1 = req.files.image1[0].buffer.toString('base64');
+          updateData.image1 = `data:${req.files.image1[0].mimetype};base64,${base64Image1}`;
+        }
+        
+        // Update optional images if provided
+        if (req.files.image2) {
+          const base64Image2 = req.files.image2[0].buffer.toString('base64');
+          updateData.image2 = `data:${req.files.image2[0].mimetype};base64,${base64Image2}`;
+        }
+
+        if (req.files.image3) {
+          const base64Image3 = req.files.image3[0].buffer.toString('base64');
+          updateData.image3 = `data:${req.files.image3[0].mimetype};base64,${base64Image3}`;
+        }
+
+        
       }
     } else {
       // JSON submission without image update
@@ -188,7 +233,7 @@ router.put('/update/:subcategory/:id', upload.single('image'), async (req, res) 
         description: req.body.description || item.description,
         price: req.body.price || item.price,
         category: req.body.category || item.category,
-        // Keep the existing image
+        // Keep existing images
       };
     }
     
@@ -202,7 +247,10 @@ router.put('/update/:subcategory/:id', upload.single('image'), async (req, res) 
       description: updatedItem.description,
       price: updatedItem.price,
       category: updatedItem.category,
-      image: updatedItem.image,
+      image1: updatedItem.image1,
+      image2: updatedItem.image2 || null,
+      image3: updatedItem.image3 || null,
+      
       createdAt: updatedItem.createdAt,
       updatedAt: updatedItem.updatedAt
     };
@@ -216,4 +264,4 @@ router.put('/update/:subcategory/:id', upload.single('image'), async (req, res) 
   }
 });
 
-module.exports = router;
+module.exports =router;
