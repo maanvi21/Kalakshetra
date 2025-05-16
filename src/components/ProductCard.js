@@ -1,4 +1,4 @@
-import React, { useState,useNavigate, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import './ProductCard.css';
 import Button from './Button';
 import { useStateValue as useWishlistState } from '../context/WishlistContext';
@@ -32,7 +32,7 @@ export default function ProductCard({ item }) {
           _id: item._id,
           title: item.title || 'Product',
           name: item.title || 'Product',
-          image: item.image || '',
+          image: item.image1 || '', // Use image1 from database
           price: item.price || 0,
           alt: item.alt || item.title || 'Product image',
         }
@@ -47,7 +47,7 @@ export default function ProductCard({ item }) {
       name: item.name || item.title || 'Product',
       title: item.title || item.name || 'Product',
       price: Number(item.price) || 0,
-      image: item.image || '/placeholder.png',
+      image: item.image1 || '/placeholder.png', // Use image1 from database
       quantity: 1,
       category: item.category || item.type || 'Other',
     };
@@ -93,7 +93,7 @@ export default function ProductCard({ item }) {
     <div className="product-card-container">
       <div className="prod_container" key={item._id}>
         <div className="prod_image-wrapper">
-          <img src={item.image || '/placeholder.png'} alt={item.alt || item.title || 'Product Image'} />
+          <img src={item.image1 || '/placeholder.png'} alt={item.alt || item.title || 'Product Image'} />
         </div>
         <div className="prod_desc">
           <div className="title-container">

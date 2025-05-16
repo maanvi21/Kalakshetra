@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./BagsProducts.css";
 import ProductCard from "../components/ProductCard";
 import Search from "../components/Search";
@@ -7,105 +8,145 @@ import { useStateValue } from '../context/CartContext';
 
 export default function BagsPage() {
   const { state } = useStateValue();
-  
-  // Sample product data for Bags
-  const Handbags = [
-    { id: 'e1', name: 'Traditional Jhumkas', price: 1299, image: '/assets/Bags/Handbags/jhumkas.jpg', category: 'Handbags' },
-    { id: 'e2', name: 'Pearl Drop Handbags', price: 999, image: '/assets/Bags/Handbags/pearl.jpg', category: 'Handbags' },
-    { id: 'e3', name: 'Stone Studs', price: 799, image: '/assets/Bags/Handbags/studs.jpg', category: 'Handbags' },
-    { id: 'e4', name: 'Handcrafted Hoops', price: 1499, image: '/assets/Bags/Handbags/hoops.jpg', category: 'Handbags' },
-  ];
-  
-  const Totes = [
-    { id: 'n1', name: 'Kundan Necklace Set', price: 3999, image: '/assets/Bags/Totes/kundan.jpg', category: 'Totes' },
-    { id: 'n2', name: 'Beaded Choker', price: 1299, image: '/assets/Bags/Totes/choker.jpg', category: 'Totes' },
-    { id: 'n3', name: 'Pearl String', price: 2499, image: '/assets/Bags/Totes/pearl.jpg', category: 'Totes' },
-    { id: 'n4', name: 'Silver Pendant Chain', price: 1799, image: '/assets/Bags/Totes/pendant.jpg', category: 'Totes' },
-  ];
-  
-  const backpacks = [
-    { id: 'r1', name: 'Silver Statement Ring', price: 899, image: '/assets/Bags/backpacks/statement.jpg', category: 'backpacks' },
-    { id: 'r2', name: 'Stone Cocktail Ring', price: 1199, image: '/assets/Bags/backpacks/cocktail.jpg', category: 'backpacks' },
-    { id: 'r3', name: 'Adjustable Toe Ring', price: 499, image: '/assets/Bags/backpacks/toe.jpg', category: 'backpacks' },
-    { id: 'r4', name: 'Brass Ring Set', price: 799, image: '/assets/Bags/backpacks/brass.jpg', category: 'backpacks' },
-  ];
-  
- 
-  const wallets = [
-    { id: 'w1', name: 'Classic Leather Watch', price: 2499, image: '/assets/Bags/wallets/leather.jpg', category: 'wallets' },
-    { id: 'w2', name: 'Metal Strap Watch', price: 2999, image: '/assets/Bags/wallets/metal.jpg', category: 'wallets' },
-    { id: 'w3', name: 'Smart Watch', price: 3999, image: '/assets/Bags/wallets/smart.jpg', category: 'wallets' },
-    { id: 'w4', name: 'Vintage Timepiece', price: 4999, image: '/assets/Bags/wallets/vintage.jpg', category: 'wallets' },
-  ];
+  const [bagsData, setBagsData] = useState({
+    handbags: [],
+    totes: [],
+    backpacks: [],
+    wallets: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [debug, setDebug] = useState({});
+
+  useEffect(() => {
+    const fetchBagsData = async () => {
+      try {
+        // Add debug information
+        console.log("Fetching bags product data...");
+        
+        // Fetch each category separately to better identify issues
+        const fetchCategory = async (category) => {
+          console.log(`Fetching ${category}...`);
+          const url = `http://localhost:5000/bags/fetch/${category}`;
+          try {
+            const response = await axios.get(url);
+            console.log(`${category} response:`, response.data);
+            return { success: true, data: response.data.items || [] };
+          } catch (err) {
+            console.error(`Error fetching ${category}:`, err);
+            return { success: false, error: err.message };
+          }
+        };
+
+        const handbagsResult = await fetchCategory('handbags');
+        const totesResult = await fetchCategory('totes');
+        const backpacksResult = await fetchCategory('backpacks');
+        const walletsResult = await fetchCategory('wallets');
+
+        // Store debug info
+        setDebug({
+          handbags: handbagsResult,
+          totes: totesResult,
+          backpacks: backpacksResult,
+          wallets: walletsResult
+        });
+
+        // Update state with successful responses
+        setBagsData({
+          handbags: handbagsResult.success ? handbagsResult.data : [],
+          totes: totesResult.success ? totesResult.data : [],
+          backpacks: backpacksResult.success ? backpacksResult.data : [],
+          wallets: walletsResult.success ? walletsResult.data : [],
+        });
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error in fetchBagsData:", error);
+        setError("Failed to load products: " + error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchBagsData();
+  }, []);
+
+  // Loading and error handling
+  if (loading) {
+    return <div className="loading-container">Loading bags...</div>;
+  }
+
+  // Display detailed error information if available
+  if (error) {
+    return (
+      <div className="error-container">
+        <h2>Error Loading Bags</h2>
+        <p>{error}</p>
+        <div className="debug-info">
+          <h3>Debug Information:</h3>
+          <pre>{JSON.stringify(debug, null, 2)}</pre>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if we have any products at all
+  const hasAnyProducts = Object.values(bagsData).some(array => array.length > 0);
   
   return (
-    <div className="Bags-page">
+    <div className="bags-page">
       <Header />
-      <div className="Bags_header">
+      <div className="bags_header">
         <Search />
       </div>
       
-      <div className="Bags_banner">
+      <div className="bags_banner">
         <h1>Bags Collection</h1>
-        <p>Handcrafted Bags to complement your traditional attire</p>
+        <p>Handcrafted bags to complement your traditional attire</p>
       </div>
-      
-      <div className="category">
-        <h2>Handbags</h2>
-        <div className="scroll-container">
-          <div className="horizontal-scroll">
-            {Handbags.map((item) => (
-              <ProductCard key={`earring-${item.id}`} items={[item]} />
-            ))}
+
+      {/* No products message */}
+      {!hasAnyProducts && (
+        <div className="no-products">
+          <h2>No products found</h2>
+          <p>There are currently no products available in our bags collection.</p>
+        </div>
+      )}
+
+      {/* Display each category dynamically */}
+      {['handbags', 'totes', 'backpacks', 'wallets'].map((category) => (
+        bagsData[category].length > 0 ? (
+          <div className="category" key={category}>
+            <h2>{category.charAt(0).toUpperCase() + category.slice(1)}</h2>
+            <div className="scroll-container">
+              <div className="horizontal-scroll">
+                {bagsData[category].map((item) => (
+                  <ProductCard key={item._id} item={item} />
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : null
+      ))}
+
+      {/* Special Offers: Only show if we have products */}
+      {hasAnyProducts && (
+        <div className="category">
+          <h2>Special Offers</h2>
+          <div className="scroll-container">
+            <div className="horizontal-scroll">
+              {[
+                ...bagsData.handbags, 
+                ...bagsData.totes, 
+                ...bagsData.backpacks
+              ]
+                .slice(0, 5)
+                .map((item) => (
+                  <ProductCard key={`offer-${item._id}`} item={item} />
+                ))}
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="category">
-        <h2>Totes</h2>
-        <div className="scroll-container">
-          <div className="horizontal-scroll">
-            {Totes.map((item) => (
-              <ProductCard key={`necklace-${item.id}`} items={[item]} />
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      <div className="category">
-        <h2>backpacks</h2>
-        <div className="scroll-container">
-          <div className="horizontal-scroll">
-            {backpacks.map((item) => (
-              <ProductCard key={`ring-${item.id}`} items={[item]} />
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      
-      
-      <div className="category">
-        <h2>wallets</h2>
-        <div className="scroll-container">
-          <div className="horizontal-scroll">
-            {wallets.map((item) => (
-              <ProductCard key={`watch-${item.id}`} items={[item]} />
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      <div className="category">
-        <h2>Special Offers</h2>
-        <div className="scroll-container">
-          <div className="horizontal-scroll">
-            {[...Handbags, ...Totes, ...backpacks].slice(0, 5).map((item) => (
-              <ProductCard key={`offer-${item.id}`} items={[item]} />
-            ))}
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

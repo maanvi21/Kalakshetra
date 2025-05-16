@@ -9,11 +9,22 @@ const MenSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
     price:{ type: Number, required: true },
-    image: { 
-        type: String, 
+     // Primary image (required)
+    image1: {
+        type: String,
         required: true,
-        // Increased max size to accommodate Base64 images
-        maxlength: 5000000 
+        maxlength: 5000000 // Allows large enough size for Base64 images
+    },
+    // Optional additional images
+    image2: {
+        type: String,
+        required: false,
+        maxlength: 5000000
+    },
+    image3: {
+        type: String,
+        required: false,
+        maxlength: 5000000
     }
 }, { timestamps: true });
 
