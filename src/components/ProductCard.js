@@ -1,18 +1,84 @@
 import React, { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 import Button from './Button';
 import { useStateValue as useWishlistState } from '../context/WishlistContext';
 import { useStateValue as useCartState } from '../context/CartContext';
+import { useProductState } from '../context/ProductContext';
+import OperationsButton from './OperationsButton';
 
 export default function ProductCard({ item }) {
- 
+  // for the description button 
+  const navigate = useNavigate();
+  const { dispatch: productDispatch } = useProductState();
+  
+  const handleDescriptionClick = useCallback(() => {
+    // Debug logging to see what data we have
+    console.log('ProductCard item data:', item);
+    console.log('Category:', item?.category);
+    console.log('ID:', item?._id);
+    
+    if (item?._id) {
+      // Determine category from current URL or item data
+      const currentPath = window.location.pathname;
+      let category = item.category || item.type;
+      
+      // If no category in item, infer from current page URL
+      if (!category) {
+        if (currentPath.includes('/men') || currentPath.includes('men')) {
+          category = 'men';
+        } else if (currentPath.includes('/women') || currentPath.includes('women')) {
+          category = 'women';
+        } else if (currentPath.includes('/accessories') || currentPath.includes('accessories')) {
+          category = 'accessories';
+        } else if (currentPath.includes('/bags') || currentPath.includes('bags')) {
+          category = 'bags';
+        } else {
+          // Default fallback - you might need to adjust this based on your routing
+          category = 'men'; // or whatever your default category should be
+        }
+      }
+      
+      // Store the complete product data in context
+      productDispatch({
+        type: 'SET_SELECTED_PRODUCT',
+        product: {
+          ...item,
+          // Ensure we have all necessary fields
+          _id: item._id,
+          name: item.name || item.title,
+          title: item.title || item.name,
+          price: item.price,
+          category: category,
+          image1: item.image1,
+          image2: item.image2,
+          image3: item.image3,
+          description: item.description,
+          alt: item.alt,
+          createdAt: item.createdAt
+        }
+      });
+
+      console.log('Determined category:', category);
+      console.log('Navigating to:', `/${category}/${item._id}`);
+      navigate(`/${category}/${item._id}`);
+    } else {
+      console.error('ProductCard: Missing _id for navigation. Item:', item);
+      // Optionally show user-friendly error
+      alert('Unable to view product details. Please try again.');
+    }
+  }, [navigate, item, productDispatch]);
+
+  //context initialization
   const { state: wishlistState, dispatch: wishlistDispatch } = useWishlistState();
   const { state: cartState, dispatch: cartDispatch } = useCartState();
 
   useEffect(() => {
     console.log('ProductCard mounted - Cart state:', cartState);
     console.log('Wishlist state:', wishlistState);
-  }, [cartState, wishlistState]);
+    // Debug the item data when component mounts
+    console.log('ProductCard item:', item);
+  }, [cartState, wishlistState, item]);
 
   // Check if item is in wishlist
   const isItemInWishlist = useCallback((itemId) => {
@@ -89,6 +155,18 @@ export default function ProductCard({ item }) {
     }
   };
 
+  // Early return if item is not properly defined
+  if (!item || !item._id) {
+    console.error('ProductCard: Invalid item data:', item);
+    return (
+      <div className="product-card-container">
+        <div className="prod_container error-state">
+          <p>Error: Invalid product data</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="product-card-container">
       <div className="prod_container" key={item._id}>
@@ -121,6 +199,7 @@ export default function ProductCard({ item }) {
               text="Add to Cart"
               onClick={() => handleAddToCart(item)}
             />
+            <OperationsButton text="Description" onClick={handleDescriptionClick}/>
             <div className="quantity-controls">
               <button
                 onClick={() => handleDecreaseQuantity(item)}
