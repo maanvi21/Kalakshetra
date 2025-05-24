@@ -108,7 +108,7 @@ const ProductDescription = () => {
       price: Number(product.price) || 0,
       image: product.image1 || '/placeholder.png',
       quantity: 1,
-      category: product.category || category,
+      
     };
 
     if (existingItem) {

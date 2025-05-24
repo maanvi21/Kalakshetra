@@ -15,29 +15,14 @@ export default function ProductCard({ item }) {
   const handleDescriptionClick = useCallback(() => {
     // Debug logging to see what data we have
     console.log('ProductCard item data:', item);
-    console.log('Category:', item?.category);
+    
     console.log('ID:', item?._id);
     
     if (item?._id) {
       // Determine category from current URL or item data
       const currentPath = window.location.pathname;
-      let category = item.category || item.type;
-      
-      // If no category in item, infer from current page URL
-      if (!category) {
-        if (currentPath.includes('/men') || currentPath.includes('men')) {
-          category = 'men';
-        } else if (currentPath.includes('/women') || currentPath.includes('women')) {
-          category = 'women';
-        } else if (currentPath.includes('/accessories') || currentPath.includes('accessories')) {
-          category = 'accessories';
-        } else if (currentPath.includes('/bags') || currentPath.includes('bags')) {
-          category = 'bags';
-        } else {
-          // Default fallback - you might need to adjust this based on your routing
-          category = 'men'; // or whatever your default category should be
-        }
-      }
+
+     
       
       // Store the complete product data in context
       productDispatch({
@@ -49,7 +34,7 @@ export default function ProductCard({ item }) {
           name: item.name || item.title,
           title: item.title || item.name,
           price: item.price,
-          category: category,
+          
           image1: item.image1,
           image2: item.image2,
           image3: item.image3,
@@ -59,9 +44,9 @@ export default function ProductCard({ item }) {
         }
       });
 
-      console.log('Determined category:', category);
-      console.log('Navigating to:', `/${category}/${item._id}`);
-      navigate(`/${category}/${item._id}`);
+    
+      console.log('Navigating to:', `/${item._id}`);
+      navigate(`/${item._id}`);
     } else {
       console.error('ProductCard: Missing _id for navigation. Item:', item);
       // Optionally show user-friendly error
