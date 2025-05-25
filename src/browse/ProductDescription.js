@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ProductDescription.css';
-import { useStateValue as useCartState } from '../context/CartContext';
-import { useStateValue as useWishlistState } from '../context/WishlistContext';
 import { useProductState } from '../context/ProductContext';
+import AddToCartButton from './AddToCart';
+
+import AddToWishlistButton from './AddToWishlist';
+
 
 const ProductDescription = () => {
   const { category, id } = useParams();
@@ -37,10 +39,6 @@ const ProductDescription = () => {
       date: "2024-03-08"
     }
   ]);
-
-  // Context for cart and wishlist
-  const { state: cartState, dispatch: cartDispatch } = useCartState();
-  const { state: wishlistState, dispatch: wishlistDispatch } = useWishlistState();
 
   // Validate product data on component mount
   useEffect(() => {
@@ -91,62 +89,6 @@ const ProductDescription = () => {
     }
   };
 
-  // Check if item is in wishlist
-  const isItemInWishlist = (itemId) => {
-    return wishlistState?.wishlist?.some(wishlistItem => wishlistItem._id === itemId) || false;
-  };
-
-  // Handle add to cart
-  const handleAddToCart = () => {
-    if (!product) return;
-    
-    const existingItem = cartState.cart.find(cartItem => cartItem._id === product._id);
-    const newItem = {
-      _id: product._id,
-      name: product.name || product.title || 'Product',
-      title: product.title || product.name || 'Product',
-      price: Number(product.price) || 0,
-      image: product.image1 || '/placeholder.png',
-      quantity: 1,
-      
-    };
-
-    if (existingItem) {
-      cartDispatch({
-        type: 'UPDATE_QUANTITY',
-        _id: product._id,
-        quantity: existingItem.quantity + 1
-      });
-    } else {
-      cartDispatch({
-        type: 'ADD_TO_CART',
-        item: newItem
-      });
-    }
-  };
-
-  // Handle wishlist toggle
-  const handleWishlistToggle = () => {
-    if (!product) return;
-    
-    const isInWishlist = isItemInWishlist(product._id);
-    if (isInWishlist) {
-      wishlistDispatch({ type: 'REMOVE_FROM_WISHLIST', _id: product._id });
-    } else {
-      wishlistDispatch({
-        type: 'ADD_TO_WISHLIST',
-        item: {
-          _id: product._id,
-          title: product.title || product.name || 'Product',
-          name: product.name || product.title || 'Product',
-          image: product.image1 || '/placeholder.png',
-          price: product.price || 0,
-          alt: product.alt || product.title || 'Product image',
-        }
-      });
-    }
-  };
-
   // Error state - No product found in context
   if (!product) {
     return (
@@ -172,7 +114,6 @@ const ProductDescription = () => {
   }
 
   const productImages = getProductImages();
-  const currentQuantity = cartState.cart.find(cartItem => cartItem._id === product._id)?.quantity || 0;
 
   return (
     <div className="product-container">
@@ -234,19 +175,17 @@ const ProductDescription = () => {
           </div>
 
           <div className="product-actions">
-            <button 
-              onClick={handleAddToCart}
-              className="add-to-cart-btn"
-            >
-              Add to Cart {currentQuantity > 0 && `(${currentQuantity})`}
-            </button>
+            <AddToCartButton 
+              product={product}
+              className="primary-action"
+              showQuantity={true}
+            />
             
-            <button 
-              onClick={handleWishlistToggle}
-              className={`wishlist-btn ${isItemInWishlist(product._id) ? 'active' : ''}`}
-            >
-              {isItemInWishlist(product._id) ? '❤️ Remove from Wishlist' : '🤍 Add to Wishlist'}
-            </button>
+            <AddToWishlistButton 
+              product={product}
+              className="secondary-action"
+              variant="outline"
+            />
           </div>
 
           <div className="product-meta">

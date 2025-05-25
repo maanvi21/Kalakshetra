@@ -5,12 +5,14 @@ import Button from './Button';
 import { useStateValue as useWishlistState } from '../context/WishlistContext';
 import { useStateValue as useCartState } from '../context/CartContext';
 import { useProductState } from '../context/ProductContext';
+import { useAuth } from '../context/AuthContext'; // Import useAuth hook
 import OperationsButton from './OperationsButton';
 
 export default function ProductCard({ item }) {
   // for the description button 
   const navigate = useNavigate();
   const { dispatch: productDispatch } = useProductState();
+  const { user } = useAuth(); // Get user authentication state
   
   const handleDescriptionClick = useCallback(() => {
     // Debug logging to see what data we have
@@ -61,9 +63,10 @@ export default function ProductCard({ item }) {
   useEffect(() => {
     console.log('ProductCard mounted - Cart state:', cartState);
     console.log('Wishlist state:', wishlistState);
+    console.log('Auth state - User:', user);
     // Debug the item data when component mounts
     console.log('ProductCard item:', item);
-  }, [cartState, wishlistState, item]);
+  }, [cartState, wishlistState, item, user]);
 
   // Check if item is in wishlist
   const isItemInWishlist = useCallback((itemId) => {
@@ -71,6 +74,13 @@ export default function ProductCard({ item }) {
   }, [wishlistState]);
 
   const handleLikeToggle = useCallback((item) => {
+    // Check authentication for wishlist operations as well (optional)
+    if (!user) {
+      console.log('User not authenticated, redirecting to login for wishlist operation');
+      navigate('/login');
+      return;
+    }
+
     const isInWishlist = isItemInWishlist(item._id);
     if (isInWishlist) {
       console.log('Removing item from wishlist:', item);
@@ -89,9 +99,16 @@ export default function ProductCard({ item }) {
         }
       });
     }
-  }, [wishlistDispatch, wishlistState]);
+  }, [wishlistDispatch, wishlistState, user, navigate]);
 
   const handleAddToCart = useCallback((item) => {
+    // Check if user is authenticated before adding to cart
+    if (!user) {
+      console.log('User not authenticated, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     const existingItem = cartState.cart.find(cartItem => cartItem._id === item._id);
     const newItem = {
       _id: item._id,
@@ -116,9 +133,16 @@ export default function ProductCard({ item }) {
         item: newItem
       });
     }
-  }, [cartState.cart, cartDispatch]);
+  }, [cartState.cart, cartDispatch, user, navigate]);
 
-  const handleIncreaseQuantity = (item) => {
+  const handleIncreaseQuantity = useCallback((item) => {
+    // Check authentication for quantity increase
+    if (!user) {
+      console.log('User not authenticated, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     const existingItem = cartState.cart.find(cartItem => cartItem._id === item._id);
     if (existingItem) {
       cartDispatch({
@@ -127,9 +151,16 @@ export default function ProductCard({ item }) {
         quantity: existingItem.quantity + 1
       });
     }
-  };
+  }, [cartState.cart, cartDispatch, user, navigate]);
 
-  const handleDecreaseQuantity = (item) => {
+  const handleDecreaseQuantity = useCallback((item) => {
+    // Check authentication for quantity decrease
+    if (!user) {
+      console.log('User not authenticated, redirecting to login');
+      navigate('/login');
+      return;
+    }
+
     const existingItem = cartState.cart.find(cartItem => cartItem._id === item._id);
     if (existingItem && existingItem.quantity > 1) {
       cartDispatch({
@@ -138,7 +169,7 @@ export default function ProductCard({ item }) {
         quantity: existingItem.quantity - 1
       });
     }
-  };
+  }, [cartState.cart, cartDispatch, user, navigate]);
 
   // Early return if item is not properly defined
   if (!item || !item._id) {

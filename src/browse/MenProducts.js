@@ -95,7 +95,7 @@ export default function MenProducts() {
     <div className="men-page">
       <Header />
       <div className="men_header">
-        <Search />
+        
       </div>
 
       <div className="men_banner">
