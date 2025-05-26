@@ -94,7 +94,7 @@ export default function WomenProducts() {
     <div className="women-page">
       <Header />
       <div className="women_header">
-        <Search />
+       
       </div>
 
       <div className="women_banner">

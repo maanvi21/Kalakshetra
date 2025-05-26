@@ -96,7 +96,7 @@ export default function BagsPage() {
     <div className="bags-page">
       <Header />
       <div className="bags_header">
-        <Search />
+       
       </div>
       
       <div className="bags_banner">

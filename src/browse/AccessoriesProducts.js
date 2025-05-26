@@ -100,7 +100,7 @@ export default function AccessoriesPage() {
     <div className="accessories-page">
       <Header />
       <div className="accessories_header">
-        <Search />
+       
       </div>
       
       <div className="accessories_banner">
