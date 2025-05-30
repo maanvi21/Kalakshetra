@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import branchesData from "./data/BranchesData.js";
 import About from "./about/About.js";
 import UserHomepage from "./homepage/UserHomepage";
 import Wishlist from './wishlist/Wishlist.js';
@@ -21,6 +22,8 @@ import AdminHomepage from "./homepage/AdminHomepage.js";
 import AdminLogin from "./admin-login/AdminLogin.js";
 import ProductDescription from "./browse/ProductDescription.js";
 import { ProductProvider } from "./context/ProductContext.js";
+import LocateUs from "./components/LocateUs.js";
+import Header from './components/user-components/Header.js';
 
 
 function App() {
@@ -35,6 +38,8 @@ function App() {
                 {/* Home/Main Routes */}
                 <Route path="/" element={<UserHomepage />} />
                    <Route path="/adminhome" element={<AdminHomepage />} />
+                
+                
                 
                 {/* Authentication Routes */}
                 <Route path="/auth" element={<AuthHandler />} />
@@ -61,6 +66,10 @@ function App() {
                 
                 {/* Admin Routes */}
                 <Route path="/adminmanagement" element={<AdminManagement />} />
+
+                {/* locateus */}
+                <Route path="/locateus" element={<LocateUs items={branchesData} />} />
+
               </Routes>
             </div>
           </Router>

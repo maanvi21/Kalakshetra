@@ -1,55 +1,92 @@
-/* Reset and structure */
+/* Reset base list styles */
 ul {
-  list-style-type: none;
+  list-style: none;
   margin: 0;
   padding: 0;
 }
 
 /* Navbar container */
 .navbar {
-  position: sticky;
-  top: 0;
- 
- 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  z-index: 1000;
+  padding: 1rem 1.5rem; /* reduce side padding if needed */
+  gap: 1.5rem; /* optional: adds uniform spacing between nav-left and nav-right */
 }
 
-/* Navigation links */
 .nav-left ul {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem; /* spacing between left nav items */
+  margin-right: 0; /* 🚫 remove unnecessary space */
 }
 
 .nav-left ul li {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #000;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out, transform 0.2s;
+  margin: 0; /* reset if any margin was causing spacing */
 }
 
-.nav-left ul li:hover {
-  color: #ff7a00; /* nice orange */
-  transform: translateY(-2px);
+
+.nav-left li:hover {
+  color: #555;
 }
 
-/* Right section of navbar */
+/* Right nav */
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.8rem; /* uniform spacing between all elements */
 }
 
+/* Icon button */
+.icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Icon image */
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+
+/* Cart count badge */
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+/* Email text */
 .user-email {
   font-size: 0.95rem;
-  font-weight: 500;
-  color:#262626;
+  color: black;
+}
 
+/* Login button override (if needed) */
+.nav-right .login-toggle-button {
   padding: 0.4rem 0.8rem;
-  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Hamburger wrapper (NavDrawer) */
+.nav-right > :last-child {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
