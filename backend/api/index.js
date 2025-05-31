@@ -1,4 +1,5 @@
 const express = require("express");
+const serverless = require("serverless-http");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const session = require("express-session");
@@ -76,4 +77,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Export for Vercel
-module.exports = app;
+module.exports.handler = serverless(app);
