@@ -68,7 +68,7 @@ export default function AdminManagement() {
       setError(null);
       
       const response = await fetch(
-        `https://kalakshetra3-backend.vercel.app/${activeCategory}/delete/${activeSubcategory}/${itemId}`, 
+        `https://kalakshetra3-zyhn.vercel.app/${activeCategory}/delete/${activeSubcategory}/${itemId}`, 
         { method: 'DELETE' }
       );
       
@@ -130,7 +130,7 @@ export default function AdminManagement() {
       const hasNewImages = files.image1 || files.image2 || files.image3 ;
       
       const response = await fetch(
-        `https://kalakshetra3-backend.vercel.app/${activeCategory}/update/${activeSubcategory}/${editingItem._id}`,
+        `https://kalakshetra3-zyhn.vercel.app/${activeCategory}/update/${activeSubcategory}/${editingItem._id}`,
         {
           method: 'PUT',
           // If we have any new files, send as FormData, otherwise as JSON
@@ -232,7 +232,7 @@ export default function AdminManagement() {
       formData.append('price', price);
       formData.append('category', activeCategory);
 
-      const apiUrl = `https://kalakshetra3-backend.vercel.app/${activeCategory}/add/${activeSubcategory}`;
+      const apiUrl = `https://kalakshetra3-zyhn.vercel.app/${activeCategory}/add/${activeSubcategory}`;
       
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -266,7 +266,7 @@ export default function AdminManagement() {
       setIsLoading(true);
       setError(null);
       
-      const response = await fetch(`https://kalakshetra3-backend.vercel.app/${activeCategory}/fetch/${activeSubcategory}`);
+      const response = await fetch(`https://kalakshetra3-zyhn.vercel.app/${activeCategory}/fetch/${activeSubcategory}`);
       
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`);
