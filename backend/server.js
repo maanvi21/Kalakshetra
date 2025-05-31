@@ -28,7 +28,7 @@ connectDB(); // ← 🔥 THIS WAS MISSING
 // Middleware
 // CORS setup - Make sure this is correctly configured
 app.use(cors({
-    origin: ["https://kalakshetra3.vercel.app", "https://kalakshetra3.vercel.app/"], // Add any client URLs
+    origin: ["https://kalakshetra3.vercel.app", "http://localhost:3000"], // Add any client URLs
     credentials: true, // Important for cookies/auth
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
@@ -66,4 +66,4 @@ app.use((req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running `));

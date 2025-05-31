@@ -12,7 +12,7 @@ router.get("/google", (req, res, next) => {
   console.log("📱 Google OAuth Request");
   
   // Get the redirectUrl from query params or use default
-  const redirectUrl = req.query.redirectUrl || "http://localhost:3000/auth/callback";
+  const redirectUrl = req.query.redirectUrl || "https://kalakshetra3.vercel.app/auth/callback ";
   console.log("🔄 Redirect URL:", redirectUrl);
   
   // Store in session for use in callback
@@ -38,7 +38,7 @@ router.get("/google/callback",
       
       if (!req.user || !req.user.email) {
         console.log("❌ Invalid user data from Google");
-        return res.redirect("http://localhost:3000/login?error=invalid_user");
+        return res.redirect("https://kalakshetra3.vercel.app/login?error=invalid_user");
       }
       
       // Get user email from OAuth
@@ -67,7 +67,7 @@ router.get("/google/callback",
       console.log("🎟️ Token Generated");
       
       // Get redirect URL from session or state parameter or use default
-      let redirectUrl = "http://localhost:3000/auth/callback";
+      let redirectUrl = "https://kalakshetra3.vercel.app/auth/callback";
       
       // Try to get from state parameter if available
       if (req.query.state) {
@@ -93,7 +93,7 @@ router.get("/google/callback",
       res.redirect(`${redirectUrl}?token=${token}&email=${encodeURIComponent(userEmail)}`);
     } catch (error) {
       console.error("❌ Google Auth Error:", error);
-      res.redirect("http://localhost:3000/login?error=auth_failed");
+      res.redirect("https://kalakshetra3.vercel.app/login?error=auth_failed");
     }
   }
 );
