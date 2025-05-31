@@ -28,7 +28,7 @@ connectDB(); // ← 🔥 THIS WAS MISSING
 // Middleware
 // CORS setup - Make sure this is correctly configured
 app.use(cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"], // Add any client URLs
+    origin: ["https://kalakshetra3.vercel.app", "https://kalakshetra3.vercel.app/"], // Add any client URLs
     credentials: true, // Important for cookies/auth
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
