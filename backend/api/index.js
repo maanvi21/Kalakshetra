@@ -4,77 +4,155 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const session = require("express-session");
 const passport = require("passport");
-// Routes (make sure Passport config is loaded before these)
-require("./config/passport"); // ← ✅ Load Passport strategy
+const path = require("path");
 
-// Load environment variables
-dotenv.config({ path: __dirname + "/.env" });
+// Load environment variables from backend folder
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
-// Load MongoDB connection
-const { connectDB } = require("./config/db");
+// Initialize Express app
+const app = express();
 
-// Debugging: Check env variables
-console.log("🔍 Checking environment variables...");
+// Global error handlers
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("❌ Unhandled Rejection at:", promise, "reason:", reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("❌ Uncaught Exception:", error);
+});
+
+// Environment variables validation
+console.log("🔍 Environment Variables Check:");
 console.log("PORT:", process.env.PORT || "NOT LOADED");
-console.log("MY_SECRET_KEY:", process.env.MY_SECRET_KEY ? "✅ Loaded" : "❌ NOT LOADED");
+console.log("JWT_SECRET:", process.env.JWT_SECRET ? "✅ Loaded" : "❌ NOT LOADED");
 console.log("MONGO_URI:", process.env.MONGO_URI ? "✅ Loaded" : "❌ NOT LOADED");
 console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "✅ Loaded" : "❌ NOT LOADED");
 
-
-const app = express();
-
-// Connect to MongoDB before anything else
-connectDB(); // ← 🔥 THIS WAS MISSING
-
-// Middleware
-// CORS setup - Make sure this is correctly configured
+// Configure CORS
 app.use(cors({
-    origin: ["https://kalakshetra3.vercel.app", "http://localhost:3000"], // Add any client URLs
-    credentials: true, // Important for cookies/auth
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  }));
-app.use(express.json());
+  origin: process.env.NODE_ENV === "production" 
+    ? ["https://kalakshetra3.vercel.app"]
+    : ["http://localhost:3000", "http://localhost:3001"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+}));
 
-// Session middleware
-app.use(
-    session({
-        secret: process.env.MY_SECRET_KEY || "default_secret",
-        resave: false,
-        saveUninitialized: true,
-        cookie: { secure: false }
-    })
-);
+// Body parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Passport
+// Session configuration
+app.use(session({
+  secret: process.env.JWT_SECRET || 'fallback-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  },
+}));
+
+// Database connection with error handling
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) {
+    return;
+  }
+  
+  try {
+    // Adjust path to config folder
+    const { connectDB: dbConnect } = require("../config/db");
+    await dbConnect();
+    isConnected = true;
+    console.log("✅ MongoDB connected");
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    throw error;
+  }
+};
+
+// Load Passport configuration
+try {
+  require("../config/passport");
+} catch (error) {
+  console.error("❌ Passport configuration error:", error);
+}
+
+// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Apply middleware, routes, etc.
-const routes = require('../backend/routes'); // adjust path as needed
-app.use("/api", routes);
-
-app.use("/auth", require("./routes/authRoutes"));
-app.use("/signup", require("./routes/signupRoute"));
-app.use("/login", require("./routes/loginRoute"));
-app.use("/men", require("./routes/menRoutes"));
-app.use("/women", require("./routes/womenRoutes"));
-app.use("/accessories", require("./routes/accessoriesRoutes"));
-app.use("/bags", require("./routes/bagsRoutes"));
-
-// 404 route handler
-app.use((req, res) => {
-    res.status(404).json({ error: "Route not found" });
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("Database connection failed:", error);
+    res.status(500).json({ error: "Database connection failed" });
+  }
 });
 
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "Kalakshetra API is running", 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
 
-// ✅ Correct way for Vercel
-const PORT = process.env.PORT || 5000;
+// API Routes with error handling - adjust paths to backend folder
+const routes = [
+  { path: "/api", file: "../routes/index" },
+  { path: "/auth", file: "../routes/authRoutes" },
+  { path: "/signup", file: "../routes/signupRoute" },
+  { path: "/login", file: "../routes/loginRoute" },
+  { path: "/men", file: "../routes/menRoutes" },
+  { path: "/women", file: "../routes/womenRoutes" },
+  { path: "/accessories", file: "../routes/accessoriesRoutes" },
+  { path: "/bags", file: "../routes/bagsRoutes" }
+];
 
-// Only listen in development, not in production
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+routes.forEach(({ path, file }) => {
+  try {
+    app.use(path, require(file));
+    console.log(`✅ Route loaded: ${path}`);
+  } catch (error) {
+    console.error(`❌ Error loading route ${path}:`, error.message);
+  }
+});
+
+// 404 handler
+app.use("*", (req, res) => {
+  res.status(404).json({ 
+    error: "Route not found", 
+    path: req.originalUrl,
+    method: req.method 
+  });
+});
+
+// Global error handler
+app.use((error, req, res, next) => {
+  console.error("❌ Global error handler:", error);
+  res.status(500).json({ 
+    error: "Internal server error",
+    message: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+  });
+});
+
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
 }
 
-// Export for Vercel
+// Export for serverless
+module.exports = app;
 module.exports.handler = serverless(app);
