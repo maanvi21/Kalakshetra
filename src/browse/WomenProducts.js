@@ -25,7 +25,7 @@ export default function WomenProducts() {
         // Fetch each category separately to better identify issues
         const fetchCategory = async (category) => {
           console.log(`Fetching ${category}...`);
-          const url = `https://kalakshetra3-zyhn.vercel.app/women/fetch/${category}`;
+          const url = `https://kalakshetra3-backend.vercel.app/women/fetch/${category}`;
           try {
             const response = await axios.get(url);
             console.log(`${category} response:`, response.data);
