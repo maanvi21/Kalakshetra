@@ -25,7 +25,7 @@ const AuthForm = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/${isLogin ? "login" : "signup"}`, {
+      const response = await fetch(`https://kalakshetra3-backend.vercel.app/${isLogin ? "login" : "signup"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -62,7 +62,7 @@ const AuthForm = () => {
 
   const handleGoogleAuth = () => {
     // Redirect to Google OAuth endpoint
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "https://kalakshetra3-backend.vercel.app/auth/google";
   };
 
   const handleLogout = () => {
