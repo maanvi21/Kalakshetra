@@ -15,7 +15,8 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.0",
     "multer": "^1.4.4",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+      "express-session": "^1.17.3"
   },
   "engines": {
     "node": ">=14.0.0"
