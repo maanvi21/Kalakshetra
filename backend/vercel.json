@@ -1,58 +1,23 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "backend/api/index.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/auth/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/signup/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/login/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/men/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/women/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/accessories/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/bags/(.*)",
-      "dest": "/backend/api/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/backend/api/index.js"
-    }
-  ],
-  "functions": {
-    "backend/api/index.js": {
-      "maxDuration": 30
-    }
-  },
-  "env": {
-    "NODE_ENV": "production"
-  }
+    "version": 2,
+    "builds": [
+        {
+            "src": "backend/api/index.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/backend/api/index.js",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "OPTIONS"
+            ]
+        }
+    ]
 }
