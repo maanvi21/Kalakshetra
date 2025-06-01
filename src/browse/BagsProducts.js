@@ -27,7 +27,7 @@ export default function BagsPage() {
         // Fetch each category separately to better identify issues
         const fetchCategory = async (category) => {
           console.log(`Fetching ${category}...`);
-          const url = `https://kalakshetra3-backend.vercel.app/bags/fetch/${category}`;
+          const url = `https://kalakshetra3-6.onrender.com/bags/fetch/${category}`;
           try {
             const response = await axios.get(url);
             console.log(`${category} response:`, response.data);

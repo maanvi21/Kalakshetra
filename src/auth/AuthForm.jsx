@@ -25,7 +25,7 @@ const AuthForm = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`https://kalakshetra3-zyhn.vercel.app/${isLogin ? "login" : "signup"}`, {
+      const response = await fetch(`https://kalakshetra3-6.onrender.com/${isLogin ? "login" : "signup"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -62,7 +62,7 @@ const AuthForm = () => {
 
   const handleGoogleAuth = () => {
     // Redirect to Google OAuth endpoint
-    window.location.href = "https://kalakshetra3-zyhn.vercel.app/auth/google";
+    window.location.href = "https://kalakshetra3-6.onrender.com/auth/google";
   };
 
   const handleLogout = () => {
