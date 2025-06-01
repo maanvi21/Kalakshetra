@@ -28,19 +28,44 @@ console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "✅ Loaded" : "
 const app = express();
 
 /* 2️⃣ Trust Render’s reverse proxy so secure cookies work */
-app.set('trust proxy', 1);
-// Connect to MongoDB before anything else
-connectDB(); // ← 🔥 THIS WAS MISSING
+app.set("trust proxy", 1);
 
-// Middleware
-// CORS setup - Make sure this is correctly configured
-app.use(cors({
-    origin: ["http://localhost:3000", "https://kalakshetra3.vercel.app"], // Add any client URLs
-    credentials: true, // Important for cookies/auth
+/* 3️⃣ Connect to MongoDB before anything else */
+connectDB();
+
+/* 4️⃣ CORS (run before session so pre‑flight requests work) */
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://kalakshetra3.vercel.app"
+      // optionally also: `https://${process.env.RENDER_EXTERNAL_HOSTNAME}`
+    ],
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
-  }));
+  })
+);
+
+/* 5️⃣ Body parser */
 app.use(express.json());
+
+/* 6️⃣ Single, persistent session store */
+app.use(
+  session({
+    secret: process.env.MY_SECRET_KEY || "default_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+      sameSite: "none"
+    },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      collectionName: "sessions"
+    })
+  })
+);
 
 // Session middleware
 app.use(
