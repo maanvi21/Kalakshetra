@@ -10,14 +10,15 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.21.2",
+    "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.0",
     "multer": "^1.4.4",
-    "serverless-http": "^3.2.0",
-    "express-session": "^1.17.3"
+    "serverless-http": "^3.2.0"
   },
   "engines": {
     "node": ">=14.0.0"
