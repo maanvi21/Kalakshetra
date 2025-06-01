@@ -15,7 +15,7 @@ const AdminHomepage = () => {
   return (
     <div className="user-homepage">
       
-<AdminHeader/>
+{/* <AdminHeader/> */}
       <main>
         <HomepagCarousel items={carouselItems}/>
 
