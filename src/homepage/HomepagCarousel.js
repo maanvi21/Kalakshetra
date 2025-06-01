@@ -8,7 +8,7 @@ export default function HomepageCarousel({ items }) {
 
   return (
     <>
-      <Header /> {/* ✅ Navbar appears at the top */}
+      
 
       <div className="carousel-container-wrapper">
         <div className="carousel-container">
