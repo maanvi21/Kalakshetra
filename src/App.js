@@ -42,7 +42,7 @@ function App() {
                 
                 
                 {/* Authentication Routes */}
-                <Route path="/auth" element={<AuthHandler />} />
+                
                 <Route path="/auth/callback" element={<AuthHandler />} /> {/* Added auth callback route */}
                 <Route path="/login" element={<AuthForm />} />
                 <Route path="/register" element={<AuthForm />} />
