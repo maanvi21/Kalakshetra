@@ -11,7 +11,7 @@ import Offers from '../components/Offers.js';
 const AdminHomepage = () => {
   return (
     <div className="admin-homepage">
-      <AdminHeader />  {/* ✅ Only Admin Header */}
+      
 
       <main>
         <HomepagCarousel items={carouselItems} />
