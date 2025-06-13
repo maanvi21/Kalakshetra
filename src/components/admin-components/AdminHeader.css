@@ -2,27 +2,39 @@
 .header {
     display: flex;
     position: sticky;
-    top: 0; /* Sticks to the top */
+    top: 0;
     left: 0;
     height: 60px;
-    width: 100%; /* Ensures full width */
-    align-items: center; /* Align logo and navbar vertically */
-    justify-content: space-between; /* Logo on left, Navbar on right */
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
     padding: 10px 20px;
-    background-color: #996c5a;;
-   
+    background-color: #996c5a;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensures it stays above other content */
+    z-index: 1000;
 }
 
 /* Logo Styling */
 .logo img {
-    height: 60px; /* Adjust size as needed */
+    height: 60px;
     width: auto;
-    cursor: pointer; /* Makes it clickable */
+    cursor: pointer;
     transition: transform 0.2s ease-in-out;
 }
 
 .logo img:hover {
     transform: scale(1.1);
+}
+
+/* Tablet and Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    .header {
+        padding: 10px 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .header {
+        padding: 10px 10px;
+    }
 }

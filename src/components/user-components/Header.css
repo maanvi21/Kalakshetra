@@ -1,28 +1,66 @@
 /* Style for the Header container */
 .header {
-    display: flex;
-    position: sticky;
-    top: 0; /* Sticks to the top */
-    left: 0;
-    height: 60px;
-    width: 100%; /* Ensures full width */
-    align-items: center; /* Align logo and navbar vertically */
-    justify-content: space-between; /* Logo on left, Navbar on right */
-    padding: 10px 20px;
-    background-color: #996c5a;;
-   
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensures it stays above other content */
+  display: flex;
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #996c5a;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
 /* Logo Styling */
 .logo img {
-    height: 60px; /* Adjust size as needed */
-    width: auto;
-    cursor: pointer; /* Makes it clickable */
-    transition: transform 0.2s ease-in-out;
+  height: 60px;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
 }
 
 .logo img:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+/* Tablet styles */
+@media (max-width: 1024px) {
+  .header {
+    padding: 8px 15px;
+  }
+  
+  .logo img {
+    height: 50px;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .header {
+    height: 50px;
+    padding: 5px 15px;
+  }
+  
+  .logo img {
+    height: 40px;
+  }
+}
+
+/* Small mobile styles */
+@media (max-width: 480px) {
+  .header {
+    height: 45px;
+    padding: 5px 10px;
+  }
+  
+  .logo img {
+    height: 35px;
+  }
+  
+  .logo img:hover {
+    transform: scale(1.05); /* Less dramatic hover effect on small screens */
+  }
 }

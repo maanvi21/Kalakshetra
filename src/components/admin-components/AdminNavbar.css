@@ -2,37 +2,85 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-  }
-  
-  /* Navbar */
-  .navbar {
+}
+
+/* Navbar */
+.navbar {
     position: sticky;
-    top: 0; /* Sticks to the top */
+    top: 0;
     color: #000000;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
     z-index: 1000;
-  }
-  
-  .navbar nav ul {
+}
+
+.navbar nav ul {
     display: flex;
     align-items: center;
-    
     gap: 1.5rem;
-    /* cursor: pointer; */
     color: #000000;
-  }
-  
-  .navbar nav ul li {
+}
+
+.navbar nav ul li {
     font-size: 1.1rem;
     font-weight: bold; 
     transition: color 0.1s ease-in-out;
     cursor: pointer;
-  }
-  
-  .navbar nav ul li:hover {
-    color: #8B4513; /* Corrected hover effect */
-  }
-  
+}
+
+.navbar nav ul li:hover {
+    color: #8B4513;
+}
+
+/* Tablet Responsive Styles */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+    
+    .navbar nav ul {
+        gap: 1rem;
+    }
+    
+    .navbar nav ul li {
+        font-size: 1rem;
+    }
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 480px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+    
+    .navbar nav ul {
+        gap: 0.5rem;
+    }
+    
+    .navbar nav ul li {
+        font-size: 0.9rem;
+    }
+    
+    /* Hide navigation items on mobile, keep only essential ones and NavDrawer */
+    .navbar nav ul li:not(:first-child):not(:last-child):not(:nth-last-child(2)) {
+        display: none;
+    }
+}
+
+/* Very small screens - hide even more items */
+@media screen and (max-width: 360px) {
+    .navbar {
+        padding: 0.5rem 0.5rem;
+    }
+    
+    /* Show only Home, Manage Items, and NavDrawer */
+    .navbar nav ul li:not(:first-child):not(:nth-last-child(2)):not(:last-child) {
+        display: none;
+    }
+    
+    .navbar nav ul {
+        gap: 0.8rem;
+    }
+}

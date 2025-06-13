@@ -14,22 +14,10 @@ export default function AdminNavbar() {
 const navToManageItems=()=>{
     navigate('/adminmanagement')
     }
-  const navToAbout=()=>{
-    navigate('/about')
-    
-  }
-  const navToContact=()=>{
-    navigate('/contact')
-    
-  }
-  const navToLocate=()=>{
-    navigate('/')
-    
-  }
-  const navToBrowse=()=>{
-    navigate('/browse')
-    
-  }
+  
+  
+ 
+  
   return (
     <div>
       <header className="navbar">
@@ -37,9 +25,6 @@ const navToManageItems=()=>{
         <nav>
           <ul>
             <li onClick={navToHome}>Home</li>
-            <li onClick={navToAbout}>About Us</li>
-            <li onClick={navToLocate}>Locate Our Branches</li>
-            <li onClick={navToContact}>Contact Us</li>
             {/* <li> <LoginToggle/> </li> */}
             <li><OperationsButton text='Manage Items' onClick={navToManageItems}/></li>
             <li><NavDrawer/></li>
