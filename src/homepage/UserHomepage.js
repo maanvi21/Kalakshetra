@@ -21,7 +21,7 @@ const UserHomepage = () => {
         <section className="offerings">
           {/* categories */}
           
-          <h2>Offers</h2>
+          
           
           <div className="offerings-grid">
           <Offers/>
