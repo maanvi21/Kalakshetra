@@ -30,14 +30,26 @@ export default function Footer() {
             <li><a href="#">Contact Us</a></li>
           </ul>
         </div>
+<div className="social-media">
+  <h3 style={{ gridColumn: 'span 2', marginBottom: '0.5rem' }}>FOLLOW US</h3>
 
-        <div className="social-media">
-         <h3 style={{ gridColumn: 'span 2', marginBottom: '0.5rem' }}>FOLLOW US</h3>
-          <img src="/assets/Gmail.png" alt="gmail" />
-          <img src="/assets/instagram.png" alt="instagram" />
-          <img src="/assets/Phone.png" alt="phone" />
-          <img src="/assets/whatsapp.png" alt="whatsapp" />
-        </div>
+  <a href="mailto:kalkshetra.new@gmail.com" target="_blank" rel="noopener noreferrer">
+    <img src="/assets/Gmail.png" alt="Gmail" />
+  </a>
+
+  <a href="https://www.instagram.com/kalakshetra_in/" target="_blank" rel="noopener noreferrer">
+    <img src="/assets/instagram.png" alt="Instagram" />
+  </a>
+
+  <a href="tel:9867156531">
+    <img src="/assets/Phone.png" alt="Phone" />
+  </a>
+
+  <a href="https://wa.me/919867156531" target="_blank" rel="noopener noreferrer">
+    <img src="/assets/whatsapp.png" alt="WhatsApp" />
+  </a>
+</div>
+
       </div>
 
       <div className="footer-bottom">
