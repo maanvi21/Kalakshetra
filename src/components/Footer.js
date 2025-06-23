@@ -54,7 +54,9 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <p>&copy; 2025 Kalakshetra. All rights reserved.</p>
-        <p>Designed & Developed by Kode & Co.</p>
+        <p>
+          <a href="https://www.instagram.com/kode.and.co/" >Designed & Developed by Kode & Co.</a>
+        </p>
       </div>
     </footer>
   );

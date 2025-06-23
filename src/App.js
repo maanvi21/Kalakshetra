@@ -37,7 +37,7 @@ function App() {
               <Routes>
                 {/* Home/Main Routes */}
                 <Route path="/" element={<UserHomepage />} />
-                   <Route path="/adminhome" element={<AdminHomepage />} />
+                   <Route path="/xyz321" element={<AdminHomepage />} />
                 
                 
                 
@@ -46,7 +46,7 @@ function App() {
                 <Route path="/auth/callback" element={<AuthHandler />} /> {/* Added auth callback route */}
                 <Route path="/login" element={<AuthForm />} />
                 <Route path="/register" element={<AuthForm />} />
-                <Route path="/adminlogin" element={<AdminLogin />} />
+                <Route path="/abc321" element={<AdminLogin />} />
                 
                 {/* Product Routes */}
                 <Route path="/menProducts" element={<MenProducts />} />

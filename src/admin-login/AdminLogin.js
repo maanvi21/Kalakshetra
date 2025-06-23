@@ -35,7 +35,7 @@ export default function AdminLogin() {
 
   // If logged in, show admin dashboard placeholder
   if (loggedIn) {
-    navigate('/adminhome');
+    navigate('/xyz321');
   }
   // Login form using div instead of form
   return (
@@ -100,9 +100,7 @@ export default function AdminLogin() {
         </div>
         
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Credentials for testing: admin / kalakshetra2025
-          </p>
+          
         </div>
       </div>
     </div>
