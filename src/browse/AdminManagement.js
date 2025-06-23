@@ -420,8 +420,7 @@ export default function AdminManagement() {
             <h3>{subcategoryDisplay} Management</h3>
             <Button text='Upload' onClick={() => { setShowUpload(true); setViewItems(false); resetForm(); }} />
             <Button text='View' onClick={handleViewItems} />
-            <Button text='Force Refresh' onClick={forceRefresh} />
-            <Button text='Check All Categories' onClick={checkAllCategories} />
+
             
             {/* Add this temporarily for debugging */}
             <div style={{marginTop: '10px', padding: '10px', border: '1px solid #ccc', backgroundColor: '#f5f5f5'}}>
