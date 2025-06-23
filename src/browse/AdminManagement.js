@@ -30,6 +30,12 @@ export default function AdminManagement() {
  
   });
 
+  // Helper function to format price for display
+  const formatPrice = (price) => {
+    const numPrice = parseFloat(price) || 0;
+    return numPrice.toFixed(2);
+  };
+
   // Handle file select for image preview
   const handleFileChange = (e, imageKey) => {
     const selectedFile = e.target.files[0];
@@ -91,7 +97,7 @@ export default function AdminManagement() {
     setEditingItem(item);
     setName(item.name);
     setDescription(item.description);
-    setPrice(item.price);
+    setPrice(item.price.toString()); // Ensure it's a string for the input
     
     // Set the current images as previews
     setImagePreviews({
@@ -115,19 +121,19 @@ export default function AdminManagement() {
       setError(null);
       
       const formData = new FormData();
+      const priceValue = parseFloat(price) || 0;
       
       // Only append the files if new ones were selected
       if (files.image1) formData.append('image1', files.image1);
       if (files.image2) formData.append('image2', files.image2);
       if (files.image3) formData.append('image3', files.image3);
       
-      
       formData.append('name', name);
       formData.append('description', description);
-      formData.append('price', price);
+      formData.append('price', priceValue.toString());
       formData.append('category', activeCategory);
       
-      const hasNewImages = files.image1 || files.image2 || files.image3 ;
+      const hasNewImages = files.image1 || files.image2 || files.image3;
       
       const response = await fetch(
         `https://kalakshetra3-6.onrender.com/${activeCategory}/update/${activeSubcategory}/${editingItem._id}`,
@@ -141,7 +147,7 @@ export default function AdminManagement() {
                 body: JSON.stringify({
                   name,
                   description,
-                  price,
+                  price: priceValue,
                   category: activeCategory
                 })
               }
@@ -222,14 +228,15 @@ export default function AdminManagement() {
       setError(null);
       
       const formData = new FormData();
+      const priceValue = parseFloat(price) || 0;
+      
       formData.append('image1', files.image1);
       if (files.image2) formData.append('image2', files.image2);
       if (files.image3) formData.append('image3', files.image3);
-     
       
       formData.append('name', name);
       formData.append('description', description);
-      formData.append('price', price);
+      formData.append('price', priceValue.toString());
       formData.append('category', activeCategory);
 
       const apiUrl = `https://kalakshetra3-6.onrender.com/${activeCategory}/add/${activeSubcategory}`;
@@ -260,11 +267,14 @@ export default function AdminManagement() {
     }
   };
 
+  // 1. Add debugging to your handleViewItems function
   const handleViewItems = async () => {
     if (!activeCategory || !activeSubcategory) return;
     try {
       setIsLoading(true);
       setError(null);
+      
+      console.log('Fetching items for:', { activeCategory, activeSubcategory });
       
       const response = await fetch(`https://kalakshetra3-6.onrender.com/${activeCategory}/fetch/${activeSubcategory}`);
       
@@ -273,7 +283,13 @@ export default function AdminManagement() {
       }
       
       const data = await response.json();
-      setItems(data.items);
+      
+      // DEBUG: Log the response to see what's actually returned
+      console.log('API Response:', data);
+      console.log('Items count:', data.items ? data.items.length : 'No items array');
+      console.log('Items:', data.items);
+      
+      setItems(data.items || []); // Ensure items is always an array
       setViewItems(true);
       setShowUpload(false);
     } catch (err) {
@@ -282,6 +298,71 @@ export default function AdminManagement() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // 2. Add a function to clear cache and force refresh
+  const forceRefresh = async () => {
+    if (!activeCategory || !activeSubcategory) return;
+    
+    try {
+      setIsLoading(true);
+      // Clear React state
+      setItems([]);
+      
+      // Clear any browser cache headers
+      const response = await fetch(`https://kalakshetra3-6.onrender.com/${activeCategory}/fetch/${activeSubcategory}`, {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Force refresh data:', data);
+      setItems(data.items || []);
+      setViewItems(true);
+    } catch (err) {
+      setError(`Failed to force refresh: ${err.message}`);
+      console.error('Force refresh error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 3. Add a function to check all categories (in case items are in wrong category)
+  const checkAllCategories = async () => {
+    const categories = ['women', 'men', 'bags', 'accessories'];
+    const subcategories = {
+      women: ['kurtis', 'sarees', 'tops', 'trousers'],
+      men: ['shirts', 'trousers', 'jackets', 'shoes'],
+      bags: ['handbags', 'totes', 'wallets', 'backpacks'],
+      accessories: ['earrings', 'necklaces', 'rings', 'bracelets', 'watches']
+    };
+    
+    console.log('Checking all categories for items...');
+    
+    for (const category of categories) {
+      for (const subcategory of subcategories[category]) {
+        try {
+          const response = await fetch(`https://kalakshetra3-6.onrender.com/${category}/fetch/${subcategory}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.items && data.items.length > 0) {
+              console.log(`Found ${data.items.length} items in ${category}/${subcategory}:`, data.items);
+            }
+          }
+        } catch (err) {
+          console.log(`Error checking ${category}/${subcategory}:`, err.message);
+        }
+      }
+    }
+    console.log('Finished checking all categories. Check console for results.');
   };
 
   return (
@@ -339,6 +420,18 @@ export default function AdminManagement() {
             <h3>{subcategoryDisplay} Management</h3>
             <Button text='Upload' onClick={() => { setShowUpload(true); setViewItems(false); resetForm(); }} />
             <Button text='View' onClick={handleViewItems} />
+            <Button text='Force Refresh' onClick={forceRefresh} />
+            <Button text='Check All Categories' onClick={checkAllCategories} />
+            
+            {/* Add this temporarily for debugging */}
+            <div style={{marginTop: '10px', padding: '10px', border: '1px solid #ccc', backgroundColor: '#f5f5f5'}}>
+              <h4>Debug Info:</h4>
+              <p>Active Category: {activeCategory}</p>
+              <p>Active Subcategory: {activeSubcategory}</p>
+              <p>Items Count: {items.length}</p>
+              <p>API URL: https://kalakshetra3-6.onrender.com/{activeCategory}/fetch/{activeSubcategory}</p>
+              <p>View Items State: {viewItems ? 'true' : 'false'}</p>
+            </div>
             
             {showUpload && (
               <div className="upload-section">
@@ -370,6 +463,8 @@ export default function AdminManagement() {
                   <input 
                     id="price"
                     type="number" 
+                    step="0.01"
+                    min="0"
                     placeholder="Price" 
                     value={price} 
                     onChange={(e) => setPrice(e.target.value)} 
@@ -407,8 +502,6 @@ export default function AdminManagement() {
                   />
                 </div>
                 
-              
-                
                 {/* Image Preview Section */}
                 <div className="image-previews">
                   {imagePreviews.image1 && (
@@ -443,8 +536,6 @@ export default function AdminManagement() {
                       />
                     </div>
                   )}
-                  
-                
                 </div>
                 
                 <div className="form-actions">
@@ -493,7 +584,7 @@ export default function AdminManagement() {
                       <td>{item._id.substring(0, 8)}...</td>
                       <td>{item.name}</td>
                       <td>{item.description.length > 50 ? `${item.description.substring(0, 50)}...` : item.description}</td>
-                      <td>₹{item.price}</td>
+                      <td>₹{formatPrice(item.price)}</td>
                       <td className="image-cell">
                         <ProductImage 
                           src={item.image1} 
@@ -518,7 +609,6 @@ export default function AdminManagement() {
                             />
                           </div>
                         )}
-                      
                       </td>
                       <td className="actions-column">
                         <button 
