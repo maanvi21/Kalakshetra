@@ -1,52 +1,87 @@
-
 /* Footer */
 footer {
-  background-color: #996c5a;;
-    color: #000000;
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Creates two equal columns */
-    /* grid-template-rows: repeat(2, auto); */
-  }
+  background-color: #996c5a;
+  color: #000000;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
 
-  .row1{
-    padding:10px;
-  }
-  .services{
-    margin-top:20px;
-  }
-  
-  footer h3 {
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-  
-  footer ul li {
-    margin-bottom: 0.5rem;
-  }
-  
-  footer ul li a {
-    transition: color 0.3s;
-  }
-  
-  footer ul li a:hover {
-    color: #8B4513; /* Corrected hover effect */
-  }
-  
-  .social-media {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Creates two equal columns */
-    grid-template-rows: repeat(2, auto);  /* Creates two rows */
-    gap: 100px; /* Space between grid items */
-    justify-content: center; /* Centering items horizontally */
-    align-items: center; /* Centering items vertically */
-    width: fit-content; /* Adjust width to content */
-    margin: auto; /* Center the grid */
-  }
-  .social-media img{
-    /* height: 50px; */
-    width: 70%;
-  }
-  
+/* Row1 holds all 4 sections in a row */
+.row1 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4rem;
+  width: 100%;
+  text-align: left;
+}
 
+/* Each section styles */
+.quick-links, .services, .help, .social-media {
+  min-width: 200px;
+}
+
+/* Headings */
+footer h3 {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* List styling */
+footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+footer ul li {
+  margin-bottom: 0.5rem;
+}
+
+footer ul li a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s;
+}
+
+footer ul li a:hover {
+  color: #8B4513;
+}
+
+/* Social media section now column-styled for icons */
+.social-media {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  grid-template-rows: repeat(2, auto);   /* 2 rows */
+  gap: 20px; /* space between icons */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.social-media img {
+  width: 40px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.social-media img:hover {
+  transform: scale(1.1); /* subtle zoom on hover */
+}
+
+
+/* Footer bottom */
+.footer-bottom {
+  text-align: center;
+  font-weight: bold;
+  padding: 1rem 0;
+}
+
+.footer-bottom p {
+  margin: 0.3rem 0;
+}
