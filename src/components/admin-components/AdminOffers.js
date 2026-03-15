@@ -21,9 +21,8 @@ export default function AdminOffers() {
   const [toast, setToast] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => { fetchOffers(); }, []);
-
+// Replace your current useEffect with this:
+useEffect(() => {
   const fetchOffers = async () => {
     try {
       setIsLoading(true);
@@ -37,6 +36,22 @@ export default function AdminOffers() {
       setIsLoading(false);
     }
   };
+  fetchOffers();
+}, []);
+
+//   const fetchOffers = async () => {
+//     try {
+//       setIsLoading(true);
+//       const res = await fetch(`${BASE_URL}/offers`);
+//       if (!res.ok) throw new Error(`${res.status} - ${res.statusText}`);
+//       const data = await res.json();
+//       setOffers(data.offers || []);
+//     } catch (err) {
+//       showToast(`Failed to load offers: ${err.message}`, 'error');
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
 
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type });

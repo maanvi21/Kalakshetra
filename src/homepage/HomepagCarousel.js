@@ -1,6 +1,6 @@
 import React from "react";
 import "./HomepageCarousel.css";
-import Header from '../components/user-components/Header.js';
+
 
 export default function HomepageCarousel({ items }) {
   // Duplicate the items to create a seamless scrolling effect
