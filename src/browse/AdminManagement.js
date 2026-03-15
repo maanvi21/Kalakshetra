@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import AdminHeader from "../components/admin-components/AdminHeader.js";
 import ProductImage from '../browse/ProductImage.js';
 
-const BASE_URL = 'https://kalakshetra3-5 .onrender.com';
+const BASE_URL = 'https://kalakshetra3-5.onrender.com';
 
 export default function AdminManagement() {
   const [activeCategory, setActiveCategory] = useState(null);
