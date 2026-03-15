@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./WomenProducts.css";
 import ProductCard from "../components/ProductCard";
-import Search from "../components/Search";
 import Header from '../components/user-components/Header.js';
 
 export default function WomenProducts() {

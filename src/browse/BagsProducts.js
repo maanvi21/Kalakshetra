@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./BagsProducts.css";
 import ProductCard from "../components/ProductCard";
-import Search from "../components/Search";
+
 import Header from '../components/user-components/Header.js';
-import { useStateValue } from '../context/CartContext';
+
 
 export default function BagsPage() {
-  const { state } = useStateValue();
+
   const [bagsData, setBagsData] = useState({
     handbags: [],
     totes: [],

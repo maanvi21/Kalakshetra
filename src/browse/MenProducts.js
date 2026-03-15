@@ -1,9 +1,9 @@
 import React from "react";
 import "./MenProducts.css";
 import ProductCard from "../components/ProductCard";
-import Search from "../components/Search";
+
 import Header from '../components/user-components/Header.js';
-import { useStateValue } from '../context/CartContext';
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 export default function MenProducts() {

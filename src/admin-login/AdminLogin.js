@@ -16,7 +16,7 @@ export default function AdminLogin() {
     if (loggedIn) {
       navigate('/xyz321');
     }
-  }, [loggedIn]);
+  }, [loggedIn, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
