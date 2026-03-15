@@ -1,33 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-// Static credentials (in a real app, this would be handled securely on the backend)
 const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "kalakshetra2025";
 
 export default function AdminLogin() {
-    const navigate= useNavigate();
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
 
+  // ✅ navigate AFTER render, not during it
+  useEffect(() => {
+    if (loggedIn) {
+      navigate('/xyz321');
+    }
+  }, [loggedIn]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Simple validation
     if (!username || !password) {
       setError('Please enter both username and password');
       return;
     }
-    
-    // Check credentials
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       setLoggedIn(true);
       setError('');
-      // In a real app, you would set authentication tokens/cookies here
-      // and redirect to the admin dashboard
     } else {
       setError('Invalid username or password');
     }

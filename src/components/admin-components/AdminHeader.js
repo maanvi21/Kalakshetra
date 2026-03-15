@@ -6,7 +6,7 @@ import AdminNavbar from './AdminNavbar';
 export default function AdminHeader() {
   const navigate=useNavigate();
   const navToHome = () => {
-    navigate('/');
+    navigate('/xyz321');
    }
 
   return (
