@@ -47,7 +47,7 @@ export default function AdminHomepage() {
       for (const sub of SUBCATEGORIES[category]) {
         try {
           const res = await fetch(
-            `https://'https://kalakshetra3-5.onrender.com';/${category}/fetch/${sub}`
+            `https://kalakshetra3-5.onrender.com/${category}/fetch/${sub}`
           );
           if (res.ok) {
             const data = await res.json();
