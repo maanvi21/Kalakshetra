@@ -23,60 +23,57 @@ import AdminLogin from "./admin-login/AdminLogin.js";
 import ProductDescription from "./browse/ProductDescription.js";
 import { ProductProvider } from "./context/ProductContext.js";
 import LocateUs from "./components/LocateUs.js";
-import Header from './components/user-components/Header.js';
-
+import AdminOffers from "./components/admin-components/AdminOffers.js";
 
 function App() {
   return (
     <AuthProvider>
       <ProductProvider>
-      <CartProvider>
-        <WishlistProvider>
-          <Router>
-            <div className="App">
-              <Routes>
-                {/* Home/Main Routes */}
-                <Route path="/" element={<UserHomepage />} />
-                   <Route path="/xyz321" element={<AdminHomepage />} />
-                
-                
-                
-                {/* Authentication Routes */}
-                
-                <Route path="/auth/callback" element={<AuthHandler />} /> {/* Added auth callback route */}
-                <Route path="/login" element={<AuthForm />} />
-                <Route path="/register" element={<AuthForm />} />
-                <Route path="/abc321" element={<AdminLogin />} />
-                
-                {/* Product Routes */}
-                <Route path="/menProducts" element={<MenProducts />} />
-                <Route path="/womenProducts" element={<WomenProducts />} />
-                <Route path="/bagsProducts" element={<BagsProducts />} />
-                <Route path="/accessoriesProducts" element={<AccessoriesProducts />} />
-                <Route path="/:id" element={<ProductDescription/>}/>
-                
-                {/* User Routes */}
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/checkout" element={<Checkout />} />
-                
-                {/* Informational Routes */}
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                
-                {/* Admin Routes */}
-                <Route path="/adminmanagement" element={<AdminManagement />} />
+        <CartProvider>
+          <WishlistProvider>
+            <Router>
+              <div className="App">
+                <Routes>
+                  {/* ── Home ── */}
+                  <Route path="/" element={<UserHomepage />} />
 
-                {/* locateus */}
-                <Route path="/locateus" element={<LocateUs items={branchesData} />} />
+                  {/* ── Authentication ── */}
+                  <Route path="/auth/callback" element={<AuthHandler />} />
+                  <Route path="/login" element={<AuthForm />} />
+                  <Route path="/register" element={<AuthForm />} />
 
-              </Routes>
-            </div>
-          </Router>
-        </WishlistProvider>
-      </CartProvider>
+                  {/* ── Product Browse ── */}
+                  <Route path="/menProducts" element={<MenProducts />} />
+                  <Route path="/womenProducts" element={<WomenProducts />} />
+                  <Route path="/bagsProducts" element={<BagsProducts />} />
+                  <Route path="/accessoriesProducts" element={<AccessoriesProducts />} />
+
+                  {/* ── User ── */}
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/checkout" element={<Checkout />} />
+
+                  {/* ── Informational ── */}
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/locateus" element={<LocateUs items={branchesData} />} />
+
+                  {/* ── Admin ── ALL admin routes must be above /:id ── */}
+                  <Route path="/abc321" element={<AdminLogin />} />
+                  <Route path="/xyz321" element={<AdminHomepage />} />
+                  <Route path="/adminmanagement" element={<AdminManagement />} />
+                  <Route path="/adminoffers" element={<AdminOffers />} />
+
+                  {/* ── Catch-all dynamic route — MUST be last ── */}
+                  <Route path="/:id" element={<ProductDescription />} />
+                </Routes>
+              </div>
+            </Router>
+          </WishlistProvider>
+        </CartProvider>
       </ProductProvider>
     </AuthProvider>
   );
 }
+
 export default App;

@@ -1,76 +1,114 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './Offers.css';
-import Button from './Button';
 
-// Sample promotional offers data
-const offersData = [
-  {
-    id: 1,
-    title: '70% Off Clearance Sale',
-    description: 'Huge discounts on last season\'s styles. Limited time only!',
-    image: 'https://i.pinimg.com/736x/9e/7d/71/9e7d712d5538ef7d5a27737de838c003.jpg'
-  },
-  {
-    id: 2,
-    title: 'Diwali Festive Offers',
-    description: 'Celebrate with sparkle – get amazing festive discounts!',
-    image: '/assets/Offers2.jpg'
-  },
-  {
-    id: 3,
-    title: 'New Arrivals',
-    description: 'Check out the latest trends and new collection drops.',
-    image: 'https://i.pinimg.com/736x/f2/db/05/f2db0563f6cf86ad7780f6a12ec444aa.jpg'
-  },{
-    id: 4,
-    title: '70% Off Clearance Sale',
-    description: 'Huge discounts on last season\'s styles. Limited time only!',
-    image: 'https://i.pinimg.com/736x/9e/7d/71/9e7d712d5538ef7d5a27737de838c003.jpg'
-  },
-  {
-    id: 5,
-    title: 'Diwali Festive Offers',
-    description: 'Celebrate with sparkle – get amazing festive discounts!',
-    image: '/assets/Offers2.jpg'
-  },
-  {
-    id: 6,
-    title: 'New Arrivals',
-    description: 'Check out the latest trends and new collection drops.',
-    image: 'https://i.pinimg.com/736x/f2/db/05/f2db0563f6cf86ad7780f6a12ec444aa.jpg'
-  }
-];
+const BASE_URL = 'https://kalakshetra3-6.onrender.com';
 
-// Individual Offer Card Component
+const BADGE_COLORS = {
+  HOT: '#ff4d2e',
+  NEW: '#2c6e49',
+  FESTIVE: '#c8891a',
+  SALE: '#1a4a8a',
+  EXCLUSIVE: '#5c2d8a',
+  LIMITED: '#1c1c1c',
+};
+
 const OfferCard = ({ offer }) => (
-  <div className="offers-card">
-    <div className="card-header">
-      <img src={offer.image} alt={offer.title} className="card-image" />
+  <div className="offer-card">
+    <div className="offer-card-img">
+      <img src={offer.image} alt={offer.title} loading="lazy" />
+      {offer.badge && (
+        <span
+          className="offer-badge"
+          style={{ background: BADGE_COLORS[offer.badge] || '#333' }}
+        >
+          {offer.badge}
+        </span>
+      )}
+      <div className="offer-card-overlay">
+        <button className="offer-shop-btn">Shop Now →</button>
+      </div>
     </div>
-    <div className="card-content">
-      <h3 className="card-title">{offer.title}</h3>
-      <p className="card-description">{offer.description}</p>
-    </div>
-    <div className="card-footer">
-      {/* <Button text="Shop Now" onClick={() => {}} /> */}
+    <div className="offer-card-body">
+      <h3 className="offer-card-title">{offer.title}</h3>
+      <p className="offer-card-desc">{offer.description}</p>
     </div>
   </div>
 );
 
-// Offers Section Component
-const Offers = () => {
-  return (
-<div className="offers-section">
-  <h2 className="section-title">Current Offers</h2>
-  <div className="offers-scroll-wrapper">
-    <div className="offers-grid animate-scroll">
-      {offersData.map((offer) => (
-        <OfferCard key={offer.id} offer={offer} />
-      ))}
+// Skeleton card shown while loading
+const SkeletonCard = () => (
+  <div className="offer-card offer-card--skeleton">
+    <div className="offer-skeleton-img" />
+    <div className="offer-card-body">
+      <div className="offer-skeleton-line offer-skeleton-line--title" />
+      <div className="offer-skeleton-line" />
+      <div className="offer-skeleton-line offer-skeleton-line--short" />
     </div>
   </div>
-</div>
+);
 
+const Offers = () => {
+  const trackRef = useRef(null);
+  const [offers, setOffers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchOffers = async () => {
+      try {
+        // Fetches only active offers for the public homepage
+        const res = await fetch(`${BASE_URL}/offers/active`);
+        if (!res.ok) throw new Error(`${res.status}`);
+        const data = await res.json();
+        setOffers(data.offers || []);
+      } catch (err) {
+        setError('Could not load offers right now.');
+        console.error('Offers fetch error:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchOffers();
+  }, []);
+
+  const scroll = (dir) => {
+    if (!trackRef.current) return;
+    trackRef.current.scrollBy({ left: dir * 340, behavior: 'smooth' });
+  };
+
+  return (
+    <section className="offers-section">
+      <div className="offers-header">
+        <div>
+          <p className="offers-eyebrow">Exclusive Deals</p>
+          <h2 className="offers-title">Current Offers</h2>
+        </div>
+        <div className="offers-nav">
+          <button className="offers-nav-btn" onClick={() => scroll(-1)} aria-label="Previous">‹</button>
+          <button className="offers-nav-btn" onClick={() => scroll(1)}  aria-label="Next">›</button>
+        </div>
+      </div>
+
+      <div className="offers-track-wrapper">
+        <div className="offers-track" ref={trackRef}>
+          {isLoading && (
+            [1, 2, 3].map((i) => <SkeletonCard key={i} />)
+          )}
+
+          {!isLoading && error && (
+            <p className="offers-error">{error}</p>
+          )}
+
+          {!isLoading && !error && offers.length === 0 && (
+            <p className="offers-empty">No offers available right now.</p>
+          )}
+
+          {!isLoading && !error && offers.map((offer) => (
+            <OfferCard key={offer._id} offer={offer} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 

@@ -81,7 +81,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/signup", require("./routes/signupRoute"));
@@ -90,6 +92,8 @@ app.use("/men", require("./routes/menRoutes"));
 app.use("/women", require("./routes/womenRoutes"));
 app.use("/accessories", require("./routes/accessoriesRoutes"));
 app.use("/bags", require("./routes/bagsRoutes"));
+const offersRouter = require('./routes/offersRoutes');
+app.use('/offers', offersRouter);
 
 // 404 route handler
 app.use((req, res) => {
