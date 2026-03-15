@@ -1,6 +1,5 @@
 import React from 'react'
 import './AdminHeader.css'
-import Navbar from './AdminNavbar'
 import { useNavigate } from 'react-router-dom'
 import AdminNavbar from './AdminNavbar';
 export default function AdminHeader() {
