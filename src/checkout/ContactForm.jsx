@@ -1,16 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ContactForm = ({ email, newsletter, onChange, errors }) => {
-  const handleLoginClick = (e) => {
-    e.preventDefault();
-    alert('Login feature would be implemented here');
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="form-section">
       <div className="section-title">
         Contact
-        <a href="#" onClick={handleLoginClick}>Log in</a>
+        {/* ✅ button instead of <a href="#"> */}
+        <button
+          type="button"
+          className="login-link-btn"
+          onClick={() => navigate('/login')}
+        >
+          Log in
+        </button>
       </div>
       <input
         type="email"
@@ -24,7 +29,6 @@ const ContactForm = ({ email, newsletter, onChange, errors }) => {
       {errors.email && (
         <div className="error-message-visible">{errors.email}</div>
       )}
-      
       <div className="checkbox-container">
         <input
           type="checkbox"

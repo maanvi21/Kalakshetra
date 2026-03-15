@@ -19,7 +19,7 @@ export default function ProductImage({ src, alt, className = '', size = 'medium'
   return (
     <img
       src={src}
-      alt={'Product image'}
+      alt={'Productimage'}
       className={`product-image ${className}`}
       style={{ 
         ...style, 
