@@ -12,7 +12,7 @@ router.get("/google", (req, res, next) => {
   console.log("📱 Google OAuth Request");
   
   // Get the redirectUrl from query params or use default
-  const redirectUrl = req.query.redirectUrl || "https://kalakshetra-five.vercel.app/auth/callback";
+  const redirectUrl = req.query.redirectUrl || "https://kalakshetra-plum.vercel.app/auth/callback";
   console.log("🔄 Redirect URL:", redirectUrl);
   
   // Store in session for use in callback

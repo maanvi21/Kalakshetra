@@ -38,7 +38,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://kalakshetra-five.vercel.app"
+      "https://kalakshetra-plum.vercel.app"
       // optionally also: `https://${process.env.RENDER_EXTERNAL_HOSTNAME}`
     ],
     credentials: true,

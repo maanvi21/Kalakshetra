@@ -25,7 +25,7 @@ const AuthForm = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`https://kalakshetra3-5.onrender.com/${isLogin ? "login" : "signup"}`, {
+      const response = await fetch(`https://kalakshetra3-5 .onrender.com/${isLogin ? "login" : "signup"}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -53,7 +53,7 @@ const AuthForm = () => {
   };
 
   const handleGoogleAuth = () => {
-    window.location.href = "https://kalakshetra3-5.onrender.com/auth/google";
+    window.location.href = "https://kalakshetra3-5 .onrender.com/auth/google";
   };
 
   const handleLogout = () => {

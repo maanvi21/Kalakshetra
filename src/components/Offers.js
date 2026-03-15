@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Offers.css';
 
-const BASE_URL = 'https://kalakshetra3-5.onrender.com';
+const BASE_URL = 'https://kalakshetra3-5 .onrender.com';
 
 const BADGE_COLORS = {
   HOT: '#ff4d2e',
