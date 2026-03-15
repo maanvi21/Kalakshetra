@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://kalakshetra3-5 .onrender.com/auth";
+const API_URL = "https://'https://kalakshetra3-5.onrender.com';/auth";
 
 export const register = async (userData) => {
     return axios.post(`${API_URL}/register`, userData);
