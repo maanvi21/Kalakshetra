@@ -1,66 +1,70 @@
-/* Style for the Header container */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500&display=swap');
+
 .header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: sticky;
   top: 0;
   left: 0;
-  height: 60px;
   width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  background-color: #996c5a;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  height: 48px;
+  padding: 0 2.5rem;
+  background-color: #67301B;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.07), 0 4px 20px rgba(0,0,0,0.18);
   z-index: 1000;
 }
 
-/* Logo Styling */
-.logo img {
-  height: 60px;
-  width: auto;
+.header-logo {
+  display: flex;
+  align-items: center;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease;
 }
 
-.logo img:hover {
-  transform: scale(1.1);
+.header-logo:hover {
+  opacity: 0.8;
 }
 
-/* Tablet styles */
+.header-logo img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(1.08) drop-shadow(0 1px 4px rgba(0,0,0,0.25));
+  transition: filter 0.2s ease;
+}
+
+.header-logo:hover img {
+  filter: brightness(1.15) drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+
 @media (max-width: 1024px) {
   .header {
-    padding: 8px 15px;
+    padding: 0 1.5rem;
+    height: 44px;
   }
-  
-  .logo img {
-    height: 50px;
+  .header-logo img {
+    height: 28px;
   }
 }
 
-/* Mobile styles */
 @media (max-width: 768px) {
   .header {
-    height: 50px;
-    padding: 5px 15px;
-  }
-  
-  .logo img {
+    padding: 0 1rem;
     height: 40px;
+  }
+  .header-logo img {
+    height: 24px;
   }
 }
 
-/* Small mobile styles */
 @media (max-width: 480px) {
   .header {
-    height: 45px;
-    padding: 5px 10px;
+    padding: 0 0.75rem;
+    height: 36px;
   }
-  
-  .logo img {
-    height: 35px;
-  }
-  
-  .logo img:hover {
-    transform: scale(1.05); /* Less dramatic hover effect on small screens */
+  .header-logo img {
+    height: 20px;
   }
 }

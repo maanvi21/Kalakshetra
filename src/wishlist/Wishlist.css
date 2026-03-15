@@ -1,95 +1,264 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-  }
-  
-  
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap');
+
+:root {
+  --brown: #67301B;
+  --brown-mid: #a17f6c;
+  --brown-light: #c9a98a;
+  --bg: #f5f0eb;
+  --surface: #ffffff;
+  --border: #e8ddd5;
+  --text: #1c1210;
+  --text-mid: #5a4035;
+  --text-muted: #9c7d6e;
+  --shadow: 0 2px 16px rgba(103, 48, 27, 0.08);
+  --shadow-lg: 0 8px 32px rgba(103, 48, 27, 0.13);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+/* ── Page ── */
+.wishlist-page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Jost', sans-serif;
+}
+
+/* ── Container ── */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 64px;
+  width: 100%;
+}
+
+/* ── Header ── */
+.wishlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--brown);
+  letter-spacing: 0.02em;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+/* ── Items Grid ── */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* ── Wishlist Item Card ── */
+.wishlist-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wishlist-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── Item Image ── */
+.item-image {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  background: var(--bg);
+}
+
+/* ── Item Details ── */
+.item-details {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.item-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0 0 6px;
+  line-height: 1.3;
+}
+
+.item-price {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--brown);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* ── Quantity Controls ── */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 10px 0;
+  background: var(--bg);
+  border-radius: 50px;
+  padding: 5px 14px;
+  border: 1px solid var(--border);
+}
+
+.quantity-controls button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--brown);
+  font-family: 'Jost', sans-serif;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.quantity-controls button:hover {
+  background: var(--border);
+}
+
+.quantity-controls span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  min-width: 20px;
+  text-align: center;
+}
+
+/* ── Item Actions ── */
+.item-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.item-actions button {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-mid);
+}
+
+.item-actions button:hover {
+  background: var(--brown);
+  color: white;
+  border-color: var(--brown);
+}
+
+/* ── Total ── */
+.total-container {
+  margin-top: 36px;
+  padding: 28px 32px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.total-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.total-amount {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--brown);
+  letter-spacing: 0.04em;
+}
+
+/* ── Empty State ── */
+.empty-message {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  padding: 80px 20px;
+  letter-spacing: 0.03em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
   .container {
-    width: 90%;
-    max-width: 800px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 24px 16px 48px;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .item-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .total-container {
     padding: 20px;
   }
- 
-  
+}
 
-  
+@media (max-width: 480px) {
   .title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  
-  
-  .item-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px; 
-  }
-  
-  
-  .wishlist-item {
-    background-color: #f7f7f7;
-    border-radius: 12px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .item-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .item-details {
-    margin-bottom: 10px;
-  }
-  
-  .item-name {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 5px 0;
-  }
-  
-  .item-price {
-    font-size: 16px;
-    color: #555;
-    margin: 5px 0;
-  }
-  
-  .quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
- 
-  
-  .total-container {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .total-label {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 1.35rem;
   }
 
-  .empty-message {
-    text-align: center;
-    font-size: 18px;
-    color: #777;
+  .wishlist-item {
+    padding: 16px 14px;
   }
-  
+
+  .item-image {
+    width: 90px;
+    height: 90px;
+  }
+}

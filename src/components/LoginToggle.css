@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap');
+
+.login-toggle-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(245, 237, 228, 0.85);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.login-toggle-btn:hover {
+  background: rgba(255,255,255,0.18);
+  color: #f5ede4;
+  border-color: rgba(255,255,255,0.35);
+}
+
+@media (max-width: 768px) {
+  .login-toggle-btn {
+    font-size: 0.55rem;
+    padding: 0.22rem 0.5rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-toggle-btn {
+    font-size: 0.5rem;
+    padding: 0.18rem 0.4rem;
+  }
+}

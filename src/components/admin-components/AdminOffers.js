@@ -3,7 +3,7 @@ import './AdminOffers.css';
 import AdminHeader from './AdminHeader.js';
 import Footer from '../Footer';
 
-const BASE_URL = 'https://kalakshetra3-6.onrender.com';
+const BASE_URL = 'https://kalakshetra3-5.onrender.com';
 const BADGE_OPTIONS = ['HOT', 'NEW', 'FESTIVE', 'SALE', 'EXCLUSIVE', 'LIMITED'];
 const EMPTY_FORM = { title: '', description: '', image: '', badge: 'NEW', active: true };
 const BADGE_COLORS = {

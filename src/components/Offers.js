@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Offers.css';
 
-const BASE_URL = 'https://kalakshetra3-6.onrender.com';
+const BASE_URL = 'https://kalakshetra3-5.onrender.com';
 
 const BADGE_COLORS = {
   HOT: '#ff4d2e',
@@ -12,30 +13,44 @@ const BADGE_COLORS = {
   LIMITED: '#1c1c1c',
 };
 
-const OfferCard = ({ offer }) => (
-  <div className="offer-card">
-    <div className="offer-card-img">
-      <img src={offer.image} alt={offer.title} loading="lazy" />
-      {offer.badge && (
-        <span
-          className="offer-badge"
-          style={{ background: BADGE_COLORS[offer.badge] || '#333' }}
-        >
-          {offer.badge}
-        </span>
-      )}
-      <div className="offer-card-overlay">
-        <button className="offer-shop-btn">Shop Now →</button>
+const OfferCard = ({ offer }) => {
+  const navigate = useNavigate();
+
+  const handleShopNow = (e) => {
+    e.stopPropagation();
+    if (offer.link) {
+      navigate(offer.link);
+    } else {
+      navigate('/womenProducts');
+    }
+  };
+
+  return (
+    <div className="offer-card">
+      <div className="offer-card-img">
+        <img src={offer.image} alt={offer.title} loading="lazy" />
+        {offer.badge && (
+          <span
+            className="offer-badge"
+            style={{ background: BADGE_COLORS[offer.badge] || '#333' }}
+          >
+            {offer.badge}
+          </span>
+        )}
+        <div className="offer-card-overlay">
+          <button className="offer-shop-btn" onClick={handleShopNow}>
+            Shop Now →
+          </button>
+        </div>
+      </div>
+      <div className="offer-card-body">
+        <h3 className="offer-card-title">{offer.title}</h3>
+        <p className="offer-card-desc">{offer.description}</p>
       </div>
     </div>
-    <div className="offer-card-body">
-      <h3 className="offer-card-title">{offer.title}</h3>
-      <p className="offer-card-desc">{offer.description}</p>
-    </div>
-  </div>
-);
+  );
+};
 
-// Skeleton card shown while loading
 const SkeletonCard = () => (
   <div className="offer-card offer-card--skeleton">
     <div className="offer-skeleton-img" />
@@ -56,7 +71,6 @@ const Offers = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        // Fetches only active offers for the public homepage
         const res = await fetch(`${BASE_URL}/offers/active`);
         if (!res.ok) throw new Error(`${res.status}`);
         const data = await res.json();
@@ -84,16 +98,26 @@ const Offers = () => {
           <h2 className="offers-title">Current Offers</h2>
         </div>
         <div className="offers-nav">
-          <button className="offers-nav-btn" onClick={() => scroll(-1)} aria-label="Previous">‹</button>
-          <button className="offers-nav-btn" onClick={() => scroll(1)}  aria-label="Next">›</button>
+          <button
+            className="offers-nav-btn"
+            onClick={(e) => { e.stopPropagation(); scroll(-1); }}
+            aria-label="Previous"
+          >
+            ‹
+          </button>
+          <button
+            className="offers-nav-btn"
+            onClick={(e) => { e.stopPropagation(); scroll(1); }}
+            aria-label="Next"
+          >
+            ›
+          </button>
         </div>
       </div>
 
       <div className="offers-track-wrapper">
         <div className="offers-track" ref={trackRef}>
-          {isLoading && (
-            [1, 2, 3].map((i) => <SkeletonCard key={i} />)
-          )}
+          {isLoading && [1, 2, 3].map((i) => <SkeletonCard key={i} />)}
 
           {!isLoading && error && (
             <p className="offers-error">{error}</p>
